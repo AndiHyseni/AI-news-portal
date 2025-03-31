@@ -1,0 +1,55 @@
+.configurationDiv {
+  padding: 30px;
+  background-color: white;
+  margin-top: 10px;
+  border-radius: 20px;
+}
+
+.configDiv {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.configButton {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px;
+}
+
+.headerImage {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  flex-direction: row;
+  justify-content: space-around;
+  margin-top: 60px;
+}
+
+.headerButton {
+  background-color: #1c7ed6;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  color: white;
+  padding-bottom: 23px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+}
+
+.footerButton {
+  background-color: #1c7ed6;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  color: white;
+  padding-bottom: 23px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+}
+
+.mantine-Image-image {
+  object-fit: contain !important;
+}

@@ -1,0 +1,89 @@
+.sitepage {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.fokus {
+  font-size: 30px;
+  color: #26145c;
+}
+
+.sitediv {
+  display: flex;
+  width: 95%;
+  background-color: white;
+  border: 1px solid #dee2e6;
+}
+
+.site {
+  display: flex;
+  flex-direction: column;
+}
+
+.sitetitle {
+  font-size: 16px;
+  padding-left: 10px;
+  padding-right: 10px;
+  cursor: pointer;
+}
+
+.sitetitle:hover {
+  color: #26145c;
+}
+
+.sitep {
+  padding-left: 10px;
+}
+
+.sitec {
+  width: 0%;
+  color: red;
+  cursor: pointer;
+}
+
+.sitec:hover {
+  color: brown;
+}
+
+.siteimage {
+  width: 270px !important;
+  height: 156px;
+  flex: 0 0 auto;
+  padding: 3px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  contain: strict;
+}
+
+.divReklama {
+  display: flex;
+  flex-direction: column;
+}
+
+.divRead {
+  display: flex;
+}
+
+.selectList {
+  display: flex;
+  justify-content: space-between;
+  width: 21%;
+  margin-bottom: 15px;
+}
+
+.button-container {
+  align-self: end;
+  margin: 10px 40px;
+}
+
+.selectLabel {
+  display: flex;
+  flex-direction: row;
+}
+
+.Shiko {
+  font-size: 20px;
+  color: #26145c;
+  margin: 5px 15px;
+}

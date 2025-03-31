@@ -1,0 +1,47 @@
+.loginForm {
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+.login {
+  padding: 50px;
+  background-color: white;
+  border-radius: 10px;
+  border: 1px solid #adb5bd;
+}
+
+.loginHeader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loginH1text {
+  font-size: 30px;
+  color: #26145c;
+}
+
+.loginButton {
+  background-color: #212529;
+  height: 45px;
+  font-size: 18px;
+}
+
+.loginButton:hover {
+  background-color: #26145c;
+}
+
+.loginpassword {
+  padding-bottom: 20px;
+}
+
+.forgotPass {
+  color: black;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.forgotPass:hover {
+  color: #26145c;
+}

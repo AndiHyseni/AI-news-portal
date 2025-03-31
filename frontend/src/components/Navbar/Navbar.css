@@ -1,0 +1,72 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 100px 10px 100px;
+  align-items: center;
+  background-color: #26145c;
+}
+
+a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: white;
+}
+
+.navbarItem {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.navbarItem:hover {
+  color: darkgray;
+}
+
+.loginNavbar {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+h1 {
+  color: white;
+  font-size: 15px;
+  align-items: center;
+}
+
+.logintext {
+  color: white;
+  font-size: 15px;
+}
+
+.username {
+  padding-right: 10px;
+  cursor: pointer;
+}
+
+.username:hover {
+  color: #f3f3f3;
+}
+
+.usernameArrow {
+  cursor: pointer;
+  top: 5px;
+  position: relative;
+}
+
+.usernameArrow:hover {
+  color: #f3f3f3;
+}
+
+.logoutbutton {
+  padding-right: 5px;
+  position: relative;
+  top: 5px;
+}
+
+.menuItem {
+  color: black;
+  margin: 0px;
+  display: inline;
+}

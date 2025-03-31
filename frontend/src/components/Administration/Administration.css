@@ -1,0 +1,68 @@
+.sidebarButton {
+  position: absolute;
+  margin-left: 205px;
+  color: white;
+}
+
+.sidebarContent {
+  width: 100%;
+  margin: 60px auto 0 0;
+  color: white;
+}
+
+.sidebarButtonClosed {
+  position: absolute;
+  margin-top: -54px;
+}
+
+.sidebarList {
+  list-style: none;
+  margin-bottom: 35.5px;
+  display: flex;
+  align-items: center;
+}
+
+ul {
+  padding-bottom: 20px;
+  padding-left: 30px;
+}
+
+.sidebarItems {
+  font-size: 23px;
+  padding-left: 6px;
+}
+
+.sidebarItems:hover {
+  color: #1c7ed6;
+}
+
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.raports {
+  display: flex;
+  justify-content: space-evenly;
+  margin-bottom: 30px;
+}
+
+.raportBox {
+  border: 1px #ced4da solid;
+  padding: 10px;
+  box-shadow: 10px 5px 5px #e3e1ea;
+}
+
+.boxTitle {
+  color: black;
+  display: flex;
+  justify-content: space-around;
+  font-size: 20px;
+}
+
+.boxParagraph {
+  color: grey;
+  display: flex;
+  justify-content: space-around;
+}

@@ -1,0 +1,40 @@
+.registerForm {
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+.register {
+  padding: 50px;
+  background-color: white;
+  border-radius: 10px;
+  border: 1px solid #adb5bd;
+}
+
+.confirmPassword {
+  padding-bottom: 20px;
+}
+
+.registerButton {
+  background-color: #212529;
+  height: 45px;
+  font-size: 18px;
+}
+
+.registerButton:hover {
+  background-color: #26145c;
+}
+
+.registerHeader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.registerH1text {
+  font-size: 30px;
+  color: #26145c;
+}
+
+.registerImage {
+  padding-right: 25px;
+}

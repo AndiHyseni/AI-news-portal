@@ -1,0 +1,35 @@
+.addUserForm {
+  background-color: white;
+  width: 100%;
+  padding: 30px;
+  margin-top: 10px;
+  border-radius: 20px;
+}
+
+.addUserHeader {
+  font-size: 20px;
+  color: black;
+  margin-top: 0px;
+}
+
+.addUserButtons {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px;
+}
+
+.addUserElement {
+  padding: 10px;
+}
+
+.addUserButton {
+  background-color: #1c7ed6;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  color: white;
+  cursor: pointer;
+}
+
+.label {
+  cursor: pointer;
+}

@@ -1,0 +1,11 @@
+.adminCategoriesdiv {
+  padding: 30px;
+  background-color: white;
+  margin-top: 10px;
+  border-radius: 20px;
+}
+
+.addButton {
+  float: right;
+  margin-bottom: 10px;
+}

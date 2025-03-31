@@ -1,0 +1,56 @@
+.mostwatchedpage {
+  padding-bottom: 25px;
+}
+
+.mostwatched {
+  font-size: 30px;
+  color: #26145c;
+}
+
+.mostwatcheddiv {
+  display: flex;
+  height: 400px;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 30px;
+  border: 1px solid #dee2e6;
+}
+
+.mostwatchedsite {
+  display: flex;
+  flex-direction: column;
+  height: inherit;
+  justify-content: space-between;
+}
+
+.mostwatchedtitle {
+  font-size: 16px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-bottom: 0px;
+}
+
+.mostwatchedp {
+  color: red;
+  padding-left: 10px;
+}
+
+.mostwatchedimage {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.mantine-h0vjos {
+  height: 400px;
+}
+
+.mantine-1jde5t7 {
+  margin-right: 30px;
+}
+
+.readMoreOnMostWatched {
+  width: 30%;
+  margin-bottom: 7px;
+  align-self: center;
+}
