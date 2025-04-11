@@ -1,23 +1,23 @@
-import { Application, Router } from 'express';
+import { Application, Router } from "express";
 
 // controllers
-import { AuthController } from '../controllers/Auth.controller';
-import { DoctorsController } from '../controllers/Doctors.controller';
-import { PatientsController } from '../controllers/Patients.controller';
-import { WorkPricesController } from '../controllers/WorkPrices.controller';
-import { DaljetController } from '../controllers/Daljet.controller';
+import { AccountController } from "../controllers/Account.controller";
+import { CategoryController } from "../controllers/Category.controller";
+import { NewsController } from "../controllers/News.controller";
+import { RapportController } from "../controllers/Raport.controller";
+import { NewsConfigController } from "../controllers/NewsConfig.controller";
 
 const endpoints: [string, Router][] = [
-    ['/api/auth', AuthController],
-    ['/api/doctors', DoctorsController],
-    ['/api/patients', PatientsController],
-    ['/api/prices', WorkPricesController],
-    ['/api/daljet', DaljetController]
+  ["/api/Account", AccountController],
+  ["/api/Category", CategoryController],
+  ["/api/News", NewsController],
+  ["/api/rapport", RapportController],
+  ["/api/NewsConfig", NewsConfigController],
 ];
 
 export const routes = (app: Application): void => {
-    [...endpoints].forEach((route) => {
-        const [url, controller] = route;
-        app.use(url, controller);
-    });
+  [...endpoints].forEach((route) => {
+    const [url, controller] = route;
+    app.use(url, controller);
+  });
 };

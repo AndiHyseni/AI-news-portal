@@ -10,6 +10,9 @@ export default class WatchedDbModel extends Model {
   news_id!: string;
   watched_on!: Date;
 
+  news!: NewsDbModel;
+  user!: UserDbModel;
+
   static tableName = "watched";
 
   $beforeInsert() {

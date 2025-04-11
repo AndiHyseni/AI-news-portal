@@ -8,6 +8,9 @@ export default class SavedNewsDbModel extends Model {
   news_id!: string;
   user_id!: string;
 
+  news!: NewsDbModel;
+  user!: UserDbModel;
+
   static tableName = "saved_news";
 
   $beforeInsert() {

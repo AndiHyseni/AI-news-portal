@@ -9,6 +9,9 @@ export default class ReactionDbModel extends Model {
   news_id!: string;
   reaction!: number;
 
+  news!: NewsDbModel;
+  user!: UserDbModel;
+
   static tableName = "reactions";
 
   $beforeInsert() {
