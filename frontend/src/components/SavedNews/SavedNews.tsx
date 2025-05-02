@@ -34,12 +34,12 @@ export const SavedNewsC: React.FC<SavedNewsPageProps> = ({
         ]
       : "";
 
-  const addView = (newsId: number) => {
+  const addView = (newsId: string) => {
     const model: AddViewModel = {
-      userId: id,
-      newsId: newsId,
-      fingerPrintId: "",
-      watchId: 2,
+      user_id: id,
+      news_id: newsId,
+      finger_print_id: "",
+      watch_id: 2,
     };
     addViews(model);
   };
@@ -57,14 +57,14 @@ export const SavedNewsC: React.FC<SavedNewsPageProps> = ({
               {role == "Registered" && (
                 <Button
                   component={Link}
-                  to={`/news/${news.newsId}`}
-                  onClick={() => addView(news.newsId)}
+                  to={`/news/${news.news_id}`}
+                  onClick={() => addView(news.news_id)}
                 >
                   Read more
                 </Button>
               )}
               {role == "Admin" && (
-                <Button component={Link} to={`/news/details/${news.newsId}`}>
+                <Button component={Link} to={`/news/details/${news.news_id}`}>
                   Read more
                 </Button>
               )}

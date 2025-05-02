@@ -28,10 +28,10 @@ export const ViewsDetailsTable: React.FC<TableProps> = ({ viewsDetails }) => {
       <tbody>
         {viewsDetails.map((viewsDetails, index) => (
           <tr key={index}>
-            <td>{viewsDetails.newsId}</td>
-            <td>{viewsDetails.userId}</td>
-            <td>{viewsDetails.fingerPrintId}</td>
-            <td>{viewsDetails.watchedOn}</td>
+            <td>{viewsDetails.news_id}</td>
+            <td>{viewsDetails.user_id}</td>
+            <td>{viewsDetails.finger_print_id}</td>
+            <td>{viewsDetails.watched_on}</td>
           </tr>
         ))}
       </tbody>

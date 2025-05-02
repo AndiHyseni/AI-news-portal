@@ -12,7 +12,7 @@ import "../SavedNews/SavedNews.css";
 
 export const SavedNews: React.FC = () => {
   const { data: userIdData } = useUsers();
-  const userId = userIdData?.map((user) => user.userId);
+  const userId = userIdData?.map((user) => user.user_id);
   const token: any =
     localStorage.getItem("jwt") != null
       ? jwtDecode(localStorage.getItem("jwt")!)

@@ -29,12 +29,12 @@ export const NewsByTagsC: React.FC<NewsByTagsProps> = ({ news }) => {
   const { data: tagNews } = useNewsByTags(String(tags));
   const navigate = useNavigate();
 
-  const addView = (newsId: number) => {
+  const addView = (newsId: string) => {
     const model: AddViewModel = {
-      userId: id,
-      newsId: newsId,
-      fingerPrintId: "",
-      watchId: 2,
+      user_id: id,
+      news_id: newsId,
+      finger_print_id: "",
+      watch_id: 2,
     };
     addViews(model);
   };
@@ -51,15 +51,15 @@ export const NewsByTagsC: React.FC<NewsByTagsProps> = ({ news }) => {
                     className="newsByTagsImage"
                     src={news.image}
                     onClick={() => {
-                      addView(news.newsId);
-                      navigate(`/news/${news.newsId}`);
+                      addView(news.id);
+                      navigate(`/news/${news.id}`);
                     }}
                   />
                   <div
                     className="newsByTagsTitle"
                     onClick={() => {
-                      addView(news.newsId);
-                      navigate(`/news/${news.newsId}`);
+                      addView(news.id);
+                      navigate(`/news/${news.id}`);
                     }}
                   >
                     {news.title}

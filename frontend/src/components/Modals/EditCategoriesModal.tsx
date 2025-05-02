@@ -26,14 +26,14 @@ export const EditCategoriesModal: React.FC<EditCategoriesModalProps> = ({
   onClose,
   mutation,
 }) => {
-  const [showOnline, setShowOnline] = useState<boolean>(categories.showOnline);
+  const [showOnline, setShowOnline] = useState<boolean>(categories.show_online);
 
   const form = useForm({
     initialValues: {
-      categoryId: categories.categoryId,
+      id: categories.id,
       name: categories.name,
       description: categories.description,
-      showOnline: categories.showOnline,
+      show_online: categories.show_online,
     },
     validate: {
       name: (value) => {
@@ -63,8 +63,8 @@ export const EditCategoriesModal: React.FC<EditCategoriesModalProps> = ({
     mutation.mutate(
       {
         ...form.values,
-        categoryId: categories.categoryId,
-        showOnline: showOnline,
+        id: categories.id,
+        show_online: showOnline,
       },
       {
         onSuccess: () => {

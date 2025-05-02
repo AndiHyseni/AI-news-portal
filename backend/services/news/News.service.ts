@@ -9,7 +9,7 @@ export const NewsService = {
   getAllNews: async () => {
     try {
       const news = await NewsDbModel.query()
-        .where({ isDeleted: false })
+        .where({ is_deleted: false })
         .orderBy("created_at", "DESC");
       return ok({ news });
     } catch (error) {
@@ -20,11 +20,11 @@ export const NewsService = {
     try {
       const news = await NewsDbModel.query()
         .findById(id)
-        .where({ isDeleted: false });
+        .where({ is_deleted: false });
       if (!news) {
         return failure({ error: "News not found" }, StatusCodeEnums.UNEXPECTED);
       }
-      return ok({ news });
+      return ok(news);
     } catch (error) {
       return failure({ error }, StatusCodeEnums.UNPROCESSABLE_ENTITY);
     }

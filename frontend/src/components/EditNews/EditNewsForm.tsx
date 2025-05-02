@@ -33,16 +33,16 @@ export const EditNewsForm: React.FC<NewsFormProps> = ({
 }) => {
   const navigate = useNavigate();
 
-  const [isFeatured, setIsFeatured] = useState<boolean>(news.isFeatured);
-  const [isDeleted, setIsDeleted] = useState<boolean>(news.isDeleted);
+  const [isFeatured, setIsFeatured] = useState<boolean>(news.is_featured);
+  const [isDeleted, setIsDeleted] = useState<boolean>(news.is_deleted);
 
-  const [categoryId, setCategoryId] = useState<number | null>(news.categoryId);
+  const [categoryId, setCategoryId] = useState<string | null>(news.category_id);
   const [newsImage, setNewsImage] = useState<string | ArrayBuffer>(news.image);
   const { data } = useCategories();
 
   const categoryOptions = data
     ? data.map((category: Categories) => ({
-        value: category.categoryId.toString(),
+        value: category.id.toString(),
         label: category.name,
       }))
     : [];
@@ -52,13 +52,13 @@ export const EditNewsForm: React.FC<NewsFormProps> = ({
   const form = useForm({
     initialValues: {
       newsId: newsId,
-      categoryId: news.categoryId,
+      categoryId: news.category_id,
       content: news.content,
-      expireDate: news.expireDate,
+      expireDate: news.expire_date,
       image: news.image,
-      isDeleted: news.isDeleted,
-      isFeatured: news.isFeatured,
-      subTitle: news.subTitle,
+      isDeleted: news.is_deleted,
+      isFeatured: news.is_featured,
+      subTitle: news.sub_title,
       tags: news.tags,
       title: news.title,
       video: news.video,
@@ -89,7 +89,7 @@ export const EditNewsForm: React.FC<NewsFormProps> = ({
         return null;
       },
       categoryId: (value) => {
-        if (!value || value === 0) {
+        if (!value || value === "") {
           return "Category is required";
         }
         return null;
@@ -123,7 +123,7 @@ export const EditNewsForm: React.FC<NewsFormProps> = ({
     mutation.mutate(
       {
         ...form.values,
-        newsId: news.newsId,
+        newsId: news.id,
         categoryId: categoryId,
         isDeleted: isDeleted,
         isFeatured: isFeatured,
@@ -189,11 +189,11 @@ export const EditNewsForm: React.FC<NewsFormProps> = ({
           <Select
             label="Category"
             placeholder="Category..."
-            defaultValue={String(news.categoryId)}
+            defaultValue={String(news.category_id)}
             data={categoryOptions}
             searchable
             maxDropdownHeight={400}
-            onChange={(categoryId) => setCategoryId(Number(categoryId))}
+            onChange={(categoryId) => setCategoryId(String(categoryId))}
             error={form.errors.categoryId}
           />
           <Switch

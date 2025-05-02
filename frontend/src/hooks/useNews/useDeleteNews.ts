@@ -8,7 +8,7 @@ import { generateRandomString } from "../../utils/randomString";
 export const useDeleteNews = () => {
   const randomId = generateRandomString(20);
 
-  return useMutation((newsId: number) => deleteNews(newsId), {
+  return useMutation((newsId: string) => deleteNews(newsId), {
     onMutate: () => {
       startNotification(randomId);
     },

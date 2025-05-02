@@ -13,8 +13,8 @@ export interface Rapport {
 export interface Users {
   email: string;
   role: string;
-  userId: string;
-  userName: string;
+  user_id: string;
+  username: string;
 }
 
 export interface Views {
@@ -24,40 +24,40 @@ export interface Views {
 }
 
 export interface ViewsDetails {
-  fingerPrintId: string;
+  finger_print_id: string;
   news: string;
-  newsId: number;
+  news_id: number;
   user: string;
-  userId: string;
-  watchId: number;
-  watchedOn: string;
+  user_id: string;
+  watch_id: number;
+  watched_on: string;
 }
 
 export interface AddViewModel {
-  fingerPrintId: string;
-  newsId: number;
-  userId: string;
-  watchId: number;
+  finger_print_id: string;
+  news_id: string;
+  user_id: string;
+  watch_id: number;
 }
 
 export interface Reaction {
   angry: number;
   happy: number;
-  newsId: number;
+  news_id: string;
   sad: number;
 }
 
 export interface AddReaction {
-  newsId: number;
+  news_id: string;
   reaction: number;
-  userId: string;
+  user_id: string;
 }
 
 export interface ReactionsDetails {
   news: string;
-  newsId: number;
+  news_id: number;
   reaction: number;
-  reactionId: number;
+  reaction_id: number;
   user: {
     accessFailedCount: number;
     concurrencyStamp: string;
@@ -73,9 +73,9 @@ export interface ReactionsDetails {
     phoneNumberConfirmed: Boolean;
     securityStamp: string;
     twoFactorEnabled: Boolean;
-    userName: string;
+    username: string;
   };
-  userId: string;
+  user_id: string;
 }
 
 export interface AddAdmin {
@@ -95,9 +95,9 @@ export interface EditAdmin {
 }
 
 export interface Configuration {
-  newsConfigId: number;
-  footerLogo: string;
-  headerLogo: string;
-  showFeatured: boolean;
-  showMostWached: boolean;
+  news_config_id: string;
+  footer_logo: string;
+  header_logo: string;
+  show_featured: boolean;
+  show_most_watched: boolean;
 }

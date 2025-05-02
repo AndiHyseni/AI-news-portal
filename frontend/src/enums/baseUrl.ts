@@ -1,3 +1,3 @@
 export enum BaseUrl {
-  DEVELOPMENT = "https://localhost:5000/api",
+  DEVELOPMENT = "http://localhost:5000/api",
 }

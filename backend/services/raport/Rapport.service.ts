@@ -62,7 +62,7 @@ export const RapportService = {
 
       // Count Admins (assumes a 'role' field in your User model)
       const adminsRes = (await UserDbModel.query()
-        .where("role", "Admin")
+        // .where("role", "Admin")
         .count("* as count")) as unknown as CountResult[];
       const adminsCount = parseInt(adminsRes[0].count, 10);
 

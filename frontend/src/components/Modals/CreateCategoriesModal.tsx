@@ -64,8 +64,8 @@ export const CreateCategoriesModal: React.FC<CreateCategoriesModalProps> = ({
     createCategoriesMutation.mutate(
       {
         ...form.values,
-        categoryId: +form.values.categoryId,
-        showOnline: showOnline,
+        id: String(form.values.categoryId),
+        show_online: showOnline,
       },
       {
         onSuccess: () => {

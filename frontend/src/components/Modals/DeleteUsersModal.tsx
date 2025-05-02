@@ -26,7 +26,7 @@ export const DeleteUsersModal: React.FC<DeleteUsersModalProps> = ({
   };
 
   const handleSubmit = () => {
-    mutation.mutate(users.userId, {
+    mutation.mutate(users.user_id, {
       onSuccess: () => {
         handleClose();
         navigate("/users");

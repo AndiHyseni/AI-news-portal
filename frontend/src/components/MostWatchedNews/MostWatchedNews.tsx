@@ -8,8 +8,10 @@ import jwtDecode from "jwt-decode";
 import { addViews } from "../../api/administration/administration";
 import { useConfiguration } from "../../hooks/useConfiguration/useConfiguration";
 
+type NewsResponse = News[] | { news: News[] };
+
 export interface NewsProps {
-  mostwatched: News[];
+  mostwatched: NewsResponse;
 }
 
 var token: any =
@@ -24,27 +26,32 @@ var id: string =
       ]
     : "";
 
-export const MostWatchedNews: React.FC<NewsProps> = ({ mostwatched }) => {
+export const MostWatchedNews: React.FC<NewsProps> = ({ mostwatched = [] }) => {
   const navigate = useNavigate();
   const { data } = useConfiguration();
 
-  const sortedMostWatched = [...mostwatched].sort(
-    (a, b) => b.numberOfClicks - a.numberOfClicks
+  // Ensure mostwatched is an array and handle the data structure
+  const newsArray: News[] = Array.isArray(mostwatched)
+    ? mostwatched
+    : (mostwatched as { news: News[] }).news || [];
+
+  const sortedMostWatched = [...newsArray].sort(
+    (a, b) => b.number_of_clicks - a.number_of_clicks
   );
 
-  const addView = (newsId: number) => {
+  const addView = (newsId: string) => {
     const model: AddViewModel = {
-      userId: id,
-      newsId: newsId,
-      fingerPrintId: "",
-      watchId: 2,
+      user_id: id,
+      news_id: newsId,
+      finger_print_id: "",
+      watch_id: 2,
     };
     addViews(model);
   };
 
   return (
     <>
-      {data?.showMostWached && (
+      {data?.show_most_watched && (
         <div className="mostwatchedpage">
           <h1 className="mostwatched">Më të shikuarat</h1>
           <>
@@ -56,26 +63,24 @@ export const MostWatchedNews: React.FC<NewsProps> = ({ mostwatched }) => {
               align="start"
               slidesToScroll={1}
             >
-              {sortedMostWatched.map((news, index) => (
-                <>
-                  <Carousel.Slide>
-                    <div key={index} className="mostwatcheddiv">
-                      <Image src={news.image} className="mostwatchedimage" />
-                      <div className="mostwatchedsite">
-                        <h2 className="mostwatchedtitle">{news.title}</h2>
-                        <Button
-                          className="readMoreOnMostWatched"
-                          onClick={() => {
-                            addView(news.newsId);
-                            navigate(`/news/${news.newsId}`);
-                          }}
-                        >
-                          Read More
-                        </Button>
-                      </div>
+              {sortedMostWatched.map((news: News, index: number) => (
+                <Carousel.Slide key={index}>
+                  <div className="mostwatcheddiv">
+                    <Image src={news.image} className="mostwatchedimage" />
+                    <div className="mostwatchedsite">
+                      <h2 className="mostwatchedtitle">{news.title}</h2>
+                      <Button
+                        className="readMoreOnMostWatched"
+                        onClick={() => {
+                          addView(news.id);
+                          navigate(`/news/${news.id}`);
+                        }}
+                      >
+                        Read More
+                      </Button>
                     </div>
-                  </Carousel.Slide>
-                </>
+                  </div>
+                </Carousel.Slide>
               ))}
             </Carousel>
           </>

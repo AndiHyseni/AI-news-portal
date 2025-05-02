@@ -9,11 +9,13 @@ import { Role } from "../../types/auth/login";
 import { Categories } from "../../types/categories/categories";
 import "../Navbar/Navbar.css";
 
+type CategoriesResponse = Categories[] | { categories: Categories[] };
+
 export interface CategoriesProps {
-  categories: Categories[];
+  categories: CategoriesResponse;
 }
 
-export const Navbar: React.FC<CategoriesProps> = ({ categories }) => {
+export const Navbar: React.FC<CategoriesProps> = ({ categories = [] }) => {
   const [userContext] = useContext(UserContext);
   const navigate = useNavigate();
   const { data } = useConfiguration();
@@ -27,19 +29,24 @@ export const Navbar: React.FC<CategoriesProps> = ({ categories }) => {
       ? jwtDecode(localStorage.getItem("jwt")!)
       : null;
 
+  // Ensure categories is an array and handle the data structure
+  const categoriesArray: Categories[] = Array.isArray(categories)
+    ? categories
+    : (categories as { categories: Categories[] }).categories || [];
+
   return (
     <div className="navbar">
       <Link to="/">
-        <Image src={data?.headerLogo} height={50} width={50} />
+        <Image src={data?.header_logo} height={50} width={50} />
       </Link>
       {(!userContext.token ||
         userContext.userRole?.includes(Role.REGISTERED)) && (
         <div style={{ display: "flex" }}>
-          {categories
-            .filter((x) => x.showOnline == true)
-            .map((categories, index) => (
-              <NavLink key={index} to={`/category/${categories.categoryId}`}>
-                <div className="navbarItem">{categories.name}</div>
+          {categoriesArray
+            .filter((x: Categories) => x.show_online === true)
+            .map((category: Categories, index: number) => (
+              <NavLink key={index} to={`/category/${category.id}`}>
+                <div className="navbarItem">{category.name}</div>
               </NavLink>
             ))}
         </div>

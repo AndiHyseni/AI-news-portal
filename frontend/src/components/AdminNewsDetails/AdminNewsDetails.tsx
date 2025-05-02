@@ -28,7 +28,7 @@ export const AdminNewsDetailsC: React.FC<NewsDetailsProps> = ({
     <div className="detailsAdmin">
       <Image src={news?.image} />
       <h1 className="titleDetails">{news?.title}</h1>
-      <h2 className="subtitleDetails">{news?.subTitle}</h2>
+      <h2 className="subtitleDetails">{news?.sub_title}</h2>
       <p className="contentDetails">{news?.content}</p>
       {
         <div
@@ -61,7 +61,7 @@ export const AdminNewsDetailsC: React.FC<NewsDetailsProps> = ({
         )}
         <Button
           className="detailsButtonList"
-          onClick={() => navigate(`/news/edit/${news.newsId}`)}
+          onClick={() => navigate(`/news/edit/${news.id}`)}
         >
           <Edit size={20} strokeWidth={2} color={"white"} /> Edit
         </Button>

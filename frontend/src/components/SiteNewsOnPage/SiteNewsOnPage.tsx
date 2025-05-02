@@ -8,9 +8,12 @@ import { Categories } from "../../types/categories/categories";
 import { News } from "../../types/news/news";
 import "../SiteNewsOnPage/SiteNewsOnPage.css";
 
+type NewsResponse = News[] | { news: News[] };
+type CategoriesResponse = Categories[] | { categories: Categories[] };
+
 export interface NewsProps {
-  homenews: News[];
-  categories: Categories[];
+  homenews: NewsResponse;
+  categories: CategoriesResponse;
 }
 
 enum SortOption {
@@ -32,8 +35,8 @@ var id: string =
     : "";
 
 export const SiteNewsOnPage: React.FC<NewsProps> = ({
-  homenews,
-  categories,
+  homenews = [],
+  categories = [],
 }) => {
   const navigate = useNavigate();
   const [sortOption, setSortOption] = useState<SortOption>(
@@ -41,24 +44,33 @@ export const SiteNewsOnPage: React.FC<NewsProps> = ({
   );
   const [showAllNews, setShowAllNews] = useState<boolean>(false);
 
-  const addView = (newsId: number) => {
+  // Ensure homenews is an array and handle the data structure
+  const newsArray: News[] = Array.isArray(homenews)
+    ? homenews
+    : (homenews as { news: News[] }).news || [];
+
+  // Ensure categories is an array and handle the data structure
+  const categoriesArray: Categories[] = Array.isArray(categories)
+    ? categories
+    : (categories as { categories: Categories[] }).categories || [];
+
+  const addView = (newsId: string) => {
     const model: AddViewModel = {
-      userId: id,
-      newsId: newsId,
-      fingerPrintId: "",
-      watchId: 2,
+      user_id: id,
+      news_id: newsId,
+      finger_print_id: "",
+      watch_id: 2,
     };
     addViews(model);
   };
 
-  const sortedNews = [...homenews].sort((a, b) => {
-    console.log(homenews);
+  const sortedNews = [...newsArray].sort((a, b) => {
     if (sortOption === SortOption.NewestFirst) {
-      return new Date(b.newsId).getTime() - new Date(a.newsId).getTime();
+      return new Date(b.id).getTime() - new Date(a.id).getTime();
     } else if (sortOption === SortOption.OldestFirst) {
-      return new Date(a.newsId).getTime() - new Date(b.newsId).getTime();
+      return new Date(a.id).getTime() - new Date(b.id).getTime();
     } else if (sortOption === SortOption.MostWatched) {
-      return b.numberOfClicks - a.numberOfClicks;
+      return b.number_of_clicks - a.number_of_clicks;
     }
     return 0;
   });
@@ -91,42 +103,41 @@ export const SiteNewsOnPage: React.FC<NewsProps> = ({
         <div className="divReklama">
           <div>
             <>
-              {visibleNews.map((news, index) => (
+              {visibleNews.map((news: News, index: number) => (
                 <div key={index} className="sitediv">
                   <Image
                     src={news.image}
                     className="siteimage"
                     onClick={() => {
-                      addView(news.newsId);
-                      navigate(`/news/${news.newsId}`);
+                      addView(news.id);
+                      navigate(`/news/${news.id}`);
                     }}
                   />
                   <div className="site">
                     <h2
                       className="sitetitle"
                       onClick={() => {
-                        addView(news.newsId);
-                        navigate(`/news/${news.newsId}`);
+                        addView(news.id);
+                        navigate(`/news/${news.id}`);
                       }}
                     >
                       {news.title}
                     </h2>
                     <p className="sitep">
                       <>
-                        {categories
-                          .filter((x) => x.categoryId == news.categoryId)
-                          .map((news) => {
-                            return (
-                              <div
-                                className="sitec"
-                                onClick={() => {
-                                  navigate(`/category/${news.categoryId}`);
-                                }}
-                              >
-                                {news.name}
-                              </div>
-                            );
-                          })}
+                        {categoriesArray
+                          .filter((x: Categories) => x.id === news.category_id)
+                          .map((category: Categories, index: number) => (
+                            <div
+                              key={index}
+                              className="sitec"
+                              onClick={() => {
+                                navigate(`/category/${category.id}`);
+                              }}
+                            >
+                              {category.name}
+                            </div>
+                          ))}
                       </>
                     </p>
                   </div>

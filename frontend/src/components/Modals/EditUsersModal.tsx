@@ -41,14 +41,14 @@ export const EditUsersModal: React.FC<EditUsersModalProps> = ({
   const form = useForm({
     initialValues: {
       role: user.role,
-      userId: user.userId,
-      userName: user.userName,
+      user_id: user.user_id,
+      username: user.username,
       confirmPassword: "",
       email: user.email,
       password: "",
     },
     validate: {
-      userName: (value) => {
+      username: (value) => {
         if (!value) {
           return "Name is required";
         }
@@ -101,7 +101,7 @@ export const EditUsersModal: React.FC<EditUsersModalProps> = ({
       {
         ...form.values,
         role: String(addRole!),
-        userId: form.values.userId,
+        user_id: form.values.user_id,
       },
       {
         onSuccess: () => {
@@ -129,7 +129,7 @@ export const EditUsersModal: React.FC<EditUsersModalProps> = ({
             required
             label="Name"
             placeholder="Name..."
-            {...form.getInputProps("userName")}
+            {...form.getInputProps("username")}
           />
           <TextInput
             className="addUserElement"

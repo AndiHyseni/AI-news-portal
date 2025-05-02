@@ -8,8 +8,8 @@ export const NewsConfigController: Router = Router();
 
 NewsConfigController.get(
   "/",
-  authorize(),
-  ValidationMiddleware(NewsConfigValidator, {}, (req: Request) => req.body),
+  // authorize(),
+  // ValidationMiddleware(NewsConfigValidator, {}, (req: Request) => req.body),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const result = await NewsConfigService.getConfigRow();

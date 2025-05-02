@@ -78,8 +78,12 @@ NewsController.post(
   "/addView",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { newsId, userId, FingerPrintId } = req.body;
-      const result = await NewsService.addView(newsId, userId, FingerPrintId);
+      const { news_id, user_id, finger_print_id } = req.body;
+      const result = await NewsService.addView(
+        news_id,
+        user_id,
+        finger_print_id
+      );
       if (result.httpCode === 200) {
         res.status(result.httpCode).send(result.data);
       } else {
@@ -96,8 +100,8 @@ NewsController.post(
   "/addSavedNews",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { NewsId, UserId } = req.body;
-      const result = await NewsService.addSaved(NewsId, UserId);
+      const { news_id, user_id } = req.body;
+      const result = await NewsService.addSaved(news_id, user_id);
       if (result.httpCode === 200) {
         res.status(result.httpCode).send(result.data);
       } else {
@@ -152,8 +156,8 @@ NewsController.get(
   authorize(),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { userId } = req.params;
-      const result = await NewsService.getSavedNews(userId);
+      const { user_id } = req.params;
+      const result = await NewsService.getSavedNews(user_id);
       if (result.httpCode === 200) {
         res.status(result.httpCode).send(result.data);
       } else {
@@ -171,8 +175,8 @@ NewsController.post(
   authorize(),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { NewsId, UserId } = req.body;
-      const result = await NewsService.deleteSaved(NewsId, UserId);
+      const { news_id, user_id } = req.body;
+      const result = await NewsService.deleteSaved(news_id, user_id);
       if (result.httpCode === 200) {
         res.status(result.httpCode).send(result.data);
       } else {

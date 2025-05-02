@@ -27,7 +27,7 @@
     "typescript": "^5.8.2"
   },
   "scripts": {
-    "start": "ts-node index.ts",
+    "start": "nodemon",
     "dev": "nodemon index.ts",
     "migrate:make": "knex migrate:make -x ts",
     "migrate:latest": "knex migrate:latest",

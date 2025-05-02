@@ -36,7 +36,7 @@ export const NewsForms: React.FC<NewsFormProps> = (newsId) => {
 
   const categoryOptions = data
     ? data.map((category: Categories) => ({
-        value: category.categoryId.toString(),
+        value: category.id.toString(),
         label: category.name,
       }))
     : [];
@@ -113,10 +113,10 @@ export const NewsForms: React.FC<NewsFormProps> = (newsId) => {
     createNewsMutation.mutate(
       {
         ...form.values,
-        newsId: +form.values.newsId,
-        categoryId: categoryId ? Number(categoryId) : 0,
-        isFeatured: isFeatured,
-        isDeleted: isDeleted,
+        news_id: String(form.values.newsId),
+        category_id: categoryId ? String(categoryId) : "",
+        is_featured: isFeatured,
+        is_deleted: isDeleted,
       },
       {
         onSuccess: () => {

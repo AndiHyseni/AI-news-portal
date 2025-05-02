@@ -4,18 +4,26 @@ import { Link, NavLink } from "react-router-dom";
 import { Categories } from "../../types/categories/categories";
 import { useConfiguration } from "../../hooks/useConfiguration/useConfiguration";
 
+type CategoriesResponse = Categories[] | { categories: Categories[] };
+
 export interface CategoriesProps {
-  categories: Categories[];
+  categories: CategoriesResponse;
 }
 
-export const Footer: React.FC<CategoriesProps> = ({ categories }) => {
+export const Footer: React.FC<CategoriesProps> = ({ categories = [] }) => {
   const { data } = useConfiguration();
+
+  // Ensure categories is an array and handle the data structure
+  const categoriesArray: Categories[] = Array.isArray(categories)
+    ? categories
+    : (categories as { categories: Categories[] }).categories || [];
+
   return (
     <div className="footer">
       <div style={{ display: "flex" }}>
         <div className="column1">
           <Link className="footerImage" to="/">
-            <Image src={data?.footerLogo} height={100} width={100} />
+            <Image src={data?.footer_logo} height={100} width={100} />
           </Link>
           <p>
             Ky portal mirëmbahet nga kompania "Portal News". Materialet dhe
@@ -30,11 +38,11 @@ export const Footer: React.FC<CategoriesProps> = ({ categories }) => {
           <div className="footerFirstItem">
             <b>Udhëzim</b>
           </div>
-          {categories
-            .filter((x) => x.showOnline == true)
-            .map((categories, index) => (
-              <NavLink key={index} to={`/category/${categories.categoryId}`}>
-                <div className="footerItem">{categories.name}</div>
+          {categoriesArray
+            .filter((x: Categories) => x.show_online === true)
+            .map((category: Categories, index: number) => (
+              <NavLink key={index} to={`/category/${category.id}`}>
+                <div className="footerItem">{category.name}</div>
               </NavLink>
             ))}
         </div>

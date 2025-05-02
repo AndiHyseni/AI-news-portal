@@ -35,7 +35,7 @@ export const DeleteSavedNewsModal: React.FC<DeleteSavedNewsModalProps> = ({
       ? token[
           "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
         ]
-      : savedNews.userId;
+      : savedNews.user_id;
 
   const handleClose = () => {
     onClose();
@@ -44,8 +44,8 @@ export const DeleteSavedNewsModal: React.FC<DeleteSavedNewsModalProps> = ({
   const handleSubmit = () => {
     mutation.mutate(
       {
-        newsId: savedNews.newsId,
-        userId: id,
+        news_id: savedNews.news_id,
+        user_id: id,
       },
       {
         onSuccess: () => {

@@ -74,7 +74,7 @@ export const Login: React.FC<LoginProps> = ({ mutation }) => {
         <div className="loginHeader">
           <Image
             className="registerImage"
-            src={data?.headerLogo}
+            src={data?.header_logo}
             height={60}
             width={60}
           />

@@ -11,7 +11,7 @@ import { News } from "../../types/news/news";
 
 export const AdminNewsDetails: React.FC = () => {
   const { newsId } = useParams();
-  const { data } = useNewsId(Number(newsId));
+  const { data } = useNewsId(String(newsId));
 
   const [selectedNews, setSelectedNews] = useState<News>();
   const [isDeleteNewsModalOpen, setIsDeleteNewsModalOpen] = useState(false);

@@ -29,11 +29,11 @@ export const NewsTable: React.FC<TableProps> = ({ newses }) => {
       <tbody>
         {newses.map((news, index) => (
           <tr key={index}>
-            <td>{news.newsId}</td>
-            <td>{news.categoryId}</td>
+            <td>{news.id}</td>
+            <td>{news.category_id}</td>
             <td>{news.title}</td>
             <td>
-              <Button component={Link} to={`/news/details/${news.newsId}`}>
+              <Button component={Link} to={`/news/details/${news.id}`}>
                 Details
               </Button>
             </td>

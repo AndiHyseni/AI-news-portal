@@ -8,7 +8,7 @@ import { News } from "../../types/news/news";
 import "../NewsByCategory/NewsByCategory.css";
 
 export interface NewsByCategoryProps {
-  news: News[];
+  news: News[] | { news: News[] };
 }
 
 var token: any =
@@ -27,20 +27,25 @@ export const NewsByCategoryC: React.FC<NewsByCategoryProps> = ({ news }) => {
   const { categoryId } = useParams();
   const navigate = useNavigate();
 
-  const addView = (newsId: number) => {
+  // Ensure news is an array and handle the data structure
+  const newsArray: News[] = Array.isArray(news)
+    ? news
+    : (news as { news: News[] }).news || [];
+
+  const addView = (newsId: string) => {
     const model: AddViewModel = {
-      userId: id,
-      newsId: newsId,
-      fingerPrintId: "",
-      watchId: 2,
+      user_id: id,
+      news_id: newsId,
+      finger_print_id: "",
+      watch_id: 2,
     };
     addViews(model);
   };
 
   return (
     <>
-      {news
-        .filter((x) => x.categoryId == Number(categoryId))
+      {newsArray
+        .filter((x) => x.category_id == String(categoryId))
         .map((news, index) => {
           return (
             <Fragment key={index}>
@@ -50,15 +55,15 @@ export const NewsByCategoryC: React.FC<NewsByCategoryProps> = ({ news }) => {
                     className="newsByCategoryImage"
                     src={news.image}
                     onClick={() => {
-                      addView(news.newsId);
-                      navigate(`/news/${news.newsId}`);
+                      addView(news.id);
+                      navigate(`/news/${news.id}`);
                     }}
                   />
                   <div
                     className="newsByCategoryTitle"
                     onClick={() => {
-                      addView(news.newsId);
-                      navigate(`/news/${news.newsId}`);
+                      addView(news.id);
+                      navigate(`/news/${news.id}`);
                     }}
                   >
                     {news.title}

@@ -26,7 +26,7 @@ export const DeleteCategoriesModal: React.FC<DeleteCategoriesModalProps> = ({
   };
 
   const handleSubmit = () => {
-    mutation.mutate(category.categoryId, {
+    mutation.mutate(category.id, {
       onSuccess: () => {
         handleClose();
         navigate("/Category");

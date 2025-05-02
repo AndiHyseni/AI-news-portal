@@ -32,12 +32,14 @@ export const ReactionsTable: React.FC<TableProps> = ({ reactions }) => {
       <tbody>
         {reactions.map((reactions, index) => (
           <tr key={index}>
-            <td>{reactions.newsId}</td>
+            <td>{reactions.news_id}</td>
             <td>{reactions.sad}</td>
             <td>{reactions.happy}</td>
             <td>{reactions.angry}</td>
             <td>
-              <Button onClick={() => navigate(`/reaction/${reactions.newsId}`)}>
+              <Button
+                onClick={() => navigate(`/reaction/${reactions.news_id}`)}
+              >
                 See more
               </Button>
             </td>

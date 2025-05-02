@@ -8,8 +8,8 @@ export const CategoryController: Router = Router();
 
 CategoryController.get(
   "/",
-  authorize(),
-  ValidationMiddleware(CategoryValidator, {}, (req: Request) => req.query),
+  // authorize(),
+  // ValidationMiddleware(CategoryValidator, {}, (req: Request) => req.query),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const result = await CategoriesService.getAllCategories();

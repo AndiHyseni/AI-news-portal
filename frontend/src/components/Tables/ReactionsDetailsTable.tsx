@@ -29,8 +29,8 @@ export const ReactionsDetailsTable: React.FC<TableProps> = ({
       <tbody>
         {reactionsDetails.map((reactionsDetails, index) => (
           <tr key={index}>
-            <td>{reactionsDetails.newsId}</td>
-            <td>{reactionsDetails.user.userName}</td>
+            <td>{reactionsDetails.news_id}</td>
+            <td>{reactionsDetails.user.username}</td>
             <td>
               {(reactionsDetails.reaction === 1 && "Happy") ||
                 (reactionsDetails.reaction === 2 && "Sad") ||

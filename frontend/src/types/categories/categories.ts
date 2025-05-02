@@ -1,6 +1,6 @@
 export interface Categories {
-  categoryId: number;
+  id: string;
   name: string;
   description: string;
-  showOnline: boolean;
+  show_online: boolean;
 }

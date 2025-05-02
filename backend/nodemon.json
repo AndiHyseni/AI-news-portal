@@ -1,0 +1,17 @@
+{
+  "watch": [
+    "src",
+    "index.ts",
+    "controllers",
+    "services",
+    "models",
+    "api",
+    "interfaces",
+    "utils",
+    "routes",
+    "middlewares"
+  ],
+  "ext": ".ts,.js",
+  "ignore": [],
+  "exec": "ts-node ./index.ts"
+}

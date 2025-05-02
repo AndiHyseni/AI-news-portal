@@ -9,8 +9,8 @@ export const RapportController: Router = Router();
 // GET dashboard view model
 RapportController.get(
   "/",
-  authorize(),
-  ValidationMiddleware(RaportValidator, {}, (req: Request) => req.body),
+  // authorize(),
+  // ValidationMiddleware(RaportValidator, {}, (req: Request) => req.body),
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const result = await RapportService.getDashboardViewModel();

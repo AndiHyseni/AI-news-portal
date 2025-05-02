@@ -8,7 +8,7 @@ import { useNewsId } from "../../hooks/useNews/useNewsId";
 
 export const EditNewsPage: React.FC = () => {
   const { newsId } = useParams();
-  const { data } = useNewsId(Number(newsId));
+  const { data } = useNewsId(String(newsId));
   const createNewsMutation = useCreateNews();
 
   return (

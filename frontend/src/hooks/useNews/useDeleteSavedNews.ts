@@ -8,7 +8,7 @@ import { queryClient } from "../../App";
 export const useDeleteSavedNews = () => {
   const randomId = generateRandomString(20);
 
-  return useMutation((newsId: number) => deleteSavedNews(newsId), {
+  return useMutation((newsId: string) => deleteSavedNews(newsId), {
     onMutate: () => {
       startNotification(randomId);
     },

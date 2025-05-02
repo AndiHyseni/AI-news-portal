@@ -61,7 +61,7 @@ export const getViewsDetails = async (
 
 export const getReactions = async (): Promise<Reaction[]> => {
   const { data } = await axiosInstance.get(
-    `${BaseUrl.DEVELOPMENT}/${REACTION.GET_REACTIONS}`
+    `${BaseUrl.DEVELOPMENT}/News/${REACTION.GET_REACTIONS}`
   );
   return data;
 };
@@ -109,7 +109,7 @@ export const addReaction = async (payload: AddReaction): Promise<number> => {
 
 export const addViews = async (payload: AddViewModel): Promise<void> => {
   const { data } = await axiosInstance.post(
-    `${BaseUrl.DEVELOPMENT}/addView`,
+    `${BaseUrl.DEVELOPMENT}/News/addView`,
     payload
   );
 

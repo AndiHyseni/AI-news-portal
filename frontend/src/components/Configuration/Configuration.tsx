@@ -15,25 +15,25 @@ export const ConfigurationC: React.FC<ConfigurationProps> = ({
   configuration,
 }) => {
   const [headerImage, setHeaderImage] = useState<string | ArrayBuffer>(
-    configuration.headerLogo
+    configuration.header_logo
   );
   const [footerImage, setFooterImage] = useState<string | ArrayBuffer>(
-    configuration.footerLogo
+    configuration.footer_logo
   );
   const [showFeatured, setShowFeatured] = useState<boolean>(
-    configuration.showFeatured
+    configuration.show_featured
   );
   const [mostWatched, setMostWatched] = useState<boolean>(
-    configuration.showMostWached
+    configuration.show_most_watched
   );
 
   const form = useForm({
     initialValues: {
-      headerLogo: configuration.headerLogo,
-      footerLogo: configuration.footerLogo,
-      newsConfigId: configuration.newsConfigId,
-      showFeatured: configuration.showFeatured,
-      showMostWatched: configuration.showMostWached,
+      header_logo: configuration.header_logo,
+      footer_logo: configuration.footer_logo,
+      news_config_id: configuration.news_config_id,
+      show_featured: configuration.show_featured,
+      show_most_watched: configuration.show_most_watched,
     },
   });
 
@@ -60,10 +60,10 @@ export const ConfigurationC: React.FC<ConfigurationProps> = ({
   const handleSubmit = () => {
     axiosInstance
       .post("https://localhost:5000/api/NewsConfig", {
-        headerLogo: headerImage,
-        footerLogo: footerImage,
-        showFeatured: showFeatured,
-        showMostWached: mostWatched,
+        header_logo: headerImage,
+        footer_logo: footerImage,
+        show_featured: showFeatured,
+        show_most_watched: mostWatched,
       })
       .then(() => {
         toast.success("Updated successfuly", { autoClose: 2000 });

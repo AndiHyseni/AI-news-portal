@@ -6,8 +6,14 @@ import { useSavedNews } from "../../hooks/useNews/useSavedNews";
 import { useAddReaction } from "../../hooks/useReactions/useAddReactions";
 import { useReactions } from "../../hooks/useReactions/useReactions";
 import { News, SavedNewsPayload } from "../../types/news/news";
+import { Reaction } from "../../types/administration/administration";
 import { AddSavedNewsButton } from "../common/AddSavedNewsButton";
 import "../NewsDetailsId/NewsDetailsId.css";
+
+// Define interface for the API response
+interface ReactionsResponse {
+  reactions: Reaction[];
+}
 
 export interface NewsDetailsProps {
   news: News;
@@ -19,7 +25,7 @@ export const NewsDetailsId: React.FC<NewsDetailsProps> = ({ news }) => {
   const { newsId } = useParams();
   const [savedNews, setSavedNews] = useState<SavedNewsPayload>();
   const savedNewsMutation = useSavedNews();
-  const { data } = useReactions();
+  const { data: reactionsData } = useReactions();
   const navigate = useNavigate();
 
   var token: any =
@@ -35,17 +41,27 @@ export const NewsDetailsId: React.FC<NewsDetailsProps> = ({ news }) => {
       : "";
   const handleSubmit = (reaction: number) => {
     addReactionMutation.mutate({
-      newsId: news.newsId,
-      userId: id,
+      news_id: news.id,
+      user_id: id,
       reaction: reaction,
     });
   };
+
+  // Access reactions array safely
+  const reactionsArray = Array.isArray(reactionsData)
+    ? reactionsData
+    : (reactionsData as ReactionsResponse | undefined)?.reactions || [];
+
+  // Find the reaction for current news
+  const currentNewsReaction = reactionsArray.find(
+    (reaction: Reaction) => reaction.news_id === news.id
+  ) || { happy: 0, sad: 0, angry: 0 };
 
   return (
     <div className="details">
       <Image src={news?.image} />
       <h1 className="titleDetails">{news?.title}</h1>
-      <h2 className="subtitleDetails">{news?.subTitle}</h2>
+      <h2 className="subtitleDetails">{news?.sub_title}</h2>
       <p className="contentDetails">{news?.content}</p>
       {
         <div
@@ -69,7 +85,7 @@ export const NewsDetailsId: React.FC<NewsDetailsProps> = ({ news }) => {
         </div>
       )}
       <div className="savedButton">
-        {news && data && (
+        {news && reactionsData && (
           <AddSavedNewsButton
             newsId={Number(newsId)}
             savedNews={savedNews}
@@ -81,9 +97,7 @@ export const NewsDetailsId: React.FC<NewsDetailsProps> = ({ news }) => {
         <div className="reactions">
           <h1 className="reactionTitle">Cili është vlerësimi juaj për këtë?</h1>
           <div className="reactionEmoji">
-            <Text className="counter">
-              {data?.filter((n) => n.newsId == news.newsId).map((x) => x.happy)}
-            </Text>
+            <Text className="counter">{currentNewsReaction.happy}</Text>
             <Image
               onClick={() => navigate("/login")}
               src="../../images/happy.png"
@@ -91,9 +105,7 @@ export const NewsDetailsId: React.FC<NewsDetailsProps> = ({ news }) => {
               height={150}
               width={150}
             />
-            <Text className="counter">
-              {data?.filter((n) => n.newsId == news.newsId).map((x) => x.sad)}
-            </Text>
+            <Text className="counter">{currentNewsReaction.sad}</Text>
             <Image
               onClick={() => navigate("/login")}
               src="../../images/sad.png"
@@ -101,9 +113,7 @@ export const NewsDetailsId: React.FC<NewsDetailsProps> = ({ news }) => {
               height={150}
               width={150}
             />
-            <Text className="counter">
-              {data?.filter((n) => n.newsId == news.newsId).map((x) => x.angry)}
-            </Text>
+            <Text className="counter">{currentNewsReaction.angry}</Text>
             <Image
               onClick={() => navigate("/login")}
               src="../../images/angry.jpg"
@@ -118,9 +128,7 @@ export const NewsDetailsId: React.FC<NewsDetailsProps> = ({ news }) => {
         <div className="reactions">
           <h1 className="reactionTitle">Cili është vlerësimi juaj për këtë?</h1>
           <div className="reactionEmoji">
-            <Text className="counter">
-              {data?.filter((n) => n.newsId == news.newsId).map((x) => x.happy)}
-            </Text>
+            <Text className="counter">{currentNewsReaction.happy}</Text>
             <Image
               onClick={() => {
                 handleSubmit(1);
@@ -131,9 +139,7 @@ export const NewsDetailsId: React.FC<NewsDetailsProps> = ({ news }) => {
               height={150}
               width={150}
             />
-            <Text className="counter">
-              {data?.filter((n) => n.newsId == news.newsId).map((x) => x.sad)}
-            </Text>
+            <Text className="counter">{currentNewsReaction.sad}</Text>
             <Image
               onClick={() => {
                 handleSubmit(2);
@@ -144,9 +150,7 @@ export const NewsDetailsId: React.FC<NewsDetailsProps> = ({ news }) => {
               height={150}
               width={150}
             />
-            <Text className="counter">
-              {data?.filter((n) => n.newsId == news.newsId).map((x) => x.angry)}
-            </Text>
+            <Text className="counter">{currentNewsReaction.angry}</Text>
             <Image
               onClick={() => {
                 handleSubmit(3);

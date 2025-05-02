@@ -27,24 +27,33 @@ var id: string =
     : "";
 
 export const HomepageNews: React.FC<NewsProps> = ({ homenews }) => {
-  const sortedHomepageNews = [...homenews].sort((a, b) => b.newsId - a.newsId);
+  // Ensure homenews is an array and handle the data structure
+  const newsArray: News[] = Array.isArray(homenews)
+    ? homenews
+    : (homenews as { news: News[] }).news || [];
+
+  const sortedHomepageNews = [...newsArray].sort(
+    (a, b) =>
+      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+  );
   const { data } = useConfiguration();
   const navigate = useNavigate();
   const autoplay = useRef(Autoplay({ delay: 5000 }));
 
-  const addView = (newsId: number) => {
+  const addView = (newsId: string) => {
     const model: AddViewModel = {
-      userId: id,
-      newsId: newsId,
-      fingerPrintId: "",
-      watchId: 2,
+      user_id: id,
+      news_id: newsId,
+      finger_print_id: "",
+      watch_id: 2,
     };
     addViews(model);
   };
+
   return (
     <div>
       <>
-        {data?.showFeatured && (
+        {data?.show_featured && (
           <Carousel
             sx={{ maxWidth: 1500 }}
             mx="auto"
@@ -54,19 +63,19 @@ export const HomepageNews: React.FC<NewsProps> = ({ homenews }) => {
             onMouseEnter={autoplay.current.stop}
             onMouseLeave={autoplay.current.reset}
           >
-            {sortedHomepageNews.map((news, index) => (
+            {sortedHomepageNews.map((news: News, index: number) => (
               <Fragment key={index}>
                 <Carousel.Slide>
                   <Image src={news.image} />
                   <div
                     onClick={() => {
-                      addView(news.newsId);
-                      navigate(`/news/${news.newsId}`);
+                      addView(news.id);
+                      navigate(`/news/${news.id}`);
                     }}
                     className="shadow"
                   >
                     <h1 className="title">{news.title}</h1>
-                    <p className="subtitle">{news.subTitle}</p>
+                    <p className="subtitle">{news.sub_title}</p>
                   </div>
                 </Carousel.Slide>
               </Fragment>

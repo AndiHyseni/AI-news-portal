@@ -6,7 +6,7 @@ import { useNewsId } from "../../hooks/useNews/useNewsId";
 
 export const NewsDetails: React.FC = () => {
   const { newsId } = useParams();
-  const { data } = useNewsId(Number(newsId));
+  const { data } = useNewsId(String(newsId));
 
   return (
     <BasePage>

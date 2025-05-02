@@ -1,27 +1,29 @@
 export interface News {
-  userId: string;
-  categoryId: number;
+  id: string;
+  user_id: string;
+  category_id: string;
   content: string;
-  expireDate: string;
+  expire_date: string;
   image: string;
-  isDeleted: boolean;
-  isFeatured: boolean;
-  newsId: number;
-  subTitle: string;
+  is_deleted: boolean;
+  is_featured: boolean;
+  sub_title: string;
   tags: string;
   title: string;
   video: string;
-  numberOfClicks: number;
+  number_of_clicks: number;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface CreateNewsPayload {
-  categoryId: number;
+  category_id: string;
   content: string;
   expireDate: string;
   image: string;
-  isDeleted: Boolean;
-  isFeatured: Boolean;
-  newsId: number;
+  is_deleted: Boolean;
+  is_featured: Boolean;
+  news_id: string;
   subTitle: string;
   tags: string;
   title: string;
@@ -29,20 +31,20 @@ export interface CreateNewsPayload {
 }
 
 export interface SavedNewsPayload {
-  newsId: number;
-  userId: string;
+  news_id: string;
+  user_id: string;
 }
 
 export interface SavedNewsPage {
-  newsId: number;
-  userId: string;
-  categoryId: number;
+  news_id: string;
+  user_id: string;
+  category_id: string;
   title: string;
   image: string;
   content: string;
   expireDate: string;
-  isDeleted: Boolean;
-  isFeatured: Boolean;
+  is_deleted: Boolean;
+  is_featured: Boolean;
   subTitle: string;
   tags: string;
   video: string;

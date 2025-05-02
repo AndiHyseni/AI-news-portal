@@ -12,7 +12,7 @@ export const NewsConfigService = {
           StatusCodeEnums.UNEXPECTED
         );
       }
-      return ok({ newsConfig: config });
+      return ok(config);
     } catch (error) {
       return failure({ error }, StatusCodeEnums.UNPROCESSABLE_ENTITY);
     }
@@ -26,7 +26,7 @@ export const NewsConfigService = {
         newsConfig.NewsConfigId,
         newsConfig
       );
-      return ok({ newsConfig: updated });
+      return ok(updated);
     } catch (error) {
       return failure({ error }, StatusCodeEnums.UNPROCESSABLE_ENTITY);
     }

@@ -75,7 +75,7 @@ export const Register: React.FC<RegisterProps> = ({ mutation }) => {
         <div className="registerHeader">
           <Image
             className="registerImage"
-            src={data?.headerLogo}
+            src={data?.header_logo}
             height={60}
             width={60}
           />

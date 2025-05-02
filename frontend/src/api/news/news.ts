@@ -15,7 +15,7 @@ export const getNews = async (): Promise<News[]> => {
   return data;
 };
 
-export const getNewsId = async (newsId: number): Promise<News> => {
+export const getNewsId = async (newsId: string): Promise<News> => {
   const { data } = await axiosInstance.get(
     `${BaseUrl.DEVELOPMENT}/${NEWS.GET_NEWSID}/${newsId}`
   );
@@ -32,7 +32,7 @@ export const createNews = async (
   return data;
 };
 
-export const deleteNews = async (newsId: number): Promise<void> => {
+export const deleteNews = async (newsId: string): Promise<void> => {
   const { data } = await axiosInstance.delete(
     `${BaseUrl.DEVELOPMENT}/${NEWS.GET_NEWSID}/${newsId}`
   );
@@ -56,7 +56,7 @@ export const savedNewsPage = async (
   return data;
 };
 
-export const deleteSavedNews = async (newsId: number): Promise<void> => {
+export const deleteSavedNews = async (newsId: string): Promise<void> => {
   const { data } = await axiosInstance.post(
     `${BaseUrl.DEVELOPMENT}/${SAVED_NEWS.DELETE_SAVED}`,
     newsId

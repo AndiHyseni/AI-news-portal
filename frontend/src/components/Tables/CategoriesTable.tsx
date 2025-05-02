@@ -45,10 +45,10 @@ export const CategoriesTable: React.FC<TableProps> = ({
         <tbody>
           {categories.map((categories, index) => (
             <tr key={index}>
-              <td>{categories.categoryId}</td>
+              <td>{categories.id}</td>
               <td>{categories.name}</td>
               <td>{categories.description}</td>
-              <td>{categories.showOnline == true ? "Yes" : "No"}</td>
+              <td>{categories.show_online == true ? "Yes" : "No"}</td>
               <td>
                 <Button onClick={() => onEditCategory(categories)}>
                   <Edit size={20} strokeWidth={2} color={"white"} />
