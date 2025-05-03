@@ -31,7 +31,7 @@ export const getRapport = async (): Promise<Rapport> => {
 
 export const getUsers = async (): Promise<Users[]> => {
   const { data } = await axiosInstance.get(
-    `${BaseUrl.DEVELOPMENT}/${USERS.GET_USERS}`
+    `${BaseUrl.DEVELOPMENT}/Account/${USERS.GET_USERS}`
   );
   return data;
 };

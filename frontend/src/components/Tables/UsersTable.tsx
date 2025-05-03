@@ -3,8 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { Edit, Trash } from "tabler-icons-react";
 import { Users } from "../../types/administration/administration";
 
+type UsersResponse = Users[] | { users: Users[] };
+
 export interface TableProps {
-  users: Users[];
+  users: UsersResponse;
   onDeleteUsers: (users: Users) => void;
   onEditUser: (users: Users) => void;
 }
@@ -16,6 +18,11 @@ export const UsersTable: React.FC<TableProps> = ({
 }) => {
   const navigate = useNavigate();
 
+  // Ensure users is an array
+  const usersArray: Users[] = Array.isArray(users)
+    ? users
+    : (users as { users: Users[] }).users || [];
+  console.log(usersArray);
   return (
     <Table
       data-testid="users-table"
@@ -38,10 +45,10 @@ export const UsersTable: React.FC<TableProps> = ({
         </tr>
       </thead>
       <tbody>
-        {users.map((user, index) => (
+        {usersArray.map((user, index) => (
           <tr key={index}>
-            <td>{user.user_id}</td>
-            <td>{user.username}</td>
+            <td>{user.id}</td>
+            <td>{user.name}</td>
             <td>{user.email}</td>
             <td>{user.role}</td>
             <td>

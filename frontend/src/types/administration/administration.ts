@@ -13,8 +13,8 @@ export interface Rapport {
 export interface Users {
   email: string;
   role: string;
-  user_id: string;
-  username: string;
+  id: string;
+  name: string;
 }
 
 export interface Views {

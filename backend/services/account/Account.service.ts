@@ -204,9 +204,9 @@ export const AccountService = {
     try {
       const users = await UserDbModel.query();
       const usersVM = users.map((user: any) => ({
-        UserId: user.id,
-        Email: user.email,
-        UserName: user.username,
+        id: user.id,
+        email: user.email,
+        name: user.name,
       }));
       return ok({ users: usersVM });
     } catch (error) {

@@ -29,6 +29,7 @@ export const EditUsersModal: React.FC<EditUsersModalProps> = ({
   onClose,
   mutation,
 }) => {
+  console.log(user);
   const [visible, { toggle }] = useDisclosure(false);
 
   const [addRole, setAddRole] = useState<string | null>(user.role);
@@ -41,14 +42,14 @@ export const EditUsersModal: React.FC<EditUsersModalProps> = ({
   const form = useForm({
     initialValues: {
       role: user.role,
-      user_id: user.user_id,
-      username: user.username,
+      user_id: user.id,
+      name: user.name,
       confirmPassword: "",
       email: user.email,
       password: "",
     },
     validate: {
-      username: (value) => {
+      name: (value) => {
         if (!value) {
           return "Name is required";
         }
@@ -129,7 +130,7 @@ export const EditUsersModal: React.FC<EditUsersModalProps> = ({
             required
             label="Name"
             placeholder="Name..."
-            {...form.getInputProps("username")}
+            {...form.getInputProps("name")}
           />
           <TextInput
             className="addUserElement"
