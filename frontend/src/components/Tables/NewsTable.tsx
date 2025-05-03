@@ -2,11 +2,18 @@ import { Button, Table } from "@mantine/core";
 import { Link } from "react-router-dom";
 import { News } from "../../types/news/news";
 
+type NewsResponse = News[] | { news: News[] };
+
 export interface TableProps {
-  newses: News[];
+  newses: NewsResponse;
 }
 
 export const NewsTable: React.FC<TableProps> = ({ newses }) => {
+  // Ensure newses is an array
+  const newsArray = Array.isArray(newses)
+    ? newses
+    : (newses as { news: News[] })?.news || [];
+
   return (
     <Table
       data-testid="news-table"
@@ -27,7 +34,7 @@ export const NewsTable: React.FC<TableProps> = ({ newses }) => {
         </tr>
       </thead>
       <tbody>
-        {newses.map((news, index) => (
+        {newsArray.map((news, index) => (
           <tr key={index}>
             <td>{news.id}</td>
             <td>{news.category_id}</td>

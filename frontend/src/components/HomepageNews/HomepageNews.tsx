@@ -10,8 +10,10 @@ import { News } from "../../types/news/news";
 import "./HomepageNews.css";
 import Autoplay from "embla-carousel-autoplay";
 
+type NewsResponse = News[] | { news: News[] };
+
 export interface NewsProps {
-  homenews: News[];
+  homenews: NewsResponse;
 }
 
 var token: any =

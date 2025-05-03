@@ -1,14 +1,16 @@
 import { Image } from "@mantine/core";
 import jwtDecode from "jwt-decode";
-import { Fragment } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { addViews } from "../../api/administration/administration";
 import { AddViewModel } from "../../types/administration/administration";
 import { News } from "../../types/news/news";
 import "../NewsByCategory/NewsByCategory.css";
+import { Categories } from "../../types/categories/categories";
 
 export interface NewsByCategoryProps {
   news: News[] | { news: News[] };
+  categories: Categories[];
 }
 
 var token: any =
@@ -23,14 +25,36 @@ var id: string =
       ]
     : "";
 
-export const NewsByCategoryC: React.FC<NewsByCategoryProps> = ({ news }) => {
+export const NewsByCategoryC: React.FC<NewsByCategoryProps> = ({
+  news,
+  categories,
+}) => {
   const { categoryId } = useParams();
+  const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const [open, setOpen] = useState<boolean>(false);
+  const [filteredNews, setFilteredNews] = useState<News[]>([]);
   const navigate = useNavigate();
 
-  // Ensure news is an array and handle the data structure
-  const newsArray: News[] = Array.isArray(news)
+  // Ensure news is an array
+  const newsArray = Array.isArray(news)
     ? news
     : (news as { news: News[] }).news || [];
+
+  useEffect(() => {
+    if (selectedCategory === "All") {
+      setFilteredNews(newsArray);
+    } else {
+      // Filter news by categoryId matching the selectedCategory
+      setFilteredNews(
+        newsArray.filter((item) => {
+          const category = categories.find(
+            (cat) => cat.id === item.category_id
+          );
+          return category?.name === selectedCategory;
+        })
+      );
+    }
+  }, [selectedCategory, newsArray, categories]);
 
   const addView = (newsId: string) => {
     const model: AddViewModel = {
@@ -44,7 +68,7 @@ export const NewsByCategoryC: React.FC<NewsByCategoryProps> = ({ news }) => {
 
   return (
     <>
-      {newsArray
+      {filteredNews
         .filter((x) => x.category_id == String(categoryId))
         .map((news, index) => {
           return (
