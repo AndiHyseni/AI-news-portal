@@ -22,7 +22,7 @@ export const UsersTable: React.FC<TableProps> = ({
   const usersArray: Users[] = Array.isArray(users)
     ? users
     : (users as { users: Users[] }).users || [];
-  console.log(usersArray);
+
   return (
     <Table
       data-testid="users-table"

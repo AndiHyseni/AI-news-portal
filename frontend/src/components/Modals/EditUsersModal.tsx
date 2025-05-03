@@ -29,7 +29,6 @@ export const EditUsersModal: React.FC<EditUsersModalProps> = ({
   onClose,
   mutation,
 }) => {
-  console.log(user);
   const [visible, { toggle }] = useDisclosure(false);
 
   const [addRole, setAddRole] = useState<string | null>(user.role);
