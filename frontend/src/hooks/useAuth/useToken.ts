@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useContext } from "react";
 import { refreshToken } from "../../api/auth/refreshToken";
-import { UserContext } from "../../contexes/UserContext";
+import { UserContext } from "../../contexts/UserContext";
 import { LoginResponse } from "../../types/auth/login";
 
 export const useToken = (token: string | null) => {
@@ -9,7 +9,10 @@ export const useToken = (token: string | null) => {
 
   return useQuery(["validateToken", token], () => refreshToken(token), {
     onSuccess: (data: LoginResponse) => {
-      setUserContext(data);
+      setUserContext({
+        isAuthenticated: true,
+        token: data.token,
+      });
     },
     retry: false,
   });

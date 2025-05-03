@@ -66,7 +66,11 @@ export const MostWatchedNews: React.FC<NewsProps> = ({ mostwatched = [] }) => {
               {sortedMostWatched.map((news: News, index: number) => (
                 <Carousel.Slide key={index}>
                   <div className="mostwatcheddiv">
-                    <Image src={news.image} className="mostwatchedimage" />
+                    <Image
+                      src={news.image}
+                      className="mostwatchedimage"
+                      height={300}
+                    />
                     <div className="mostwatchedsite">
                       <h2 className="mostwatchedtitle">{news.title}</h2>
                       <Button

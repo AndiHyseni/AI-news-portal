@@ -28,54 +28,88 @@ export const AccountService = {
       const hashedPassword = await hashPassword(password);
       const newUser = await UserDbModel.query().insert({
         email,
-        username: email.split("@")[0],
-        password_hash: hashedPassword,
+        name: email.split("@")[0],
+        password: hashedPassword,
       });
       const userViewModel = {
         UserId: newUser.id,
         Email: newUser.email,
-        UserName: newUser.username,
+        UserName: newUser.name,
       };
       return ok({ user: userViewModel });
     } catch (error) {
       return failure({ error }, StatusCodeEnums.UNPROCESSABLE_ENTITY);
     }
   },
-  login: async (data: any) => {
+  login: async (data: Pick<UserDbModel, "email" | "password">) => {
+    const { email, password } = data;
+
     try {
-      const { email, password, fingerPrintId } = data;
-      const user = await UserDbModel.query().findOne({ email });
+      // Check if user with this email exists
+      let user = await UserDbModel.query().findOne({ email });
+
       if (!user) {
         return failure(
           { statusMessage: "This email doesn't exist!" },
           StatusCodeEnums.INVALID_CREDENTIALS
         );
       }
-      const passwordIsValid = await comparePassword(
-        password,
-        user.password_hash
-      );
-      if (!passwordIsValid) {
+
+      /*Compares hashed password with the one from input*/
+      const passwordIsValid = await comparePassword(password, user.password);
+
+      if (!passwordIsValid)
         return failure(
           { statusMessage: "Invalid Credentials" },
           StatusCodeEnums.INVALID_CREDENTIALS
         );
+
+      // Fetch roles separately to avoid relation mapping issues
+      try {
+        const roles = await UserDbModel.relatedQuery("roles").for(user.id);
+
+        // Extract role names
+        const roleNames = roles.map((role) => role.name) || ["user"];
+
+        // Generate JWT
+        const token = generateJWT({
+          ...user,
+          roles: roleNames,
+        });
+
+        // Construct response object with all necessary user data
+        const response = {
+          token,
+          roles: roleNames,
+          userId: user.id,
+          name: user.name,
+          email: user.email,
+        };
+
+        return ok(response);
+      } catch (error) {
+        console.error("Error fetching roles:", error);
+
+        // Fallback to basic login without roles if relation query fails
+        const token = generateJWT({
+          ...user,
+          roles: ["user"],
+        });
+
+        return ok({
+          token,
+          roles: ["user"],
+          userId: user.id,
+          name: user.name,
+          email: user.email,
+        });
       }
-      // Generate JWT token
-      const token = generateJWT(user);
-      // Generate a refresh token
-      const refreshToken = uuidv4();
-      await RefreshTokenDbModel.query().insert({
-        token: refreshToken,
-        user_id: user.id,
-        jwt_id: uuidv4(),
-        date_added: new Date(),
-        date_expires: new Date(Date.now() + 6 * 30 * 24 * 60 * 60 * 1000), // 6 months expiry
-      });
-      // Optionally update fingerprint here if needed
-      return ok({ token, refreshToken });
     } catch (error) {
-      return failure({ error }, StatusCodeEnums.UNPROCESSABLE_ENTITY);
+      console.error("Login error:", error);
+      return failure(
+        { statusMessage: "An error occurred during login", error },
+        StatusCodeEnums.UNEXPECTED
+      );
     }
   },
   refreshToken: async (tokenRequest: any) => {
@@ -126,13 +160,13 @@ export const AccountService = {
       const hashedPassword = await hashPassword(password);
       const newAdmin = await UserDbModel.query().insert({
         email,
-        username: email.split("@")[0],
-        password_hash: hashedPassword,
+        name: email.split("@")[0],
+        password: hashedPassword,
       });
       const userViewModel = {
         UserId: newAdmin.id,
         Email: newAdmin.email,
-        UserName: newAdmin.username,
+        UserName: newAdmin.name,
       };
       return ok({ user: userViewModel });
     } catch (error) {
@@ -151,7 +185,7 @@ export const AccountService = {
       const userViewModel = {
         UserId: user.id,
         Email: user.email,
-        UserName: user.username,
+        UserName: user.name,
       };
       return ok({ user: userViewModel });
     } catch (error) {
@@ -250,7 +284,7 @@ export const AccountService = {
       }
       const hashed = await hashPassword(password);
       const updatedUser = await UserDbModel.query().patchAndFetchById(user.id, {
-        password_hash: hashed,
+        password: hashed,
       });
       return ok({ user: updatedUser });
     } catch (error) {

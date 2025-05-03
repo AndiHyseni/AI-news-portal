@@ -2,8 +2,7 @@ import "./App.css";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { MantineProvider } from "@mantine/core";
 import { Router } from "./routes/Router";
-import { useState } from "react";
-import { defaultLoginResponse, UserContext } from "./contexes/UserContext";
+import { UserProvider } from "./contexts/UserContext";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -14,14 +13,12 @@ export const queryClient = new QueryClient({
 });
 
 const App: React.FC = () => {
-  const [user, setUser] = useState(defaultLoginResponse);
-
   return (
     <MantineProvider>
       <QueryClientProvider client={queryClient}>
-        <UserContext.Provider value={[user, setUser]}>
+        <UserProvider>
           <Router />
-        </UserContext.Provider>
+        </UserProvider>
       </QueryClientProvider>
     </MantineProvider>
   );

@@ -2,16 +2,20 @@ import { Model } from "objection";
 import { v4 as uuidv4 } from "uuid";
 import ReactionDbModel from "./Reaction.model";
 import RefreshTokenDbModel from "./RefreshToken.model";
+import RoleDbModel from "./Role.model";
 import SavedNewsDbModel from "./SavedNews.model";
+import UserRoleDbModel from "./UserRole.model";
 import WatchedDbModel from "./Watched.model";
 
 export default class UserDbModel extends Model {
   id!: string;
-  username!: string;
+  name!: string;
   email!: string;
-  password_hash!: string;
+  password!: string;
   created_at?: Date;
   updated_at?: Date;
+
+  roles?: RoleDbModel[];
 
   static tableName = "users";
 
@@ -55,6 +59,26 @@ export default class UserDbModel extends Model {
       join: {
         from: "users.id",
         to: "watched.user_id",
+      },
+    },
+    userRoles: {
+      relation: Model.HasManyRelation,
+      modelClass: UserRoleDbModel,
+      join: {
+        from: "users.id",
+        to: "user_roles.user_id",
+      },
+    },
+    roles: {
+      relation: Model.ManyToManyRelation,
+      modelClass: RoleDbModel,
+      join: {
+        from: "users.id",
+        through: {
+          from: "user_roles.user_id",
+          to: "user_roles.role_id",
+        },
+        to: "roles.id",
       },
     },
   };

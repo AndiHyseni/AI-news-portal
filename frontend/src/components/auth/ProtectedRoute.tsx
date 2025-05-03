@@ -1,25 +1,13 @@
 import React, { useContext } from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import { UserContext } from "../contexts/UserContext";
-import { useToken } from "../hooks/useAuth/useToken";
+import { UserContext } from "../../contexts/UserContext";
 
 interface ProtectedRouteProps {
   requiredRoles?: string[];
 }
 
-export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
-  requiredRoles,
-}) => {
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ requiredRoles }) => {
   const [userContext] = useContext(UserContext);
-  const { isLoading, error } = useToken(localStorage.getItem("jwt"));
-
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
-
-  if (error) {
-    return <Navigate to="/login" />;
-  }
 
   // If not authenticated, redirect to login
   if (!userContext.isAuthenticated) {
@@ -34,10 +22,12 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     );
 
     if (!hasRequiredRole) {
-      return <Navigate to="/denied" />;
+      return <Navigate to="/unauthorized" />;
     }
   }
 
   // If authenticated and has required roles, render the child routes
   return <Outlet />;
 };
+
+export default ProtectedRoute;

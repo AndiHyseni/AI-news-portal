@@ -59,10 +59,12 @@
 .divReklama {
   display: flex;
   flex-direction: column;
+  width: -webkit-fill-available;
 }
 
 .divRead {
   display: flex;
+  justify-content: space-between;
 }
 
 .selectList {

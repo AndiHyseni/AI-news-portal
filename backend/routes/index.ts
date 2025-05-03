@@ -6,6 +6,7 @@ import { CategoryController } from "../controllers/Category.controller";
 import { NewsController } from "../controllers/News.controller";
 import { RapportController } from "../controllers/Raport.controller";
 import { NewsConfigController } from "../controllers/NewsConfig.controller";
+import RoleController from "../controllers/Role.controller";
 
 const endpoints: [string, Router][] = [
   ["/api/Account", AccountController],
@@ -13,6 +14,7 @@ const endpoints: [string, Router][] = [
   ["/api/News", NewsController],
   ["/api/rapport", RapportController],
   ["/api/NewsConfig", NewsConfigController],
+  ["/api/roles", RoleController],
 ];
 
 export const routes = (app: Application): void => {

@@ -106,7 +106,7 @@ export const RapportService = {
             if (!acc[key]) {
               acc[key] = {
                 Id: record.user_id,
-                name: record.user?.username || "",
+                name: record.user?.name || "",
                 number: 0,
               };
             }
@@ -123,7 +123,7 @@ export const RapportService = {
             if (!acc[key]) {
               acc[key] = {
                 Id: record.user_id,
-                name: record.user?.username || "",
+                name: record.user?.name || "",
                 number: 0,
               };
             }
@@ -140,7 +140,7 @@ export const RapportService = {
             if (!acc[key]) {
               acc[key] = {
                 Id: record.user_id,
-                name: record.user?.username || "",
+                name: record.user?.name || "",
                 number: 0,
               };
             }

@@ -51,7 +51,7 @@ export const HomepageNews: React.FC<NewsProps> = ({ homenews }) => {
   };
 
   return (
-    <div>
+    <div style={{ width: "-webkit-fill-available" }}>
       <>
         {data?.show_featured && (
           <Carousel
@@ -66,7 +66,7 @@ export const HomepageNews: React.FC<NewsProps> = ({ homenews }) => {
             {sortedHomepageNews.map((news: News, index: number) => (
               <Fragment key={index}>
                 <Carousel.Slide>
-                  <Image src={news.image} />
+                  <Image src={news.image} height={600} />
                   <div
                     onClick={() => {
                       addView(news.id);

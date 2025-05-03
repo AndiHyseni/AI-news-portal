@@ -1,15 +1,11 @@
 import { createContext } from "react";
-import { LoginResponse } from "../types/auth/login";
+import { UserContext as UserContextType } from "../types/auth/login";
 
-export const defaultLoginResponse: LoginResponse = {
-  expiresAt: "",
-  refreshToken: "",
-  token: "",
-  userEmail: "",
-  userRole: undefined,
-  username: "",
+export const defaultLoginResponse: UserContextType = {
+  isAuthenticated: false,
+  token: null,
 };
 
 export const UserContext = createContext<
-  [LoginResponse, (loginResponse: LoginResponse) => void]
+  [UserContextType, (userContext: UserContextType) => void]
 >([defaultLoginResponse, () => null]);

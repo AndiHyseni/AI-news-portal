@@ -1,37 +1,43 @@
 import axios from "axios";
 import { BaseUrl } from "../enums/baseUrl";
 
-export const axiosInstance = axios.create();
-
-axiosInstance.interceptors.request.use((request) => {
-  if (!request.headers) {
-    request.headers = {};
-  }
-  request.headers.Accept = "application/json";
-
-  // Attach token to request if available
-  const jwtToken = localStorage.getItem("jwt");
-  if (jwtToken) {
-    request.headers.Authorization = `Bearer ${jwtToken}`;
-  }
-
-  // Send content-type with POST/PUT requests
-  if (request.method === "POST" || request.method === "PUT") {
-    request.headers["Content-Type"] = "application/json";
-  }
-
-  return request;
+export const axiosInstance = axios.create({
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
-// if request succeeds with status code 1001 throw error
-axiosInstance.interceptors.response.use((response) => {
-  if (response.data.code === 1001) {
-    localStorage.removeItem("jwt");
-    window.location.reload();
+// Add a request interceptor to include the JWT token in every request
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("jwt");
+    if (token) {
+      if (!config.headers) {
+        config.headers = {};
+      }
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
   }
+);
 
-  return response;
-});
+// Add a response interceptor to handle token expiration
+axiosInstance.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      // Token expired or invalid
+      localStorage.removeItem("jwt");
+      window.location.href = "/login";
+    }
+    return Promise.reject(error);
+  }
+);
 
 export const BASE_DOMAIN_URL =
   process.env.REACT_APP_ENV === "dev" ? BaseUrl.DEVELOPMENT : "";

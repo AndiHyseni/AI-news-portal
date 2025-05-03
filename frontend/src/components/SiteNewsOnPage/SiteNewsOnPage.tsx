@@ -123,7 +123,7 @@ export const SiteNewsOnPage: React.FC<NewsProps> = ({
                     >
                       {news.title}
                     </h2>
-                    <p className="sitep">
+                    <div className="sitep">
                       <>
                         {categoriesArray
                           .filter((x: Categories) => x.id === news.category_id)
@@ -139,7 +139,7 @@ export const SiteNewsOnPage: React.FC<NewsProps> = ({
                             </div>
                           ))}
                       </>
-                    </p>
+                    </div>
                   </div>
                 </div>
               ))}

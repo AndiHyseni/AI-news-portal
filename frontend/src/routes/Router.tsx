@@ -21,33 +21,43 @@ import { NewsByTags } from "../pages/NewsByTags/NewsByTags";
 import { NewsDetails } from "../pages/NewsDetails/NewsDetails";
 import { SavedNews } from "../pages/SavedNews/SavedNews";
 import { ErrorPage } from "./ErrorPage";
+import ProtectedRoute from "../components/auth/ProtectedRoute";
 
 export const Router: React.FC = () => {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Public routes */}
         <Route path="/" element={<Homepage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/news/:newsId" element={<NewsDetails />} />
-        <Route path="/denied" element={<ErrorPage />} />
-        <Route path="/news" element={<AdminNews />} />
-        <Route path="/news/add" element={<AddNewsPage />} />
-        <Route path="/news/details/:newsId" element={<AdminNewsDetails />} />
-        <Route path="/news/edit/:newsId" element={<EditNewsPage />} />
-        <Route path="/users" element={<AdminUsers />} />
-        <Route path="/saved" element={<SavedNews />} />
-        <Route path="/Category" element={<AdminCategories />} />
-        <Route path="/views" element={<AdminViews />} />
-        <Route path="/views/:newsId" element={<AdminViewsDetails />} />
-        <Route path="/reaction" element={<AdminReactions />} />
-        <Route path="/reaction/:newsId" element={<AdminReactionsDetails />} />
-        <Route path="/addAdmin" element={<AddUsersPage />} />
-        <Route path="/category/:categoryId" element={<NewsByCategory />} />
-        <Route path="/tag/:tags" element={<NewsByTags />} />
-        <Route path="/configuration" element={<Configuration />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/category/:categoryId" element={<NewsByCategory />} />
+        <Route path="/tag/:tags" element={<NewsByTags />} />
+        <Route path="/denied" element={<ErrorPage />} />
+
+        {/* Protected routes for all authenticated users */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/saved" element={<SavedNews />} />
+        </Route>
+
+        {/* Protected routes for admin users */}
+        <Route element={<ProtectedRoute requiredRoles={["admin"]} />}>
+          <Route path="/news" element={<AdminNews />} />
+          <Route path="/news/add" element={<AddNewsPage />} />
+          <Route path="/news/details/:newsId" element={<AdminNewsDetails />} />
+          <Route path="/news/edit/:newsId" element={<EditNewsPage />} />
+          <Route path="/users" element={<AdminUsers />} />
+          <Route path="/Category" element={<AdminCategories />} />
+          <Route path="/views" element={<AdminViews />} />
+          <Route path="/views/:newsId" element={<AdminViewsDetails />} />
+          <Route path="/reaction" element={<AdminReactions />} />
+          <Route path="/reaction/:newsId" element={<AdminReactionsDetails />} />
+          <Route path="/addAdmin" element={<AddUsersPage />} />
+          <Route path="/configuration" element={<Configuration />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
