@@ -77,7 +77,7 @@ export const HomepageNews: React.FC<NewsProps> = ({ homenews }) => {
                     className="shadow"
                   >
                     <h1 className="title">{news.title}</h1>
-                    <p className="subtitle">{news.sub_title}</p>
+                    <p className="subtitle">{news.subtitle}</p>
                   </div>
                 </Carousel.Slide>
               </Fragment>

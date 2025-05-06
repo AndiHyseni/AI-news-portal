@@ -67,18 +67,18 @@ export const RapportService = {
       const adminsCount = parseInt(adminsRes[0].count, 10);
 
       const dashboardViewModel = {
-        Categories: categoriesCount,
-        News: newsCount,
-        Users: usersCount,
-        Saved: savedCount,
-        Views: viewsCount,
-        Angry: angryCount,
-        Sad: sadCount,
-        Happy: happyCount,
-        Admins: adminsCount,
+        categories: categoriesCount,
+        news: newsCount,
+        users: usersCount,
+        saved: savedCount,
+        views: viewsCount,
+        angry: angryCount,
+        sad: sadCount,
+        happy: happyCount,
+        admins: adminsCount,
       };
 
-      return ok({ dashboard: dashboardViewModel });
+      return ok(dashboardViewModel);
     } catch (error) {
       return failure({ error }, StatusCodeEnums.UNPROCESSABLE_ENTITY);
     }

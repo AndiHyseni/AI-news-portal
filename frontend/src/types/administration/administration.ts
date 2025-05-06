@@ -7,7 +7,7 @@ export interface Rapport {
   sad: number;
   saved: number;
   users: number;
-  vIews: number;
+  views: number;
 }
 
 export interface Users {

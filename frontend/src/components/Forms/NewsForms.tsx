@@ -43,14 +43,14 @@ export const NewsForms: React.FC<NewsFormProps> = (newsId) => {
 
   const form = useForm({
     initialValues: {
-      newsId: 0,
-      categoryId: 0,
+      id: 0,
+      category_id: 0,
       content: "",
-      expireDate: "",
+      expire_date: "",
       image: "",
-      isDeleted: false,
-      isFeatured: false,
-      subTitle: "",
+      is_deleted: false,
+      is_featured: false,
+      subtitle: "",
       tags: "",
       title: "",
       video: "",
@@ -62,7 +62,7 @@ export const NewsForms: React.FC<NewsFormProps> = (newsId) => {
         }
         return null;
       },
-      subTitle: (value) => {
+      subtitle: (value) => {
         if (!value) {
           return "Subtitle is required";
         }
@@ -74,7 +74,7 @@ export const NewsForms: React.FC<NewsFormProps> = (newsId) => {
         }
         return null;
       },
-      expireDate: (value) => {
+      expire_date: (value) => {
         if (!value) {
           return "Expire date is required";
         }
@@ -110,13 +110,28 @@ export const NewsForms: React.FC<NewsFormProps> = (newsId) => {
   const handleSubmit = (News: any) => {
     News.image = image;
     News.tags = tags.join(",");
+
+    const formattedDate = form.values.expire_date
+      ? (() => {
+          const date = new Date(form.values.expire_date);
+          // Adjust for timezone to ensure the correct day is saved
+          const year = date.getFullYear();
+          const month = String(date.getMonth() + 1).padStart(2, "0");
+          const day = String(date.getDate()).padStart(2, "0");
+          return `${year}-${month}-${day}`;
+        })()
+      : "";
+
     createNewsMutation.mutate(
       {
-        ...form.values,
-        news_id: String(form.values.newsId),
+        id: String(form.values.id),
         category_id: categoryId ? String(categoryId) : "",
-        is_featured: isFeatured,
-        is_deleted: isDeleted,
+        content: form.values.content,
+        expire_date: formattedDate,
+        image: image,
+        is_featured: Boolean(isFeatured),
+        subtitle: form.values.subtitle,
+        title: form.values.title,
       },
       {
         onSuccess: () => {
@@ -143,7 +158,7 @@ export const NewsForms: React.FC<NewsFormProps> = (newsId) => {
           size="sm"
           label="Subtitle"
           placeholder="News subtitle..."
-          {...form.getInputProps("subTitle")}
+          {...form.getInputProps("subtitle")}
         />
         <Textarea
           className="addNewsElement"
@@ -165,7 +180,7 @@ export const NewsForms: React.FC<NewsFormProps> = (newsId) => {
             placeholder="Expire date..."
             label="Expire Date"
             withAsterisk
-            {...form.getInputProps("expireDate")}
+            {...form.getInputProps("expire_date")}
           />
           <Select
             label="Category"

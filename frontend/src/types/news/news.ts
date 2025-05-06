@@ -7,7 +7,7 @@ export interface News {
   image: string;
   is_deleted: boolean;
   is_featured: boolean;
-  sub_title: string;
+  subtitle: string;
   tags: string;
   title: string;
   video: string;
@@ -17,17 +17,17 @@ export interface News {
 }
 
 export interface CreateNewsPayload {
+  id: string;
   category_id: string;
   content: string;
-  expireDate: string;
+  expire_date: string;
   image: string;
-  is_deleted: Boolean;
-  is_featured: Boolean;
-  news_id: string;
-  subTitle: string;
-  tags: string;
+  is_deleted?: Boolean;
+  is_featured?: Boolean;
+  subtitle: string;
+  tags?: string;
   title: string;
-  video: string;
+  video?: string;
 }
 
 export interface SavedNewsPayload {

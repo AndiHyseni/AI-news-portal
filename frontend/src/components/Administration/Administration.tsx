@@ -23,7 +23,7 @@ export const Administration: React.FC<AdministrationProps> = ({ raport }) => {
         <div className="raportBox">
           <Image src="../../images/views.png" width={250} height={200} />
           <h1 className="boxTitle">Views</h1>
-          <p className="boxParagraph">Number of Views: {raport.vIews}</p>
+          <p className="boxParagraph">Number of Views: {raport.views}</p>
         </div>
       </div>
       <div className="raports">

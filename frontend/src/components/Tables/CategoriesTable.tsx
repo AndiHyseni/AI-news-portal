@@ -1,10 +1,11 @@
 import { Button, Table } from "@mantine/core";
-import { Fragment } from "react";
 import { CirclePlus, Edit, Trash } from "tabler-icons-react";
 import { Categories } from "../../types/categories/categories";
 
+type CategoriesResponse = Categories[] | { categories: Categories[] };
+
 export interface TableProps {
-  categories: Categories[];
+  categories: CategoriesResponse;
   onDeleteCategory: (categories: Categories) => void;
   setIsOpenCreateModal: (isModalOpen: boolean) => void;
   onEditCategory: (categories: Categories) => void;
@@ -16,6 +17,11 @@ export const CategoriesTable: React.FC<TableProps> = ({
   setIsOpenCreateModal,
   onEditCategory,
 }) => {
+  // Ensure categories is an array
+  const categoriesArray: Categories[] = Array.isArray(categories)
+    ? categories
+    : (categories as { categories: Categories[] }).categories || [];
+
   return (
     <>
       <Button className="addButton" onClick={() => setIsOpenCreateModal(true)}>
@@ -43,21 +49,21 @@ export const CategoriesTable: React.FC<TableProps> = ({
           </tr>
         </thead>
         <tbody>
-          {categories.map((categories, index) => (
+          {categoriesArray.map((category, index) => (
             <tr key={index}>
-              <td>{categories.id}</td>
-              <td>{categories.name}</td>
-              <td>{categories.description}</td>
-              <td>{categories.show_online == true ? "Yes" : "No"}</td>
+              <td>{category.id}</td>
+              <td>{category.name}</td>
+              <td>{category.description}</td>
+              <td>{category.show_online == true ? "Yes" : "No"}</td>
               <td>
-                <Button onClick={() => onEditCategory(categories)}>
+                <Button onClick={() => onEditCategory(category)}>
                   <Edit size={20} strokeWidth={2} color={"white"} />
                 </Button>
               </td>
               <td>
                 <Button
                   color={"red"}
-                  onClick={() => onDeleteCategory(categories)}
+                  onClick={() => onDeleteCategory(category)}
                 >
                   <Trash size={20} strokeWidth={2} color={"white"} />
                 </Button>

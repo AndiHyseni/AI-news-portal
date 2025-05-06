@@ -40,25 +40,34 @@ export const EditNewsForm: React.FC<NewsFormProps> = ({
   const [newsImage, setNewsImage] = useState<string | ArrayBuffer>(news.image);
   const { data } = useCategories();
 
-  const categoryOptions = data
-    ? data.map((category: Categories) => ({
-        value: category.id.toString(),
-        label: category.name,
-      }))
+  // Ensure data is an array
+  const categoriesArray = data
+    ? Array.isArray(data)
+      ? data
+      : (data as any).categories || []
     : [];
+
+  const categoryOptions = categoriesArray.map((category: Categories) => ({
+    value: category.id.toString(),
+    label: category.name,
+  }));
 
   const [tags, setTags] = useState([]) as any;
 
+  const formattedate = news.expire_date ? new Date(news.expire_date) : null;
+
+  console.log(formattedate);
+
   const form = useForm({
     initialValues: {
-      newsId: newsId,
-      categoryId: news.category_id,
+      id: newsId,
+      category_id: news.category_id,
       content: news.content,
-      expireDate: news.expire_date,
+      expire_date: formattedate,
       image: news.image,
-      isDeleted: news.is_deleted,
-      isFeatured: news.is_featured,
-      subTitle: news.sub_title,
+      is_deleted: Boolean(news.is_deleted),
+      is_featured: Boolean(news.is_featured),
+      subtitle: news.subtitle,
       tags: news.tags,
       title: news.title,
       video: news.video,
@@ -70,7 +79,7 @@ export const EditNewsForm: React.FC<NewsFormProps> = ({
         }
         return null;
       },
-      subTitle: (value) => {
+      subtitle: (value) => {
         if (!value) {
           return "Subtitle is required";
         }
@@ -82,13 +91,13 @@ export const EditNewsForm: React.FC<NewsFormProps> = ({
         }
         return null;
       },
-      expireDate: (value) => {
+      expire_date: (value: any) => {
         if (!value) {
           return "Expire date is required";
         }
         return null;
       },
-      categoryId: (value) => {
+      category_id: (value) => {
         if (!value || value === "") {
           return "Category is required";
         }
@@ -119,16 +128,30 @@ export const EditNewsForm: React.FC<NewsFormProps> = ({
     setTags(tags.filter((el: any, i: any) => i !== index));
   }
 
+  // Format the date to MySQL compatible format (YYYY-MM-DD)
+  const formattedDate = form.values.expire_date
+    ? (() => {
+        const date = new Date(form.values.expire_date);
+        // Adjust for timezone to ensure the correct day is saved
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
+      })()
+    : "";
+
   const handleSubmit = () => {
     mutation.mutate(
       {
-        ...form.values,
-        newsId: news.id,
-        categoryId: categoryId,
-        isDeleted: isDeleted,
-        isFeatured: isFeatured,
+        category_id: categoryId,
+        content: form.values.content,
+        expire_date: formattedDate,
         image: newsImage,
-        tags: tags.join(","),
+        is_featured: Boolean(isFeatured),
+        is_deleted: Boolean(isDeleted),
+        id: String(news.id),
+        subtitle: form.values.subtitle,
+        title: form.values.title,
       },
       {
         onSuccess: () => {
@@ -140,6 +163,7 @@ export const EditNewsForm: React.FC<NewsFormProps> = ({
           ) {
             form.setFieldError("title", "error");
           }
+          console.error("Error submitting form:", error);
         },
       }
     );
@@ -162,7 +186,7 @@ export const EditNewsForm: React.FC<NewsFormProps> = ({
           size="sm"
           label="Subtitle"
           placeholder="News subtitle..."
-          {...form.getInputProps("subTitle")}
+          {...form.getInputProps("subtitle")}
         />
         <Textarea
           className="addNewsElement"
@@ -184,7 +208,7 @@ export const EditNewsForm: React.FC<NewsFormProps> = ({
             placeholder="Expire date..."
             label="Expire Date"
             withAsterisk
-            {...form.getInputProps("expireDate")}
+            {...form.getInputProps("expire_date")}
           />
           <Select
             label="Category"
@@ -194,7 +218,7 @@ export const EditNewsForm: React.FC<NewsFormProps> = ({
             searchable
             maxDropdownHeight={400}
             onChange={(categoryId) => setCategoryId(String(categoryId))}
-            error={form.errors.categoryId}
+            error={form.errors.category_id}
           />
           <Switch
             label="is Featured"

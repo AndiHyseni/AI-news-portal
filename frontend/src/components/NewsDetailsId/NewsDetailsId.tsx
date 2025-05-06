@@ -61,7 +61,7 @@ export const NewsDetailsId: React.FC<NewsDetailsProps> = ({ news }) => {
     <div className="details">
       <Image src={news?.image} height={600} />
       <h1 className="titleDetails">{news?.title}</h1>
-      <h2 className="subtitleDetails">{news?.sub_title}</h2>
+      <h2 className="subtitleDetails">{news?.subtitle}</h2>
       <p className="contentDetails">{news?.content}</p>
       {
         <div

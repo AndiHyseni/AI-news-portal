@@ -37,6 +37,7 @@ export const AdminCategories: React.FC = () => {
     setSelectedCategory(category);
     setIsDeleteCategoriesModalOpen(true);
   };
+
   return (
     <BasePage>
       <div style={{ display: "flex" }}>
