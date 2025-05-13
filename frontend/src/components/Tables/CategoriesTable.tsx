@@ -40,7 +40,6 @@ export const CategoriesTable: React.FC<TableProps> = ({
       >
         <thead>
           <tr>
-            <th>Id</th>
             <th>Name</th>
             <th>Description</th>
             <th>Show Online</th>
@@ -51,7 +50,6 @@ export const CategoriesTable: React.FC<TableProps> = ({
         <tbody>
           {categoriesArray.map((category, index) => (
             <tr key={index}>
-              <td>{category.id}</td>
               <td>{category.name}</td>
               <td>{category.description}</td>
               <td>{category.show_online == true ? "Yes" : "No"}</td>

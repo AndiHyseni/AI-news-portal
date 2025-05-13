@@ -18,7 +18,7 @@ export interface Users {
 }
 
 export interface Views {
-  id: number;
+  id: string;
   newsTitle: string;
   nrOfClicks: number;
 }

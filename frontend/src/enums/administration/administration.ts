@@ -8,6 +8,7 @@ export enum USERS {
 }
 
 export enum VIEWS {
+  VIEWS = "views",
   GET_VIEWS = "getViews",
   GET_WATCHED = "getwatched",
 }

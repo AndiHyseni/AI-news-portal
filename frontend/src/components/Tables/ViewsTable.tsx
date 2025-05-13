@@ -1,17 +1,21 @@
 import { Button, Table } from "@mantine/core";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Views } from "../../types/administration/administration";
 
 export interface TableProps {
-  views: Views[];
+  views: Views[] | any;
 }
 
 export const ViewsTable: React.FC<TableProps> = ({ views }) => {
   const navigate = useNavigate();
 
-  const sortedMostWatched = [...views].sort(
-    (a, b) => b.nrOfClicks - a.nrOfClicks
-  );
+  // Ensure views is an array before trying to sort it
+  const viewsArray = Array.isArray(views.views) ? views.views : [];
+
+  const sortedMostWatched =
+    viewsArray.length > 0
+      ? [...viewsArray].sort((a, b) => b.nrOfClicks - a.nrOfClicks)
+      : [];
 
   return (
     <Table
@@ -26,20 +30,18 @@ export const ViewsTable: React.FC<TableProps> = ({ views }) => {
     >
       <thead>
         <tr>
-          <th>Id</th>
           <th>News Title</th>
           <th>Number of Clicks</th>
           <th>See Details</th>
         </tr>
       </thead>
       <tbody>
-        {sortedMostWatched.map((views, index) => (
+        {sortedMostWatched.map((view, index) => (
           <tr key={index}>
-            <td>{views.id}</td>
-            <td>{views.newsTitle}</td>
-            <td>{views.nrOfClicks}</td>
+            <td>{view.NewsTitle}</td>
+            <td>{view.nrOfClicks}</td>
             <td>
-              <Button onClick={() => navigate(`/views/${views.id}`)}>
+              <Button onClick={() => navigate(`/views/${view.id}`)}>
                 See more
               </Button>
             </td>

@@ -9,6 +9,7 @@ import { CategoriesTable } from "../../components/Tables/CategoriesTable";
 import { useCategories } from "../../hooks/useCategories/useCategories";
 import { useCreateCategories } from "../../hooks/useCategories/useCreateCategories";
 import { useDeleteCategories } from "../../hooks/useCategories/useDeleteCategories";
+import { useUpdateCategories } from "../../hooks/useCategories/useUpdateCategories";
 import { Categories } from "../../types/categories/categories";
 import "../AdminCategories/AdminCategories.css";
 
@@ -23,7 +24,7 @@ export const AdminCategories: React.FC = () => {
   const [editCategoriesModalOpen, setEditCategoriesModalOpen] = useState(false);
 
   const deleteCategoriesMutation = useDeleteCategories();
-  const editCategoriesMutation = useCreateCategories();
+  const editCategoriesMutation = useUpdateCategories();
 
   const handleCreateCategories = (category: Categories) => {
     setSelectedCategory(category);

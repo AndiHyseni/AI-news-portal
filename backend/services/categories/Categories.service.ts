@@ -37,10 +37,47 @@ export const CategoriesService = {
       return failure({ error }, StatusCodeEnums.UNPROCESSABLE_ENTITY);
     }
   },
-  addCategory: async (name: string) => {
+  addCategory: async (
+    name: string,
+    description: string,
+    show_online: boolean
+  ) => {
     try {
-      const category = await CategoriesDbModel.query().insert({ name });
+      const category = await CategoriesDbModel.query().insert({
+        name,
+        description,
+        show_online,
+      });
       return ok({ category });
+    } catch (error) {
+      return failure({ error }, StatusCodeEnums.UNPROCESSABLE_ENTITY);
+    }
+  },
+  updateCategory: async (
+    id: string,
+    name: string,
+    description: string,
+    show_online: boolean
+  ) => {
+    try {
+      const category = await CategoriesDbModel.query().findById(id);
+      if (!category) {
+        return failure(
+          { error: "Category not found" },
+          StatusCodeEnums.UNEXPECTED
+        );
+      }
+
+      const updatedCategory = await CategoriesDbModel.query().patchAndFetchById(
+        id,
+        {
+          name,
+          description,
+          show_online,
+        }
+      );
+
+      return ok({ category: updatedCategory });
     } catch (error) {
       return failure({ error }, StatusCodeEnums.UNPROCESSABLE_ENTITY);
     }

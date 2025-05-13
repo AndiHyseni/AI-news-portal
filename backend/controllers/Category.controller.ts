@@ -56,8 +56,33 @@ CategoryController.post(
   ValidationMiddleware(CategoryValidator, {}, (req: Request) => req.body),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { name } = req.body;
-      const result = await CategoriesService.addCategory(name);
+      const { name, description, show_online } = req.body;
+      const result = await CategoriesService.addCategory(
+        name,
+        description,
+        show_online
+      );
+      res.status(result.httpCode).send(result.data);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+CategoryController.put(
+  "/:id",
+  authorize(),
+  ValidationMiddleware(CategoryValidator, {}, (req: Request) => req.body),
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params;
+      const { name, description, show_online } = req.body;
+      const result = await CategoriesService.updateCategory(
+        id,
+        name,
+        description,
+        show_online
+      );
       res.status(result.httpCode).send(result.data);
     } catch (err) {
       next(err);

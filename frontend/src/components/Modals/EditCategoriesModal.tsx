@@ -8,7 +8,7 @@ import {
   TextInput,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Categories } from "../../types/categories/categories";
 
 export interface EditCategoriesModalProps {
@@ -26,14 +26,16 @@ export const EditCategoriesModal: React.FC<EditCategoriesModalProps> = ({
   onClose,
   mutation,
 }) => {
-  const [showOnline, setShowOnline] = useState<boolean>(categories.show_online);
+  const [showOnline, setShowOnline] = useState<boolean>(
+    Boolean(categories.show_online)
+  );
 
   const form = useForm({
     initialValues: {
       id: categories.id,
       name: categories.name,
       description: categories.description,
-      show_online: categories.show_online,
+      show_online: Boolean(categories.show_online),
     },
     validate: {
       name: (value) => {
@@ -52,9 +54,20 @@ export const EditCategoriesModal: React.FC<EditCategoriesModalProps> = ({
     },
   });
 
+  useEffect(() => {
+    if (opened) {
+      form.setValues({
+        id: categories.id,
+        name: categories.name,
+        description: categories.description,
+        show_online: Boolean(categories.show_online),
+      });
+      setShowOnline(Boolean(categories.show_online));
+    }
+  }, [categories, opened]);
+
   const handleClose = () => {
     onClose();
-    window.location.reload();
   };
 
   const handleSubmit = () => {
@@ -64,12 +77,11 @@ export const EditCategoriesModal: React.FC<EditCategoriesModalProps> = ({
       {
         ...form.values,
         id: categories.id,
-        show_online: showOnline,
+        show_online: Boolean(showOnline),
       },
       {
         onSuccess: () => {
           handleClose();
-          window.location.reload();
         },
       }
     );

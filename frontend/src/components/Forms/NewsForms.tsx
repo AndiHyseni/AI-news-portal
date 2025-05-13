@@ -34,17 +34,21 @@ export const NewsForms: React.FC<NewsFormProps> = (newsId) => {
 
   const { data } = useCategories();
 
-  const categoryOptions = data
-    ? data.map((category: Categories) => ({
-        value: category.id.toString(),
-        label: category.name,
-      }))
+  // Ensure data is an array
+  const categoriesArray = data
+    ? Array.isArray(data)
+      ? data
+      : (data as any).categories || []
     : [];
+
+  const categoryOptions = categoriesArray.map((category: Categories) => ({
+    value: category.id.toString(),
+    label: category.name,
+  }));
 
   const form = useForm({
     initialValues: {
-      id: 0,
-      category_id: 0,
+      category_id: "",
       content: "",
       expire_date: "",
       image: "",
@@ -124,7 +128,6 @@ export const NewsForms: React.FC<NewsFormProps> = (newsId) => {
 
     createNewsMutation.mutate(
       {
-        id: String(form.values.id),
         category_id: categoryId ? String(categoryId) : "",
         content: form.values.content,
         expire_date: formattedDate,

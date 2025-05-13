@@ -18,7 +18,7 @@ export const EditNewsPage: React.FC = () => {
         <Container style={{ width: "100%" }}>
           {data && (
             <EditNewsForm
-              newsId={Number(newsId)}
+              newsId={String(newsId)}
               news={data}
               mutation={createNewsMutation}
             />

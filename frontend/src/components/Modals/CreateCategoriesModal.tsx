@@ -10,9 +10,7 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useCreateCategories } from "../../hooks/useCategories/useCreateCategories";
-import { Categories } from "../../types/categories/categories";
 
 export interface CreateCategoriesModalProps {
   title: string;
@@ -30,7 +28,6 @@ export const CreateCategoriesModal: React.FC<CreateCategoriesModalProps> = ({
 
   const form = useForm({
     initialValues: {
-      categoryId: 0,
       name: "",
       description: "",
       showOnline: false,
@@ -63,8 +60,8 @@ export const CreateCategoriesModal: React.FC<CreateCategoriesModalProps> = ({
 
     createCategoriesMutation.mutate(
       {
-        ...form.values,
-        id: String(form.values.categoryId),
+        name: form.values.name,
+        description: form.values.description,
         show_online: showOnline,
       },
       {

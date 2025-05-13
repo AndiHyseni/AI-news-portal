@@ -7,6 +7,7 @@ import {
   VIEWS,
 } from "../../enums/administration/administration";
 import { BaseUrl } from "../../enums/baseUrl";
+import { NEWS } from "../../enums/news/url";
 import {
   AddAdmin,
   AddReaction,
@@ -45,7 +46,7 @@ export const deleteUsers = async (userId: string): Promise<void> => {
 
 export const getViews = async (): Promise<Views[]> => {
   const { data } = await axiosInstance.get(
-    `${BaseUrl.DEVELOPMENT}/${VIEWS.GET_VIEWS}`
+    `${BaseUrl.DEVELOPMENT}/${VIEWS.VIEWS}`
   );
   return data;
 };
@@ -61,7 +62,7 @@ export const getViewsDetails = async (
 
 export const getReactions = async (): Promise<Reaction[]> => {
   const { data } = await axiosInstance.get(
-    `${BaseUrl.DEVELOPMENT}/News/${REACTION.GET_REACTIONS}`
+    `${BaseUrl.DEVELOPMENT}/${NEWS.GET_NEWS}/${REACTION.GET_REACTIONS}`
   );
   return data;
 };

@@ -27,18 +27,18 @@ export const NewsTable: React.FC<TableProps> = ({ newses }) => {
     >
       <thead>
         <tr>
-          <th>Id</th>
-          <th>Category</th>
           <th>Title</th>
+          <th>Category</th>
+          <th>Is Featured</th>
           <th>Details</th>
         </tr>
       </thead>
       <tbody>
         {newsArray.map((news, index) => (
           <tr key={index}>
-            <td>{news.id}</td>
-            <td>{news.category_id}</td>
             <td>{news.title}</td>
+            <td>{news.category.name}</td>
+            <td>{news.is_featured ? "Yes" : "No"}</td>
             <td>
               <Button component={Link} to={`/news/details/${news.id}`}>
                 Details

@@ -1,4 +1,5 @@
-import { Container } from "@mantine/core";
+import { Container, Text } from "@mantine/core";
+import { useState, useEffect } from "react";
 import { Sidebar } from "../../components/Administration/Sidebar";
 import { BasePage } from "../../components/BasePage/BasePage";
 import { ViewsTable } from "../../components/Tables/ViewsTable";
@@ -6,7 +7,16 @@ import { useViews } from "../../hooks/useViews/useViews";
 import "../AdminViews/AdminViews.css";
 
 export const AdminViews: React.FC = () => {
-  const { data } = useViews();
+  const { data, isLoading, isError } = useViews();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (isError) {
+      setErrorMessage("Failed to load views data. Please try again later.");
+    } else {
+      setErrorMessage(null);
+    }
+  }, [isError]);
 
   return (
     <BasePage>
@@ -14,7 +24,10 @@ export const AdminViews: React.FC = () => {
         <Sidebar />
         <Container style={{ width: "100%" }}>
           <div className="adminViewsdiv">
-            {data && <ViewsTable views={data} />}
+            <h1>News Views Statistics</h1>
+            {isLoading && <Text>Loading views data...</Text>}
+            {errorMessage && <Text color="red">{errorMessage}</Text>}
+            {data && !isLoading && !errorMessage && <ViewsTable views={data} />}
           </div>
         </Container>
       </div>

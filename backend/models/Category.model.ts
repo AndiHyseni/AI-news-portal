@@ -1,4 +1,5 @@
 import { Model } from "objection";
+import { v4 as uuidv4 } from "uuid";
 
 export default class CategoryDbModel extends Model {
   id!: string;
@@ -8,6 +9,10 @@ export default class CategoryDbModel extends Model {
   created_at?: Date;
 
   static tableName = "category";
+
+  $beforeInsert() {
+    this.id = uuidv4();
+  }
 
   static get jsonSchema() {
     return {

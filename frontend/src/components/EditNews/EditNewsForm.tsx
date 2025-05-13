@@ -21,7 +21,7 @@ import { Categories } from "../../types/categories/categories";
 import { News } from "../../types/news/news";
 
 export interface NewsFormProps {
-  newsId: number;
+  newsId: string;
   news: News;
   mutation: any;
 }
@@ -55,8 +55,6 @@ export const EditNewsForm: React.FC<NewsFormProps> = ({
   const [tags, setTags] = useState([]) as any;
 
   const formattedate = news.expire_date ? new Date(news.expire_date) : null;
-
-  console.log(formattedate);
 
   const form = useForm({
     initialValues: {

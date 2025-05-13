@@ -1,5 +1,6 @@
 import { Model } from "objection";
 import { v4 as uuidv4 } from "uuid";
+import CategoryDbModel from "./Category.model";
 
 export default class NewsDbModel extends Model {
   id!: string;
@@ -20,6 +21,8 @@ export default class NewsDbModel extends Model {
   tags?: string;
   views?: number;
 
+  category?: CategoryDbModel;
+
   static tableName = "news";
 
   $beforeInsert() {
@@ -38,7 +41,19 @@ export default class NewsDbModel extends Model {
         subtitle: { type: "string", minLength: 1 },
         is_featured: { type: "boolean" },
         content: { type: "string", minLength: 1 },
+        image: { type: "string" },
       },
     };
   }
+
+  static relationMappings = {
+    category: {
+      relation: Model.HasOneRelation,
+      modelClass: CategoryDbModel,
+      join: {
+        from: "news.category_id",
+        to: "category.id",
+      },
+    },
+  };
 }

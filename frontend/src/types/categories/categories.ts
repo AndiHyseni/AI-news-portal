@@ -4,3 +4,9 @@ export interface Categories {
   description: string;
   show_online: boolean;
 }
+
+export interface CreateCategoryPayload {
+  name: string;
+  description: string;
+  show_online: boolean;
+}

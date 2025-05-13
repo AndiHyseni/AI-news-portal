@@ -10,7 +10,8 @@ export const NewsService = {
     try {
       const news = await NewsDbModel.query()
         .where({ is_deleted: false })
-        .orderBy("created_at", "DESC");
+        .orderBy("created_at", "DESC")
+        .withGraphFetched("category");
       return ok({ news });
     } catch (error) {
       return failure({ error }, StatusCodeEnums.UNPROCESSABLE_ENTITY);

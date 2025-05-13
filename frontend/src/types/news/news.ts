@@ -1,3 +1,5 @@
+import { Categories } from "../categories/categories";
+
 export interface News {
   id: string;
   user_id: string;
@@ -14,10 +16,10 @@ export interface News {
   number_of_clicks: number;
   created_at: string;
   updated_at: string;
+  category: Categories;
 }
 
 export interface CreateNewsPayload {
-  id: string;
   category_id: string;
   content: string;
   expire_date: string;
