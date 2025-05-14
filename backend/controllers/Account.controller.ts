@@ -133,7 +133,7 @@ router.delete(
 // Forgot password
 router.post(
   "/forgot-password",
-  ValidationMiddleware(AccountValidator, {}, (req: Request) => req.body),
+  // ValidationMiddleware(AccountValidator, {}, (req: Request) => req.body),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { email } = req.body;

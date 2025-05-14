@@ -274,7 +274,7 @@ export const AccountService = {
   },
   resetPassword: async (data: any) => {
     try {
-      const { email, token, password } = data;
+      const { email, password } = data;
       const user = await UserDbModel.query().findOne({ email });
       if (!user) {
         return failure(

@@ -14,7 +14,7 @@ export const ForgotPassword = () => {
   async function login() {
     let item = { email };
     let result = await axios
-      .post("https://localhost:5000/api/forgot-password", item)
+      .post("http://localhost:5000/api/Account/forgot-password", item)
       .then((res) => {
         setIsError(false);
         setData("A reset link has been sent!");
@@ -22,7 +22,7 @@ export const ForgotPassword = () => {
       })
       .catch((err) => {
         setIsError(true);
-        setData(err.response.statusText);
+        setData(err.response?.statusText || "An error occurred");
       });
   }
 
@@ -42,6 +42,7 @@ export const ForgotPassword = () => {
             placeholder="Email"
             onChange={(e) => setEmail(e.target.value)}
             className="form-control"
+            value={email}
           />
           <br />
           <Button onClick={login} className="btn btn-primary butoniReset">

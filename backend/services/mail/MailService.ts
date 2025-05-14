@@ -34,12 +34,12 @@ export default class MailService {
 
   private constructor() {
     this.mailSettings = {
-      host: process.env.SMTP_HOST || "smtp.example.com",
-      port: parseInt(process.env.SMTP_PORT || "587"),
+      host: process.env.SMTP_HOST || "sandbox.smtp.mailtrap.io",
+      port: parseInt(process.env.SMTP_PORT || "2525"),
       secure: process.env.SMTP_SECURE === "true",
       auth: {
-        user: process.env.SMTP_USER || "",
-        pass: process.env.SMTP_PASS || "",
+        user: process.env.SMTP_USER || "a4e9e7e43f1c45",
+        pass: process.env.SMTP_PASS || "4181c71ee8c4e3",
       },
     };
     this.transporter = nodemailer.createTransport(this.mailSettings);

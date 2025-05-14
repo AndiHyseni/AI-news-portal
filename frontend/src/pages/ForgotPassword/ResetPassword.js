@@ -6,15 +6,14 @@ import { Button, Input } from "@mantine/core";
 export const ResetPassword = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [token, setToken] = useState("");
   const [data, setData] = useState();
   const [isError, setIsError] = useState();
   useEffect(() => {}, []);
 
   async function reset() {
-    let item = { email, password, token };
+    let item = { email, password };
     let result = await axios
-      .post("https://localhost:5000/api/reset-password", item)
+      .post("http://localhost:5000/api/Account/reset-password", item)
       .then((res) => {
         setIsError(false);
         setData("Password changed succesfully!");
