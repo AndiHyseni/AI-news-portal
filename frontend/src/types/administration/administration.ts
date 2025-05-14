@@ -80,9 +80,8 @@ export interface ReactionsDetails {
 
 export interface AddAdmin {
   role: string;
-  userId: string;
-  userName: string;
-  confirmPassword: string;
+  id: string;
+  username: string;
   email: string;
   password: string;
 }

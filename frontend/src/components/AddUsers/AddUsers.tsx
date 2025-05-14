@@ -11,6 +11,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAddUser } from "../../hooks/useUsers/useAddUser";
+import { Role, RoleIds } from "../../types/auth/login";
 import "../AddUsers/AddUsers.css";
 
 export const AddUsers: React.FC = () => {
@@ -18,17 +19,18 @@ export const AddUsers: React.FC = () => {
   const addUserMutation = useAddUser();
   const [visible, { toggle }] = useDisclosure(false);
 
-  const [addRole, setAddRole] = useState<string | null>("Registered");
+  const [addRole, setAddRole] = useState<string | null>(
+    RoleIds.REGISTERED.toString()
+  );
 
   const roleOptions = [
-    { value: "Admin", label: "Admin" },
-    { value: "Registered", label: "Registered" },
+    { value: RoleIds.ADMIN.toString(), label: Role.ADMIN },
+    { value: RoleIds.REGISTERED.toString(), label: Role.REGISTERED },
   ];
 
   const form = useForm({
     initialValues: {
-      role: "",
-      userId: "",
+      role: RoleIds.REGISTERED.toString(),
       userName: "",
       confirmPassword: "",
       email: "",
@@ -66,9 +68,9 @@ export const AddUsers: React.FC = () => {
         if (!/\d/.test(value)) {
           return "Password must contain at least one number";
         }
-        if (!/[$@#!%&*?]/.test(value)) {
-          return "Password must contain at least one special character";
-        }
+        // if (!/[$@#!%&*?]/.test(value)) {
+        //   return "Password must contain at least one special character";
+        // }
         return null;
       },
       confirmPassword: (value, values) =>
@@ -77,15 +79,26 @@ export const AddUsers: React.FC = () => {
   });
 
   const handleSubmit = () => {
+    const errors = form.validate();
+
+    if (errors.hasErrors) {
+      return;
+    }
+
     addUserMutation.mutate(
       {
-        ...form.values,
+        id: "",
+        username: form.values.userName,
+        email: form.values.email,
+        password: form.values.password,
         role: addRole!,
-        userId: form.values.userId,
       },
       {
         onSuccess: () => {
           navigate("/users");
+        },
+        onError: (error) => {
+          console.error("Error adding user:", error);
         },
       }
     );
@@ -131,11 +144,13 @@ export const AddUsers: React.FC = () => {
           label="Role"
           placeholder="Role..."
           data={roleOptions}
-          {...form.getInputProps("role")}
           searchable
           maxDropdownHeight={400}
           value={addRole}
-          onChange={(addRole) => setAddRole(addRole)}
+          onChange={(value) => {
+            setAddRole(value);
+            form.setFieldValue("role", value || "");
+          }}
         />
 
         <Group className="addUserButtons">

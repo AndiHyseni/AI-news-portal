@@ -1,6 +1,7 @@
 import Joi from "joi";
 
 export const AccountValidator = Joi.object({
+  id: Joi.any(),
   username: Joi.string(),
   email: Joi.string()
     .email({ tlds: { allow: false } })
@@ -9,4 +10,5 @@ export const AccountValidator = Joi.object({
     .label("Email"),
   password: Joi.string().trim().min(8).required().label("Password"),
   password_hash: Joi.string().trim().min(8).label("Password"),
+  role: Joi.any(),
 });

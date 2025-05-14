@@ -8,8 +8,7 @@ import { Model } from "objection";
 import UserDbModel from "./Users.model";
 import RoleDbModel from "./Role.model";
 
-export default class UserRole extends Model {
-  id!: string;
+export default class UserRoleDbModel extends Model {
   user_id!: string;
   role_id!: string;
   created_at?: Date;
@@ -20,10 +19,6 @@ export default class UserRole extends Model {
   // Relationships
   user?: UserDbModel;
   role?: RoleDbModel;
-
-  $beforeInsert() {
-    this.id = uuidv4();
-  }
 
   $afterUpdate() {
     this.updated_at = new Date();

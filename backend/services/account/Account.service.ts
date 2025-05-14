@@ -11,6 +11,7 @@ import jwt from "jsonwebtoken";
 import MailService from "../mail/MailService";
 import RefreshTokenDbModel from "../../models/RefreshToken.model";
 import UserDbModel from "../../models/Users.model";
+import UserRoleDbModel from "../../models/UserRole.model";
 
 export const AccountService = {
   register: async (data: any) => {
@@ -149,7 +150,7 @@ export const AccountService = {
   },
   addAdmin: async (data: any) => {
     try {
-      const { email, password } = data;
+      const { email, password, role } = data;
       const existingUser = await UserDbModel.query().findOne({ email });
       if (existingUser) {
         return failure(
@@ -168,6 +169,10 @@ export const AccountService = {
         Email: newAdmin.email,
         UserName: newAdmin.name,
       };
+      await UserRoleDbModel.query().insert({
+        user_id: newAdmin.id,
+        role_id: role,
+      });
       return ok({ user: userViewModel });
     } catch (error) {
       return failure({ error }, StatusCodeEnums.UNPROCESSABLE_ENTITY);
@@ -202,11 +207,12 @@ export const AccountService = {
   },
   getUsers: async () => {
     try {
-      const users = await UserDbModel.query();
+      const users = await UserDbModel.query().withGraphFetched("roles");
       const usersVM = users.map((user: any) => ({
         id: user.id,
         email: user.email,
         name: user.name,
+        role: user.roles.map((role: any) => role.name),
       }));
       return ok({ users: usersVM });
     } catch (error) {
@@ -249,7 +255,7 @@ export const AccountService = {
   },
   editUser: async (data: any) => {
     try {
-      const user = await UserDbModel.query().findById(data.userId);
+      const user = await UserDbModel.query().findById(data.id);
       if (!user) {
         return failure(
           { statusMessage: "User not found" },
@@ -257,16 +263,32 @@ export const AccountService = {
         );
       }
       const updatedData: any = {
-        username: data.userName,
+        name: data.username,
         email: data.email,
       };
       if (data.password) {
         updatedData.password = await hashPassword(data.password);
       }
       const updatedUser = await UserDbModel.query().patchAndFetchById(
-        data.userId,
+        data.id,
         updatedData
       );
+
+      const existingUserRole = await UserRoleDbModel.query()
+        .where("user_id", data.id)
+        .first();
+
+      if (existingUserRole) {
+        await UserRoleDbModel.query().where("user_id", data.id).patch({
+          role_id: data.role,
+        });
+      } else {
+        await UserRoleDbModel.query().insert({
+          user_id: data.id,
+          role_id: data.role,
+        });
+      }
+
       return ok({ user: updatedUser });
     } catch (error) {
       return failure({ error }, StatusCodeEnums.UNPROCESSABLE_ENTITY);

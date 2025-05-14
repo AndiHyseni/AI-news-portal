@@ -46,9 +46,9 @@ export const Register: React.FC<RegisterProps> = ({ mutation }) => {
         if (!/\d/.test(value)) {
           return "Password must contain at least one number";
         }
-        if (!/[$@#!%&*?]/.test(value)) {
-          return "Password must contain at least one special character";
-        }
+        // if (!/[$@#!%&*?]/.test(value)) {
+        //   return "Password must contain at least one special character";
+        // }
         return null;
       },
       confirmPassword: (value, values) =>

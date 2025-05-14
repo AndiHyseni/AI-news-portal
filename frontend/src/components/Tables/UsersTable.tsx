@@ -36,7 +36,6 @@ export const UsersTable: React.FC<TableProps> = ({
     >
       <thead>
         <tr>
-          <th>Id</th>
           <th>Name</th>
           <th>Email</th>
           <th>Role</th>
@@ -47,7 +46,6 @@ export const UsersTable: React.FC<TableProps> = ({
       <tbody>
         {usersArray.map((user, index) => (
           <tr key={index}>
-            <td>{user.id}</td>
             <td>{user.name}</td>
             <td>{user.email}</td>
             <td>{user.role}</td>

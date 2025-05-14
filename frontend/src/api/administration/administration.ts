@@ -77,24 +77,16 @@ export const getreactionsDetails = async (
 };
 
 export const addUser = async (payload: AddAdmin): Promise<number> => {
-  if (payload.role == "Admin") {
-    const { data } = await axiosInstance.post(
-      `${BaseUrl.DEVELOPMENT}/addAdmin`,
-      payload
-    );
-    return data;
-  } else {
-    const { data } = await axiosInstance.post(
-      `${BaseUrl.DEVELOPMENT}/${USERS.GET_ACCOUNT}`,
-      payload
-    );
-    return data;
-  }
+  const { data } = await axiosInstance.post(
+    `${BaseUrl.DEVELOPMENT}/Account/addAdmin`,
+    payload
+  );
+  return data;
 };
 
 export const editUser = async (payload: EditAdmin): Promise<string> => {
   const { data } = await axiosInstance.post(
-    `${BaseUrl.DEVELOPMENT}/${EDITUSER.EDIT_USER}`,
+    `${BaseUrl.DEVELOPMENT}/Account/${EDITUSER.EDIT_USER}`,
     payload
   );
   return data;

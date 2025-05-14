@@ -9,9 +9,9 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Users } from "../../types/administration/administration";
-import { Role } from "../../types/auth/login";
+import { Role, RoleIds } from "../../types/auth/login";
 import "../AddUsers/AddUsers.css";
 
 export interface EditUsersModalProps {
@@ -31,16 +31,44 @@ export const EditUsersModal: React.FC<EditUsersModalProps> = ({
 }) => {
   const [visible, { toggle }] = useDisclosure(false);
 
-  const [addRole, setAddRole] = useState<string | null>(user.role);
+  // Map role name to role ID
+  const getRoleId = (roleName: string): string => {
+    // Default to REGISTERED if roleName is undefined or null
+    if (!roleName) {
+      return RoleIds.REGISTERED.toString();
+    }
+
+    switch (roleName.toLowerCase()) {
+      case Role.ADMIN?.toLowerCase():
+        return RoleIds.ADMIN.toString();
+      case Role.REGISTERED?.toLowerCase():
+        return RoleIds.REGISTERED.toString();
+      default:
+        return RoleIds.REGISTERED.toString();
+    }
+  };
+
+  // Extract role from array if it's an array, otherwise use as is, with fallback
+  const getUserRole = (user: Users): string => {
+    const roleName = Array.isArray(user.role)
+      ? user.role.length > 0
+        ? user.role[0]
+        : Role.REGISTERED
+      : user.role || Role.REGISTERED;
+
+    return getRoleId(roleName);
+  };
+
+  const [addRole, setAddRole] = useState<string | null>(getUserRole(user));
 
   const roleOptions = [
-    { value: Role.ADMIN, label: Role.ADMIN },
-    { value: Role.REGISTERED, label: Role.REGISTERED },
+    { value: RoleIds.ADMIN.toString(), label: Role.ADMIN },
+    { value: RoleIds.REGISTERED.toString(), label: Role.REGISTERED },
   ];
 
   const form = useForm({
     initialValues: {
-      role: user.role,
+      role: getUserRole(user),
       user_id: user.id,
       name: user.name,
       confirmPassword: "",
@@ -79,9 +107,9 @@ export const EditUsersModal: React.FC<EditUsersModalProps> = ({
         if (!/\d/.test(value)) {
           return "Password must contain at least one number";
         }
-        if (!/[$@#!%&*?]/.test(value)) {
-          return "Password must contain at least one special character";
-        }
+        // if (!/[$@#!%&*?]/.test(value)) {
+        //   return "Password must contain at least one special character";
+        // }
         return null;
       },
       confirmPassword: (value, values) =>
@@ -89,27 +117,61 @@ export const EditUsersModal: React.FC<EditUsersModalProps> = ({
     },
   });
 
+  // Reset form when modal opens with new user data
+  useEffect(() => {
+    if (opened) {
+      const roleId = getUserRole(user);
+
+      // Reset form with the new user's data
+      form.setValues({
+        role: roleId,
+        user_id: user.id,
+        name: user.name,
+        confirmPassword: "",
+        email: user.email,
+        password: "",
+      });
+
+      setAddRole(roleId);
+    }
+  }, [opened, user]);
+
   const handleClose = () => {
+    // Reset form when closing
+    form.reset();
+    setAddRole(null);
     onClose();
-    window.location.reload();
   };
 
   const handleSubmit = () => {
     const errors = form.validate();
 
-    mutation.mutate(
-      {
-        ...form.values,
-        role: String(addRole!),
-        user_id: form.values.user_id,
+    if (errors.hasErrors) {
+      return;
+    }
+
+    // Ensure we have a role value
+    if (!addRole) {
+      console.error("Role is missing");
+      return;
+    }
+
+    const payload = {
+      id: form.values.user_id,
+      username: form.values.name,
+      email: form.values.email,
+      password: form.values.password,
+      role: addRole,
+    };
+
+    mutation.mutate(payload, {
+      onSuccess: () => {
+        handleClose();
       },
-      {
-        onSuccess: () => {
-          handleClose();
-          window.location.reload();
-        },
-      }
-    );
+      onError: (error: any) => {
+        console.error("Error updating user:", error);
+      },
+    });
   };
 
   return (
@@ -161,7 +223,7 @@ export const EditUsersModal: React.FC<EditUsersModalProps> = ({
             className="addUserElement"
             label="Role"
             placeholder="Role..."
-            defaultValue={user.role}
+            value={addRole}
             data={roleOptions}
             searchable
             maxDropdownHeight={400}
