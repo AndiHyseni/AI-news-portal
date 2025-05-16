@@ -4,11 +4,26 @@ import { Sidebar } from "../../components/Administration/Sidebar";
 import { BasePage } from "../../components/BasePage/BasePage";
 import { ViewsDetailsTable } from "../../components/Tables/ViewsDetailsTable";
 import { useViewsDetails } from "../../hooks/useViews/useViewsDetails";
+import { ViewsDetails } from "../../types/administration/administration";
 import "../AdminViews/AdminViews.css";
+
+interface ApiResponse {
+  watched: ViewsDetails[];
+  statusIsOk: boolean;
+  statusCode: string;
+  statusMessage: string;
+  statusPath: string;
+  statusDate: string;
+}
 
 export const AdminViewsDetails: React.FC = () => {
   const { newsId } = useParams();
-  const { data } = useViewsDetails(Number(newsId));
+  const { data, isLoading, error } = useViewsDetails(String(newsId));
+
+  // Extract the watched array from the response
+  const viewsDetailsArray: ViewsDetails[] = Array.isArray(data)
+    ? data
+    : (data as unknown as ApiResponse)?.watched || [];
 
   return (
     <BasePage>
@@ -16,7 +31,13 @@ export const AdminViewsDetails: React.FC = () => {
         <Sidebar />
         <Container style={{ width: "100%" }}>
           <div className="adminViewsdiv">
-            {data && <ViewsDetailsTable viewsDetails={data} />}
+            {isLoading ? (
+              <p>Loading...</p>
+            ) : error ? (
+              <p>Error loading views details</p>
+            ) : (
+              <ViewsDetailsTable viewsDetails={viewsDetailsArray} />
+            )}
           </div>
         </Container>
       </div>

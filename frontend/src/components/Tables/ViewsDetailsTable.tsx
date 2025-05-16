@@ -6,6 +6,25 @@ export interface TableProps {
 }
 
 export const ViewsDetailsTable: React.FC<TableProps> = ({ viewsDetails }) => {
+  // Format date from ISO string (2025-05-14T12:13:30.000Z) to DD-MM-YYYY HH:MM:SS
+  const formatDate = (dateString: string) => {
+    try {
+      const date = new Date(dateString);
+
+      const day = date.getDate().toString().padStart(2, "0");
+      const month = (date.getMonth() + 1).toString().padStart(2, "0");
+      const year = date.getFullYear();
+
+      const hours = date.getHours().toString().padStart(2, "0");
+      const minutes = date.getMinutes().toString().padStart(2, "0");
+      const seconds = date.getSeconds().toString().padStart(2, "0");
+
+      return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+    } catch (error) {
+      return dateString; // Return original string if parsing fails
+    }
+  };
+
   return (
     <Table
       data-testid="viewsDetails-table"
@@ -31,7 +50,7 @@ export const ViewsDetailsTable: React.FC<TableProps> = ({ viewsDetails }) => {
             <td>{viewsDetails.news_id}</td>
             <td>{viewsDetails.user_id}</td>
             <td>{viewsDetails.finger_print_id}</td>
-            <td>{viewsDetails.watched_on}</td>
+            <td>{formatDate(viewsDetails.watched_on)}</td>
           </tr>
         ))}
       </tbody>

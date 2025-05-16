@@ -31,6 +31,7 @@ export const Sidebar: React.FC = () => {
         display: "flex",
         position: "relative",
         width: "440px",
+        minHeight: "842px",
         backgroundColor: "#212529",
         boxShadow: "0 2px 4px 0 #4d3c8233",
       }}

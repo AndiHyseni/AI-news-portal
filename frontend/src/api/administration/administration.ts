@@ -52,10 +52,10 @@ export const getViews = async (): Promise<Views[]> => {
 };
 
 export const getViewsDetails = async (
-  newsId: number
+  newsId: string
 ): Promise<ViewsDetails[]> => {
   const { data } = await axiosInstance.get(
-    `${BaseUrl.DEVELOPMENT}/${VIEWS.GET_WATCHED}/${newsId}`
+    `${BaseUrl.DEVELOPMENT}/${NEWS.GET_NEWS}/${VIEWS.GET_WATCHED}/${newsId}`
   );
   return data;
 };
