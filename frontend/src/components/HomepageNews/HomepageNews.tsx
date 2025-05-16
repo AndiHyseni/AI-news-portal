@@ -52,10 +52,15 @@ export const HomepageNews: React.FC<NewsProps> = ({ homenews }) => {
     addViews(model);
   };
 
+  const handleNewsClick = (newsId: string) => {
+    addView(newsId);
+    navigate(`/news/${newsId}`);
+  };
+
   return (
-    <div style={{ width: "-webkit-fill-available" }}>
-      <>
-        {data?.show_featured && (
+    <div style={{ width: "100%" }}>
+      {data?.show_featured && (
+        <div className="homepage-carousel-container">
           <Carousel
             sx={{ maxWidth: 1500 }}
             mx="auto"
@@ -66,25 +71,25 @@ export const HomepageNews: React.FC<NewsProps> = ({ homenews }) => {
             onMouseLeave={autoplay.current.reset}
           >
             {sortedHomepageNews.map((news: News, index: number) => (
-              <Fragment key={index}>
-                <Carousel.Slide>
-                  <Image src={news.image} height={600} />
-                  <div
-                    onClick={() => {
-                      addView(news.id);
-                      navigate(`/news/${news.id}`);
-                    }}
-                    className="shadow"
-                  >
-                    <h1 className="title">{news.title}</h1>
-                    <p className="subtitle">{news.subtitle}</p>
-                  </div>
-                </Carousel.Slide>
-              </Fragment>
+              <Carousel.Slide key={index} className="carousel-slide">
+                <Image
+                  src={news.image}
+                  height={600}
+                  className="carousel-image"
+                  alt={news.title}
+                />
+                <div
+                  onClick={() => handleNewsClick(news.id)}
+                  className="shadow"
+                >
+                  <h1 className="title">{news.title}</h1>
+                  <p className="subtitle">{news.subtitle}</p>
+                </div>
+              </Carousel.Slide>
             ))}
           </Carousel>
-        )}
-      </>
+        </div>
+      )}
     </div>
   );
 };

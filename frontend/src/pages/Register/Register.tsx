@@ -76,17 +76,19 @@ export const Register: React.FC<RegisterProps> = ({ mutation }) => {
           <Image
             className="registerImage"
             src={data?.header_logo}
-            height={60}
-            width={60}
+            height={80}
+            width={80}
+            radius="md"
           />
           <h1 className="registerH1text">Register</h1>
         </div>
-        <Stack className="register" sx={{ maxWidth: 380 }} mx="auto">
+        <Stack className="register" sx={{ maxWidth: 400 }} mx="auto">
           <TextInput
             {...form.getInputProps("email")}
             placeholder="Enter your email address"
             label="Email"
             withAsterisk
+            size="md"
           />
           <PasswordInput
             {...form.getInputProps("password")}
@@ -94,6 +96,7 @@ export const Register: React.FC<RegisterProps> = ({ mutation }) => {
             placeholder="Enter your password"
             visible={visible}
             onVisibilityChange={toggle}
+            size="md"
           />
           <PasswordInput
             className="confirmPassword"
@@ -102,8 +105,9 @@ export const Register: React.FC<RegisterProps> = ({ mutation }) => {
             placeholder="Confirm your password"
             visible={visible}
             onVisibilityChange={toggle}
+            size="md"
           />
-          <Button className="registerButton" type="submit">
+          <Button className="registerButton" type="submit" size="md">
             Register
           </Button>
         </Stack>

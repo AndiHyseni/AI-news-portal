@@ -1,47 +1,106 @@
 .loginForm {
-  padding-top: 50px;
-  padding-bottom: 50px;
+  padding-top: 80px;
+  padding-bottom: 80px;
+  max-width: 500px;
+  margin: 0 auto;
 }
 
 .login {
-  padding: 50px;
+  padding: 40px;
   background-color: white;
-  border-radius: 10px;
-  border: 1px solid #adb5bd;
+  min-width: 500px;
+  border-radius: 16px;
+  border: none;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.login:hover {
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+  transform: translateY(-5px);
 }
 
 .loginHeader {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 30px;
+  flex-direction: column;
 }
 
 .loginH1text {
-  font-size: 30px;
+  font-size: 32px;
+  font-weight: 700;
   color: #26145c;
+  margin-top: 20px;
+  position: relative;
+}
+
+.loginH1text::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, #4b21b0 0%, #6937da 100%);
+  border-radius: 2px;
 }
 
 .loginButton {
-  background-color: #212529;
-  height: 45px;
-  font-size: 18px;
+  background: linear-gradient(135deg, #4b21b0 0%, #2e1470 100%);
+  height: 50px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(38, 20, 92, 0.2);
+  margin-top: 10px;
 }
 
 .loginButton:hover {
-  background-color: #26145c;
+  background: linear-gradient(135deg, #5c30cc 0%, #3a1b8c 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(38, 20, 92, 0.3);
+}
+
+.loginButton:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 5px rgba(38, 20, 92, 0.2);
 }
 
 .loginpassword {
-  padding-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .forgotPass {
-  color: black;
+  color: #555;
   margin-bottom: 20px;
   display: flex;
   flex-direction: row-reverse;
+  font-size: 14px;
+  transition: all 0.2s ease;
 }
 
 .forgotPass:hover {
-  color: #26145c;
+  color: #4b21b0;
+  text-decoration: underline;
+}
+
+.loginImage {
+  margin-bottom: 15px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .loginForm {
+    padding-top: 50px;
+    padding-bottom: 50px;
+    width: 90%;
+  }
+
+  .login {
+    padding: 25px;
+  }
 }

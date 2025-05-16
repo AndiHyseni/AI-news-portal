@@ -1,4 +1,4 @@
-import { Image } from "@mantine/core";
+import { Image, Title, Container, Grid, Paper, Text } from "@mantine/core";
 import { Rapport } from "../../types/administration/administration";
 import "../Administration/Administration.css";
 
@@ -8,64 +8,145 @@ export interface AdministrationProps {
 
 export const Administration: React.FC<AdministrationProps> = ({ raport }) => {
   return (
-    <div className="dashboard">
-      <div className="raports">
-        <div className="raportBox">
-          <Image src="../../images/users.png" width={250} height={200} />
-          <h1 className="boxTitle">Users</h1>
-          <p className="boxParagraph">Number of Users: {raport.users}</p>
-        </div>
-        <div className="raportBox">
-          <Image src="../../images/admin.png" width={250} height={200} />
-          <h1 className="boxTitle">Admins</h1>
-          <p className="boxParagraph">Number of Admins: {raport.admins}</p>
-        </div>
-        <div className="raportBox">
-          <Image src="../../images/views.png" width={250} height={200} />
-          <h1 className="boxTitle">Views</h1>
-          <p className="boxParagraph">Number of Views: {raport.views}</p>
-        </div>
+    <>
+      <Title order={2} mb={30} className="category-page-title">
+        Dashboard Overview
+      </Title>
+      <div className="dashboard">
+        <Grid className="raports">
+          <Grid.Col sm={6} md={4}>
+            <Paper className="raportBox">
+              <div className="image-container" style={{ height: "180px" }}>
+                <Image
+                  src="../../images/users.png"
+                  height={180}
+                  fit="contain"
+                />
+              </div>
+              <h2 className="boxTitle">Users</h2>
+              <p className="boxParagraph">Number of Users: {raport.users}</p>
+            </Paper>
+          </Grid.Col>
+
+          <Grid.Col sm={6} md={4}>
+            <Paper className="raportBox">
+              <div className="image-container" style={{ height: "180px" }}>
+                <Image
+                  src="../../images/admin.png"
+                  height={180}
+                  fit="contain"
+                />
+              </div>
+              <h2 className="boxTitle">Admins</h2>
+              <p className="boxParagraph">Number of Admins: {raport.admins}</p>
+            </Paper>
+          </Grid.Col>
+
+          <Grid.Col sm={6} md={4}>
+            <Paper className="raportBox">
+              <div className="image-container" style={{ height: "180px" }}>
+                <Image
+                  src="../../images/views.png"
+                  height={180}
+                  fit="contain"
+                />
+              </div>
+              <h2 className="boxTitle">Views</h2>
+              <p className="boxParagraph">Number of Views: {raport.views}</p>
+            </Paper>
+          </Grid.Col>
+        </Grid>
+
+        <Grid className="raports">
+          <Grid.Col sm={6} md={4}>
+            <Paper className="raportBox">
+              <div className="image-container" style={{ height: "180px" }}>
+                <Image src="../../images/news.jpg" height={180} fit="contain" />
+              </div>
+              <h2 className="boxTitle">News</h2>
+              <p className="boxParagraph">Number of News: {raport.news}</p>
+            </Paper>
+          </Grid.Col>
+
+          <Grid.Col sm={6} md={4}>
+            <Paper className="raportBox">
+              <div className="image-container" style={{ height: "180px" }}>
+                <Image
+                  src="../../images/category.png"
+                  height={180}
+                  fit="contain"
+                />
+              </div>
+              <h2 className="boxTitle">Categories</h2>
+              <p className="boxParagraph">
+                Number of Categories: {raport.categories}
+              </p>
+            </Paper>
+          </Grid.Col>
+
+          <Grid.Col sm={6} md={4}>
+            <Paper className="raportBox">
+              <div className="image-container" style={{ height: "180px" }}>
+                <Image
+                  src="../../images/savedNews.jpg"
+                  height={180}
+                  fit="contain"
+                />
+              </div>
+              <h2 className="boxTitle">Saved News</h2>
+              <p className="boxParagraph">
+                Number of Saved News: {raport.saved}
+              </p>
+            </Paper>
+          </Grid.Col>
+        </Grid>
+
+        <Grid className="raports">
+          <Grid.Col sm={6} md={4}>
+            <Paper className="raportBox">
+              <div className="image-container" style={{ height: "180px" }}>
+                <Image
+                  src="../../images/happy.png"
+                  height={180}
+                  fit="contain"
+                />
+              </div>
+              <h2 className="boxTitle">Happy</h2>
+              <p className="boxParagraph">
+                Number of Happy reactions: {raport.happy}
+              </p>
+            </Paper>
+          </Grid.Col>
+
+          <Grid.Col sm={6} md={4}>
+            <Paper className="raportBox">
+              <div className="image-container" style={{ height: "180px" }}>
+                <Image src="../../images/sad.png" height={180} fit="contain" />
+              </div>
+              <h2 className="boxTitle">Sad</h2>
+              <p className="boxParagraph">
+                Number of Sad reactions: {raport.sad}
+              </p>
+            </Paper>
+          </Grid.Col>
+
+          <Grid.Col sm={6} md={4}>
+            <Paper className="raportBox">
+              <div className="image-container" style={{ height: "180px" }}>
+                <Image
+                  src="../../images/angry.jpg"
+                  height={180}
+                  fit="contain"
+                />
+              </div>
+              <h2 className="boxTitle">Angry</h2>
+              <p className="boxParagraph">
+                Number of Angry reactions: {raport.angry}
+              </p>
+            </Paper>
+          </Grid.Col>
+        </Grid>
       </div>
-      <div className="raports">
-        <div className="raportBox">
-          <Image src="../../images/news.jpg" width={250} height={200} />
-          <h1 className="boxTitle">News</h1>
-          <p className="boxParagraph">Number of News: {raport.news}</p>
-        </div>
-        <div className="raportBox">
-          <Image src="../../images/category.png" width={250} height={200} />
-          <h1 className="boxTitle">Categories</h1>
-          <p className="boxParagraph">
-            Number of Categories: {raport.categories}
-          </p>
-        </div>
-        <div className="raportBox">
-          <Image src="../../images/savedNews.jpg" width={250} height={200} />
-          <h1 className="boxTitle">Saved News</h1>
-          <p className="boxParagraph">Number of Saved News: {raport.saved}</p>
-        </div>
-      </div>
-      <div className="raports">
-        <div className="raportBox">
-          <Image src="../../images/happy.png" width={250} height={200} />
-          <h1 className="boxTitle">Happy</h1>
-          <p className="boxParagraph">
-            Number of Happy reactions: {raport.happy}
-          </p>
-        </div>
-        <div className="raportBox">
-          <Image src="../../images/sad.png" width={250} height={200} />
-          <h1 className="boxTitle">Sad</h1>
-          <p className="boxParagraph">Number of Sad reactions: {raport.sad}</p>
-        </div>
-        <div className="raportBox">
-          <Image src="../../images/angry.jpg" width={250} height={200} />
-          <h1 className="boxTitle">Angry</h1>
-          <p className="boxParagraph">
-            Number of Angry reactions: {raport.angry}
-          </p>
-        </div>
-      </div>
-    </div>
+    </>
   );
 };

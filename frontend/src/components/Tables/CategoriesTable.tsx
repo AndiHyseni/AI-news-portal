@@ -1,75 +1,117 @@
-import { Button, Table } from "@mantine/core";
+import { ActionIcon, Text, Table, Paper, Button } from "@mantine/core";
 import { CirclePlus, Edit, Trash } from "tabler-icons-react";
+import "./Tables.css";
 import { Categories } from "../../types/categories/categories";
 
-type CategoriesResponse = Categories[] | { categories: Categories[] };
-
-export interface TableProps {
-  categories: CategoriesResponse;
-  onDeleteCategory: (categories: Categories) => void;
-  setIsOpenCreateModal: (isModalOpen: boolean) => void;
-  onEditCategory: (categories: Categories) => void;
+export interface Props {
+  categories: Categories[] | { categories: Categories[] };
+  onDeleteCategory: (category: Categories) => void;
+  onEditCategory: (category: Categories) => void;
+  setIsOpenCreateModal: (isOpen: boolean) => void;
 }
 
-export const CategoriesTable: React.FC<TableProps> = ({
+export const CategoriesTable: React.FC<Props> = ({
   categories,
   onDeleteCategory,
-  setIsOpenCreateModal,
   onEditCategory,
+  setIsOpenCreateModal,
 }) => {
   // Ensure categories is an array
-  const categoriesArray: Categories[] = Array.isArray(categories)
+  const categoriesArray = Array.isArray(categories)
     ? categories
     : (categories as { categories: Categories[] }).categories || [];
 
   return (
     <>
-      <Button className="addButton" onClick={() => setIsOpenCreateModal(true)}>
-        <CirclePlus size={20} strokeWidth={2} color={"white"} />
-        Add New Category
-      </Button>
-      <Table
-        data-testid="categories-table"
-        highlightOnHover
-        verticalSpacing={6}
-        style={{ marginTop: 5, marginBottom: 20, textAlign: "center" }}
-        sx={() => ({
-          backgroundColor: "white",
-          boxShadow: "box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.15)",
-        })}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "20px",
+        }}
       >
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Show Online</th>
-            <th>Edit</th>
-            <th>Delete</th>
-          </tr>
-        </thead>
-        <tbody>
-          {categoriesArray.map((category, index) => (
-            <tr key={index}>
-              <td>{category.name}</td>
-              <td>{category.description}</td>
-              <td>{category.show_online == true ? "Yes" : "No"}</td>
-              <td>
-                <Button onClick={() => onEditCategory(category)}>
-                  <Edit size={20} strokeWidth={2} color={"white"} />
-                </Button>
-              </td>
-              <td>
-                <Button
-                  color={"red"}
-                  onClick={() => onDeleteCategory(category)}
-                >
-                  <Trash size={20} strokeWidth={2} color={"white"} />
-                </Button>
-              </td>
+        <Text className="table-title" size="xl" weight={600}>
+          Categories Management
+        </Text>
+
+        <Button
+          leftIcon={<CirclePlus size={20} />}
+          onClick={() => setIsOpenCreateModal(true)}
+          className="action-button"
+        >
+          Add Category
+        </Button>
+      </div>
+
+      {categoriesArray && categoriesArray.length > 0 ? (
+        <Table
+          data-testid="category-table"
+          highlightOnHover
+          verticalSpacing="md"
+          horizontalSpacing="lg"
+          className="custom-table"
+        >
+          <thead className="table-header">
+            <tr>
+              <th>Name</th>
+              <th>Description</th>
+              <th>Status</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {categoriesArray.map((category, index) => (
+              <tr key={index} className="table-row">
+                <td>
+                  <Text weight={500}>{category.name}</Text>
+                </td>
+                <td>
+                  <Text lineClamp={2} size="sm" color="dimmed">
+                    {category.description}
+                  </Text>
+                </td>
+                <td>
+                  <span
+                    className={`badge ${
+                      category.show_online ? "badge-success" : "badge-inactive"
+                    }`}
+                  >
+                    {category.show_online ? "Active" : "Inactive"}
+                  </span>
+                </td>
+                <td style={{ width: "150px" }}>
+                  <div style={{ display: "flex", gap: "8px" }}>
+                    <ActionIcon
+                      color="blue"
+                      onClick={() => onEditCategory(category)}
+                      variant="light"
+                      radius="md"
+                      size="lg"
+                    >
+                      <Edit size={18} />
+                    </ActionIcon>
+                    <ActionIcon
+                      color="red"
+                      onClick={() => onDeleteCategory(category)}
+                      variant="light"
+                      radius="md"
+                      size="lg"
+                    >
+                      <Trash size={18} />
+                    </ActionIcon>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      ) : (
+        <div className="empty-state">
+          <div className="empty-state-icon">📋</div>
+          <Text className="empty-state-text">No categories found</Text>
+        </div>
+      )}
     </>
   );
 };

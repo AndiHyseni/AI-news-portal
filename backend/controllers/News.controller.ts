@@ -132,24 +132,6 @@ NewsController.get(
   }
 );
 
-// GET all views (Admin only)
-// NewsController.get(
-//   "/getViews",
-//   // authorize(),
-//   async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//       const result = await NewsService.getViews();
-//       if (result.httpCode === 200) {
-//         res.status(result.httpCode).send(result.data);
-//       } else {
-//         res.status(result.httpCode).send("Something went wrong");
-//       }
-//     } catch (err) {
-//       next(err);
-//     }
-//   }
-// );
-
 // GET saved news for a user (Authenticated users)
 NewsController.get(
   "/getSaved/:userId",
@@ -214,23 +196,6 @@ NewsController.get(
     try {
       const { id } = req.params;
       const result = await NewsService.getReactionsByNews(id);
-      if (result.httpCode === 200) {
-        res.status(result.httpCode).send(result.data);
-      } else {
-        res.status(result.httpCode).send("Something went wrong");
-      }
-    } catch (err) {
-      next(err);
-    }
-  }
-);
-
-// GET all reactions (for view models)
-NewsController.get(
-  "/reaction",
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const result = await NewsService.getAllReactions();
       if (result.httpCode === 200) {
         res.status(result.httpCode).send(result.data);
       } else {

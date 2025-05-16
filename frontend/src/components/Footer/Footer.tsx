@@ -1,65 +1,120 @@
-import "../Footer/Footer.css";
 import { Image } from "@mantine/core";
 import { Link, NavLink } from "react-router-dom";
 import { Categories } from "../../types/categories/categories";
 import { useConfiguration } from "../../hooks/useConfiguration/useConfiguration";
-
-type CategoriesResponse = Categories[] | { categories: Categories[] };
+import {
+  BrandTwitter,
+  BrandFacebook,
+  BrandInstagram,
+  BrandYoutube,
+  BrandLinkedin,
+  Mail,
+  Phone,
+  Bookmark,
+  InfoCircle,
+  FileText,
+} from "tabler-icons-react";
+import "./Footer.css";
 
 export interface CategoriesProps {
-  categories: CategoriesResponse;
+  categories: Categories[] | Categories;
 }
 
 export const Footer: React.FC<CategoriesProps> = ({ categories = [] }) => {
   const { data } = useConfiguration();
+  const currentYear = new Date().getFullYear();
 
-  // Ensure categories is an array and handle the data structure
-  const categoriesArray: Categories[] = Array.isArray(categories)
-    ? categories
-    : (categories as { categories: Categories[] }).categories || [];
+  // Ensure categories is always an array
+  const categoriesArray = Array.isArray(categories) ? categories : [categories];
 
   return (
-    <div className="footer">
-      <div style={{ display: "flex" }}>
-        <div className="column1">
-          <Link className="footerImage" to="/">
-            <Image src={data?.footer_logo} height={100} width={100} />
-          </Link>
-          <p>
-            Ky portal mirëmbahet nga kompania "Portal News". Materialet dhe
-            informacionet në këtë portal nuk mund të kopjohen, të shtypen, ose
-            të përdoren në çfarëdo forme tjetër për qëllime përfitimi, pa
-            miratimin e drejtuesve të "Portal News". Për ta shfrytëzuar
-            materialin e këtij portali obligoheni t'i pranoni Kushtet e
-            përdorimit.
-          </p>
-        </div>
-        <div className="column2">
-          <div className="footerFirstItem">
-            <b>Udhëzim</b>
+    <footer className="footer">
+      <div className="footer-content">
+        <div className="footer-left">
+          <div className="footer-logo">
+            <Link to="/">
+              <Image
+                src={data?.header_logo}
+                height={60}
+                width={60}
+                radius="md"
+                alt="News Portal Logo"
+              />
+            </Link>
           </div>
-          {categoriesArray
-            .filter((x: Categories) => x.show_online === true)
-            .map((category: Categories, index: number) => (
-              <NavLink key={index} to={`/category/${category.id}`}>
-                <div className="footerItem">{category.name}</div>
-              </NavLink>
-            ))}
+          <div className="footer-description">
+            <p>
+              Your trusted source for latest news and in-depth stories that
+              matter. We deliver accurate, timely, and relevant content to keep
+              you informed about what's happening in the world.
+            </p>
+          </div>
+        </div>
+
+        <div className="footer-links">
+          <h4 style={{ color: "white" }}>Categories</h4>
+          <div className="footer-categories">
+            {categoriesArray
+              .filter((category) => Boolean(category.show_online))
+              .map((category: Categories, index: number) => (
+                <NavLink key={index} to={`/category/${category.id}`}>
+                  {category.name}
+                </NavLink>
+              ))}
+          </div>
+        </div>
+
+        <div className="footer-links">
+          <h4 style={{ color: "white" }}>Quick Links</h4>
+          <div className="footer-categories">
+            <NavLink to="/saved">
+              <Bookmark size={16} style={{ marginRight: "8px" }} />
+              Saved Articles
+            </NavLink>
+            <NavLink to="/about">
+              <InfoCircle size={16} style={{ marginRight: "8px" }} />
+              About Us
+            </NavLink>
+            <NavLink to="/terms">
+              <FileText size={16} style={{ marginRight: "8px" }} />
+              Terms of Use
+            </NavLink>
+          </div>
+        </div>
+
+        <div className="footer-right">
+          <h4 style={{ color: "white" }}>Connect With Us</h4>
+          <p>
+            <Mail size={16} style={{ marginRight: "8px" }} />
+            Email: contact@news-portal.com
+          </p>
+          <p>
+            <Phone size={16} style={{ marginRight: "8px" }} />
+            Phone: +1 234 567 890
+          </p>
+          <div className="footer-social">
+            <a href="#" aria-label="Twitter">
+              <BrandTwitter size={20} />
+            </a>
+            <a href="#" aria-label="Facebook">
+              <BrandFacebook size={20} />
+            </a>
+            <a href="#" aria-label="Instagram">
+              <BrandInstagram size={20} />
+            </a>
+            <a href="#" aria-label="YouTube">
+              <BrandYoutube size={20} />
+            </a>
+            <a href="#" aria-label="LinkedIn">
+              <BrandLinkedin size={20} />
+            </a>
+          </div>
         </div>
       </div>
-      <div className="hr-footer">
-        <hr
-          style={{
-            background: "white",
-            color: "white",
-            borderColor: "white",
-            width: "100%",
-          }}
-        />
+
+      <div className="footer-bottom">
+        <p>&copy; {currentYear} News Portal. All rights reserved.</p>
       </div>
-      <div className="copyright">
-        <h4>Portal News © All rights reserved</h4>
-      </div>
-    </div>
+    </footer>
   );
 };

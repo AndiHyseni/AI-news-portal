@@ -51,5 +51,5 @@
 }
 
 .mantine-Image-image {
-  object-fit: contain !important;
+  object-fit: contain;
 }

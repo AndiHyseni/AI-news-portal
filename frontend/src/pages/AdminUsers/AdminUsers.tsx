@@ -35,10 +35,6 @@ export const AdminUsers: React.FC = () => {
         <Sidebar />
         <Container style={{ width: "100%" }}>
           <div className="adminUsersdiv">
-            <Button className="addButton" onClick={() => navigate("/addAdmin")}>
-              <CirclePlus size={20} strokeWidth={2} color={"white"} />
-              Add Users
-            </Button>
             {data && (
               <UsersTable
                 users={data}

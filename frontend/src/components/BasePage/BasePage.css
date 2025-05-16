@@ -1,0 +1,21 @@
+.base-page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f5f7fa;
+}
+
+.base-page-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.base-page-content {
+  flex: 1;
+}
+
+.base-page-footer {
+  margin-top: auto;
+}

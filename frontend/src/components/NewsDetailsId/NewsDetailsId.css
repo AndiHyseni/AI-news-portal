@@ -2,100 +2,268 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 10px 100px 10px 100px;
+  padding: 30px;
   align-items: center;
   background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  max-width: 1200px;
+  margin: 0 auto 40px auto;
 }
 
 .detailsAdmin {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 10px 50px 10px 50px;
+  padding: 30px;
   align-items: center;
   background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.news-image-container {
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+  border-radius: 12px;
+  margin-bottom: 25px;
+  position: relative;
+}
+
+.news-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  transition: transform 0.7s ease;
 }
 
 .titleDetails {
-  color: black;
-  font-size: 29px;
+  color: #333;
+  font-size: 36px;
+  font-weight: 800;
   text-align: center;
+  margin-top: 30px;
+  margin-bottom: 15px;
+  position: relative;
+  width: 100%;
 }
 
 .subtitleDetails {
   text-align: center;
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 600;
+  color: #555;
+  margin-bottom: 30px;
+  width: 100%;
+}
+
+.news-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+  color: #666;
+  font-size: 14px;
 }
 
 .contentDetails {
   text-align: justify;
-  font-size: 15px;
+  font-size: 18px;
+  line-height: 1.8;
+  color: #444;
+  margin-bottom: 30px;
+  width: 100%;
 }
 
 .tagsDetails {
   width: 100%;
   display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 20px 0;
 }
 
 .tagsButton {
-  background-color: black;
-  margin-right: 5px;
+  background-color: #26145c;
+  border-radius: 20px;
+  padding: 6px 15px;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  font-weight: 500;
 }
 
 .tagsButton:hover {
-  background-color: #26145c;
+  background-color: #371d7b;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(38, 20, 92, 0.2);
 }
 
 .videoDetails {
-  padding-top: 20px;
+  padding-top: 30px;
   padding-bottom: 40px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .detailsButtonList {
-  margin-right: 10px;
+  margin-right: 15px;
+  transition: all 0.3s ease;
 }
 
 .deleteButton {
-  background-color: red;
+  background-color: #e53935;
+  transition: all 0.3s ease;
 }
 
 .deleteButton:hover {
-  background-color: rgb(148, 4, 4);
+  background-color: #c62828;
+  box-shadow: 0 5px 10px rgba(229, 57, 53, 0.3);
 }
 
 .savedButton {
   width: 100%;
-  margin-top: 25px;
+  margin: 30px 0;
+  display: flex;
+  justify-content: flex-end;
 }
 
+/* Reactions styling */
 .reactions {
   width: 100%;
-  margin: 20px 0;
+  margin: 30px 0;
+  padding: 30px;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
 }
 
 .reactionTitle {
-  color: black;
-  font-size: 20px;
+  color: #333;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 30px;
+  text-align: center;
 }
 
 .reactionEmoji {
   display: flex;
+  justify-content: center;
+  gap: 60px;
+}
+
+.reaction-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .reactionImage {
-  margin-right: 20px;
-  border: 2px solid #dee2e6;
-  padding: 10px;
+  width: 100px !important;
+  height: 100px !important;
+  border-radius: 50% !important;
+  background-color: #fff;
   cursor: pointer;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  padding: 0 !important;
+  border: 3px solid transparent;
+  object-fit: contain;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reactionImage span {
+  font-size: 60px;
+  line-height: 1;
+}
+
+/* Specific styles for each emoji */
+.happy-emoji {
+  background-color: #ffc107;
+  border-color: #ffb300;
+}
+
+.sad-emoji {
+  background-color: #ffd54f;
+  border-color: #ffc107;
+}
+
+.angry-emoji {
+  background-color: #ff7043;
+  border-color: #f4511e;
 }
 
 .reactionImage:hover {
-  box-shadow: 10px 5px 5px #dee2e6;
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
 }
 
 .counter {
-  position: relative;
-  left: 20px;
-  z-index: 1;
+  position: absolute;
+  top: -12px;
+  right: -5px;
+  background-color: #26145c;
+  color: white;
+  min-width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 2;
+  padding: 0 5px;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .details {
+    padding: 20px;
+  }
+
+  .titleDetails {
+    font-size: 28px;
+  }
+
+  .subtitleDetails {
+    font-size: 18px;
+  }
+
+  .contentDetails {
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .reactions {
+    padding: 20px;
+  }
+
+  .reactionTitle {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+
+  .reactionEmoji {
+    gap: 25px;
+  }
+
+  .reactionImage {
+    width: 80px !important;
+    height: 80px !important;
+  }
+
+  .counter {
+    min-width: 22px;
+    height: 22px;
+    font-size: 12px;
+  }
 }

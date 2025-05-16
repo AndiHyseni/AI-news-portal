@@ -1,72 +1,129 @@
 .navbar {
   display: flex;
   justify-content: space-between;
-  padding: 10px 100px 10px 100px;
+  padding: 15px 5%;
   align-items: center;
-  background-color: #26145c;
+  background: linear-gradient(135deg, #4b21b0 0%, #2e1470 100%);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.navbar-logo img {
+  transition: transform 0.3s ease;
+}
+
+.navbar-logo:hover img {
+  transform: scale(1.05);
+}
+
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 
 a {
   display: flex;
   align-items: center;
   text-decoration: none;
-  color: white;
+  color: rgba(255, 255, 255, 0.9);
+  transition: all 0.2s ease;
 }
 
 .navbarItem {
   display: flex;
   align-items: center;
-  margin-right: 10px;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-weight: 500;
+  transition: all 0.2s ease;
 }
 
 .navbarItem:hover {
-  color: darkgray;
+  color: white;
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.active .navbarItem {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: white;
 }
 
 .loginNavbar {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 15px;
 }
 
 h1 {
+  margin: 0;
   color: white;
-  font-size: 15px;
-  align-items: center;
+  font-size: 16px;
+  font-weight: 500;
 }
 
 .logintext {
   color: white;
   font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.logintext:hover {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .username {
-  padding-right: 10px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: 4px;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .username:hover {
-  color: #f3f3f3;
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .usernameArrow {
-  cursor: pointer;
-  top: 5px;
-  position: relative;
+  margin-left: 3px;
+  transition: transform 0.2s ease;
 }
 
-.usernameArrow:hover {
-  color: #f3f3f3;
+.username:hover .usernameArrow {
+  transform: translateY(2px);
 }
 
 .logoutbutton {
-  padding-right: 5px;
-  position: relative;
-  top: 5px;
+  margin-right: 5px;
 }
 
 .menuItem {
-  color: black;
-  margin: 0px;
+  color: #333;
+  margin: 0;
+  font-weight: 500;
   display: inline;
+  transition: color 0.2s ease;
+}
+
+.mantine-Menu-item:hover .menuItem {
+  color: #4b21b0;
+}
+
+.login-button-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.login-divider {
+  height: 20px;
+  width: 1px;
+  background-color: rgba(255, 255, 255, 0.3);
 }

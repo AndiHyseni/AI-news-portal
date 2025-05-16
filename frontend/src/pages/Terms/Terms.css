@@ -1,0 +1,169 @@
+.terms-page {
+  max-width: 1000px;
+  padding: 40px 20px;
+  margin: 0 auto;
+}
+
+.terms-header {
+  margin-bottom: 40px;
+  text-align: center;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 20px;
+}
+
+.terms-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #26145c;
+  position: relative;
+  display: inline-block;
+}
+
+.terms-title::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, #4b21b0 0%, #6937da 100%);
+  border-radius: 2px;
+}
+
+.terms-subtitle {
+  color: #666;
+  font-size: 1rem;
+}
+
+.terms-section {
+  margin-bottom: 40px;
+  background-color: white;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    box-shadow 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.terms-section:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.09);
+}
+
+.terms-intro {
+  margin-bottom: 30px;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #444;
+}
+
+.terms-accordion {
+  margin-top: 30px;
+}
+
+.terms-accordion .mantine-Accordion-item {
+  margin-bottom: 10px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+}
+
+.terms-accordion .mantine-Accordion-item:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+.terms-accordion .mantine-Accordion-content {
+  padding: 20px;
+  line-height: 1.6;
+  background-color: #f9f9fb;
+}
+
+.terms-accordion .mantine-Accordion-control {
+  font-weight: 600;
+  font-size: 1.1rem;
+  padding: 15px 20px;
+  color: #26145c;
+  transition: all 0.3s ease;
+}
+
+.terms-accordion .mantine-Accordion-control:hover {
+  background-color: #f5f9ff;
+}
+
+.terms-list {
+  margin: 15px 0 15px 20px;
+}
+
+.terms-list .mantine-List-item {
+  margin-bottom: 10px;
+  padding-left: 5px;
+  position: relative;
+}
+
+.mt-10 {
+  margin-top: 10px;
+}
+
+.contact-info {
+  margin-top: 10px;
+  background-color: whitesmoke;
+  padding: 15px;
+  border-radius: 8px;
+  display: inline-block;
+  border-left: 3px solid #4b21b0;
+}
+
+.terms-footer {
+  margin-top: 60px;
+  padding-top: 20px;
+  border-top: 1px solid #e0e0e0;
+  text-align: center;
+  color: #666;
+}
+
+.copyright {
+  margin-top: 10px;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .terms-page {
+    padding: 30px 15px;
+  }
+
+  .terms-title {
+    font-size: 2rem;
+  }
+
+  .terms-accordion .mantine-Accordion-control {
+    font-size: 1rem;
+    padding: 12px 15px;
+  }
+
+  .terms-accordion .mantine-Accordion-content {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .terms-page {
+    padding: 20px 10px;
+  }
+
+  .terms-title {
+    font-size: 1.8rem;
+  }
+
+  .terms-accordion .mantine-Accordion-content {
+    padding: 12px;
+  }
+
+  .terms-accordion .mantine-Accordion-control {
+    font-size: 0.95rem;
+    padding: 10px 12px;
+  }
+}

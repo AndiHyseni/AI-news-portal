@@ -62,7 +62,7 @@ export const getViewsDetails = async (
 
 export const getReactions = async (): Promise<Reaction[]> => {
   const { data } = await axiosInstance.get(
-    `${BaseUrl.DEVELOPMENT}/${NEWS.GET_NEWS}/${REACTION.GET_REACTIONS}`
+    `${BaseUrl.DEVELOPMENT}/${REACTION.GET_REACTIONS}`
   );
   return data;
 };
@@ -71,7 +71,7 @@ export const getreactionsDetails = async (
   newsId: number
 ): Promise<ReactionsDetails[]> => {
   const { data } = await axiosInstance.get(
-    `${BaseUrl.DEVELOPMENT}/${REACTION.GET_REACTIONS_DETAILS}/${newsId}`
+    `${BaseUrl.DEVELOPMENT}/${NEWS.GET_NEWS}/${REACTION.GET_REACTIONS_DETAILS}/${newsId}`
   );
   return data;
 };
@@ -94,7 +94,7 @@ export const editUser = async (payload: EditAdmin): Promise<string> => {
 
 export const addReaction = async (payload: AddReaction): Promise<number> => {
   const { data } = await axiosInstance.post(
-    `${BaseUrl.DEVELOPMENT}/${REACTION.GET_ADD_REACTION}`,
+    `${BaseUrl.DEVELOPMENT}/${NEWS.GET_NEWS}/${REACTION.GET_ADD_REACTION}`,
     payload
   );
   return data;

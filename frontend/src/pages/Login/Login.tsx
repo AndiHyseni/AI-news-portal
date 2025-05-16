@@ -6,18 +6,27 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../Login/Login.css";
 import { useConfiguration } from "../../hooks/useConfiguration/useConfiguration";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { UserContext } from "../../contexts/UserContext";
+import jwtDecode from "jwt-decode";
 
 export interface LoginProps {
   mutation: any;
+}
+
+interface JwtPayload {
+  id: string;
+  roles: string[];
+  username: string;
+  email: string;
+  exp: number;
 }
 
 export const Login: React.FC<LoginProps> = ({ mutation }) => {
   const [visible, { toggle }] = useDisclosure(false);
   const navigate = useNavigate();
   const { data } = useConfiguration();
-  const [, setUserContext] = useContext(UserContext);
+  const [userContext, setUserContext] = useContext(UserContext);
 
   const form = useForm({
     initialValues: {
@@ -58,6 +67,30 @@ export const Login: React.FC<LoginProps> = ({ mutation }) => {
     },
   });
 
+  // Monitor login mutation state
+  useEffect(() => {
+    if (mutation.isSuccess && mutation.data) {
+      const response = mutation.data;
+
+      try {
+        // Decode the token to get user details
+        const decoded = jwtDecode<JwtPayload>(response.token);
+
+        // Update user context with all necessary information
+        setUserContext({
+          isAuthenticated: true,
+          token: response.token,
+          roles: decoded.roles || response.roles || [],
+          userId: decoded.id || response.userId,
+          username: decoded.username || response.username,
+          email: decoded.email || response.email,
+        });
+      } catch (error) {
+        console.error("Error decoding token after login:", error);
+      }
+    }
+  }, [mutation.isSuccess, mutation.data, setUserContext]);
+
   const handleSubmit = async () => {
     try {
       const response = await mutation.mutateAsync({
@@ -75,19 +108,14 @@ export const Login: React.FC<LoginProps> = ({ mutation }) => {
         return;
       }
 
-      // Set user context manually since we're not using the hook's callback
-      setUserContext({
-        isAuthenticated: true,
-        token: response.token,
-        roles: response.roles || [],
-        userId: response.userId,
-        username: response.username,
-        email: response.email,
-      });
-
+      // Store token in localStorage
       localStorage.setItem("jwt", response.token);
-      navigate("/");
-      toast.success("Login successful", { autoClose: 2000 });
+
+      // Navigate and show success message
+      setTimeout(() => {
+        navigate("/");
+        toast.success("Login successful", { autoClose: 2000 });
+      }, 100);
     } catch (error: any) {
       console.error("Login error:", error);
 
@@ -116,20 +144,22 @@ export const Login: React.FC<LoginProps> = ({ mutation }) => {
       <form className="loginForm" onSubmit={form.onSubmit(handleSubmit)}>
         <div className="loginHeader">
           <Image
-            className="registerImage"
+            className="loginImage"
             src={data?.header_logo}
-            height={60}
-            width={60}
+            height={80}
+            width={80}
+            radius="md"
           />
           <h1 className="loginH1text">Login</h1>
         </div>
-        <Stack className="login" sx={{ maxWidth: 380 }} mx="auto">
+        <Stack className="login" sx={{ maxWidth: 400 }} mx="auto">
           <TextInput
             {...form.getInputProps("email")}
             placeholder="Enter your email address"
             label="Email"
             withAsterisk
             autoComplete="email"
+            size="md"
           />
           <PasswordInput
             {...form.getInputProps("password")}
@@ -139,11 +169,12 @@ export const Login: React.FC<LoginProps> = ({ mutation }) => {
             visible={visible}
             onVisibilityChange={toggle}
             autoComplete="current-password"
+            size="md"
           />
           <NavLink to="/forgot-password" className="forgotPass">
             Forgot Password?
           </NavLink>
-          <Button className="loginButton" type="submit">
+          <Button className="loginButton" type="submit" size="md">
             Login
           </Button>
         </Stack>

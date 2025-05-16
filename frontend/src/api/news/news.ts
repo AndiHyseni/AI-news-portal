@@ -26,7 +26,7 @@ export const createNews = async (
   payload: CreateNewsPayload
 ): Promise<number> => {
   const { data } = await axiosInstance.post(
-    `${BaseUrl.DEVELOPMENT}/News/${CREATE_NEWS.CREATE_NEWS}`,
+    `${BaseUrl.DEVELOPMENT}/${NEWS.GET_NEWS}/${CREATE_NEWS.CREATE_NEWS}`,
     payload
   );
   return data;
@@ -66,7 +66,16 @@ export const deleteSavedNews = async (newsId: string): Promise<void> => {
 
 export const getNewsByTags = async (tags: string): Promise<News[]> => {
   const { data } = await axiosInstance.get(
-    `${BaseUrl.DEVELOPMENT}/${TAGS.TAGS}/${tags}`
+    `${BaseUrl.DEVELOPMENT}/${NEWS.GET_NEWS}/${TAGS.TAGS}/${tags}`
   );
-  return data;
+
+  if (data && data.news && Array.isArray(data.news)) {
+    return data.news;
+  }
+
+  if (Array.isArray(data)) {
+    return data;
+  }
+
+  return [];
 };

@@ -1,7 +1,16 @@
-import { Button, Table } from "@mantine/core";
-import { useNavigate } from "react-router-dom";
-import { Edit, Trash } from "tabler-icons-react";
+import {
+  ActionIcon,
+  Paper,
+  Table,
+  Text,
+  Badge,
+  Avatar,
+  Button,
+} from "@mantine/core";
+import { CirclePlus, UserCheck, UserX } from "tabler-icons-react";
 import { Users } from "../../types/administration/administration";
+import "./Tables.css";
+import { useNavigate } from "react-router-dom";
 
 type UsersResponse = Users[] | { users: Users[] };
 
@@ -24,44 +33,111 @@ export const UsersTable: React.FC<TableProps> = ({
     : (users as { users: Users[] }).users || [];
 
   return (
-    <Table
-      data-testid="users-table"
-      highlightOnHover
-      verticalSpacing={6}
-      style={{ marginTop: 5, marginBottom: 20, textAlign: "center" }}
-      sx={() => ({
-        backgroundColor: "white",
-        boxShadow: "box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.15)",
-      })}
-    >
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Role</th>
-          <th>Edit</th>
-          <th>Delete</th>
-        </tr>
-      </thead>
-      <tbody>
-        {usersArray.map((user, index) => (
-          <tr key={index}>
-            <td>{user.name}</td>
-            <td>{user.email}</td>
-            <td>{user.role}</td>
-            <td>
-              <Button onClick={() => onEditUser(user)}>
-                <Edit size={20} strokeWidth={2} color={"white"} />
-              </Button>
-            </td>
-            <td>
-              <Button color={"red"} onClick={() => onDeleteUsers(user)}>
-                <Trash size={20} strokeWidth={2} color={"white"} />
-              </Button>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </Table>
+    <>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "20px",
+        }}
+      >
+        <Text className="table-title" size="xl" weight={600} mb="md">
+          User Management
+        </Text>
+
+        <Button
+          leftIcon={<CirclePlus size={20} />}
+          onClick={() => navigate("/addAdmin")}
+          className="action-button"
+        >
+          Add Users
+        </Button>
+      </div>
+
+      {usersArray && usersArray.length > 0 ? (
+        <Table
+          data-testid="users-table"
+          highlightOnHover
+          verticalSpacing="md"
+          horizontalSpacing="lg"
+          className="custom-table"
+        >
+          <thead className="table-header">
+            <tr>
+              <th>User</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {usersArray.map((user, index) => (
+              <tr key={index} className="table-row">
+                <td>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "12px",
+                    }}
+                  >
+                    <Avatar
+                      radius="xl"
+                      size="sm"
+                      color={user.role === "Admin" ? "violet" : "blue"}
+                    >
+                      {user.name.substring(0, 2).toUpperCase()}
+                    </Avatar>
+                    <Text weight={500}>{user.name}</Text>
+                  </div>
+                </td>
+                <td>
+                  <Text size="sm">{user.email}</Text>
+                </td>
+                <td>
+                  <Badge
+                    color={user.role === "Admin" ? "violet" : "blue"}
+                    variant="light"
+                  >
+                    {user.role}
+                  </Badge>
+                </td>
+                <td>
+                  {user.role === "Admin" ? (
+                    <ActionIcon
+                      color="red"
+                      variant="light"
+                      onClick={() => onDeleteUsers(user)}
+                      radius="md"
+                      size="lg"
+                      title="Remove Admin"
+                    >
+                      <UserX size={18} />
+                    </ActionIcon>
+                  ) : (
+                    <ActionIcon
+                      color="green"
+                      variant="light"
+                      onClick={() => onEditUser(user)}
+                      radius="md"
+                      size="lg"
+                      title="Make Admin"
+                    >
+                      <UserCheck size={18} />
+                    </ActionIcon>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      ) : (
+        <div className="empty-state">
+          <div className="empty-state-icon">👤</div>
+          <Text className="empty-state-text">No users found</Text>
+        </div>
+      )}
+    </>
   );
 };

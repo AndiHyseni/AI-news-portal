@@ -8,6 +8,7 @@ import { RapportController } from "../controllers/Raport.controller";
 import { NewsConfigController } from "../controllers/NewsConfig.controller";
 import RoleController from "../controllers/Role.controller";
 import { ViewsController } from "../controllers/Views.controller";
+import { ReactionsController } from "../controllers/Reactions.controller";
 
 const endpoints: [string, Router][] = [
   ["/api/Account", AccountController],
@@ -17,6 +18,7 @@ const endpoints: [string, Router][] = [
   ["/api/NewsConfig", NewsConfigController],
   ["/api/roles", RoleController],
   ["/api/views", ViewsController],
+  ["/api/reaction", ReactionsController],
 ];
 
 export const routes = (app: Application): void => {

@@ -1,57 +1,180 @@
 .mostwatchedpage {
-  padding-bottom: 25px;
+  padding: 30px 0;
+  margin-top: 20px;
+}
+
+.mostwatched-carousel {
+  width: 100%;
+  max-width: 1400px;
+  margin: 30px auto;
+  padding: 0 15px;
+  position: relative;
 }
 
 .mostwatched {
-  font-size: 30px;
+  font-size: 32px;
+  font-weight: 700;
   color: #26145c;
+  margin-bottom: 25px;
+  position: relative;
+  display: inline-block;
+  margin-left: 10px;
+}
+
+.mostwatched::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 60px;
+  height: 4px;
+  background-color: #26145c;
+  border-radius: 2px;
 }
 
 .mostwatcheddiv {
   display: flex;
-  height: 400px;
+  height: 350px;
   flex-direction: column;
   background-color: white;
-  border-radius: 30px;
-  border: 1px solid #dee2e6;
+  border-radius: 12px;
+  border: none;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  margin: 10px;
+}
+
+.mostwatcheddiv:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+.mostwatched-image-container {
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+  position: relative;
 }
 
 .mostwatchedsite {
   display: flex;
   flex-direction: column;
-  height: inherit;
+  flex: 1;
   justify-content: space-between;
+  padding: 20px;
+  position: relative;
+  z-index: 1;
 }
 
 .mostwatchedtitle {
-  font-size: 16px;
-  padding-left: 10px;
-  padding-right: 10px;
-  margin-bottom: 0px;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #333;
+  margin-bottom: 15px;
+  transition: color 0.3s ease;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
 }
 
-.mostwatchedp {
-  color: red;
-  padding-left: 10px;
+.mostwatcheddiv:hover .mostwatchedtitle {
+  color: #26145c;
 }
 
 .mostwatchedimage {
-  flex: 0 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
 }
 
-.mantine-h0vjos {
-  height: 400px;
-}
-
-.mantine-1jde5t7 {
-  margin-right: 30px;
+.mostwatcheddiv:hover .mostwatchedimage {
+  transform: scale(1.05);
 }
 
 .readMoreOnMostWatched {
-  width: 30%;
-  margin-bottom: 7px;
-  align-self: center;
+  width: auto;
+  padding: 8px 20px;
+  margin-top: 10px;
+  align-self: flex-start;
+  background: linear-gradient(135deg, #4b21b0 0%, #2e1470 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 14px;
+  transition: background-color 0.3s ease, transform 0.2s ease,
+    box-shadow 0.3s ease;
+}
+
+.readMoreOnMostWatched:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(43, 20, 112, 0.3);
+}
+
+/* Embla Carousel Custom Styles */
+.mantine-Carousel-root {
+  width: 100%;
+}
+
+.mantine-Carousel-control {
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  color: #26145c;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  width: 40px;
+  height: 40px;
+  z-index: 10;
+}
+
+.mantine-Carousel-control:hover {
+  background-color: white;
+  transform: scale(1.1);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.mantine-Carousel-indicators {
+  margin-top: 20px;
+}
+
+.mantine-Carousel-indicator {
+  width: 30px;
+  height: 4px;
+  transition: all 0.3s ease;
+  background-color: #fff;
+}
+
+.mantine-Carousel-indicator[data-active] {
+  background-color: #26145c;
+  width: 50px;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .mostwatched {
+    font-size: 28px;
+    margin-left: 5px;
+  }
+
+  .mostwatchedtitle {
+    font-size: 16px;
+  }
+
+  .readMoreOnMostWatched {
+    padding: 6px 15px;
+    font-size: 13px;
+  }
+
+  .mostwatcheddiv {
+    height: 320px;
+    margin: 5px;
+  }
+
+  .mostwatched-carousel {
+    padding: 0 10px;
+  }
 }

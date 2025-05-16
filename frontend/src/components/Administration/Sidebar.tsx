@@ -1,121 +1,164 @@
-import { Button, createStyles } from "@mantine/core";
+import { Button, createStyles, Text, Box, ActionIcon } from "@mantine/core";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import {
-  ArrowBarToRight,
   PlaystationX,
-  TextWrapDisabled,
+  Menu2,
+  Dashboard,
+  Category,
+  News,
+  Settings,
+  Users,
+  Eye,
+  MoodSmile,
 } from "tabler-icons-react";
 import "../Administration/Administration.css";
 
 const useSidebarStyles = createStyles({
-  closed: {
-    width: "0px !important",
-    transitionDuration: "600ms",
+  sidebar: {
+    position: "relative",
+    height: "100vh",
+    backgroundColor: "#212529",
+    boxShadow: "0 2px 20px rgba(0, 0, 0, 0.15)",
+    borderRadius: "0 16px 16px 0",
+    transition: "width 0.3s ease",
+    overflow: "hidden",
   },
   open: {
-    width: "250px",
-    transitionDuration: "300ms",
+    width: "280px",
   },
-  transform: {
-    transform: "rotate(180deg)",
+  closed: {
+    width: "60px",
+  },
+  toggleButtonOpen: {
+    position: "absolute",
+    top: "15px",
+    right: "15px",
+    zIndex: 100,
+  },
+  toggleButtonClosed: {
+    position: "absolute",
+    top: "15px",
+    left: "15px",
+    zIndex: 100,
+  },
+  content: {
+    width: "280px",
+    paddingTop: "60px",
   },
 });
 
 export const Sidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(true);
-  const { classes, cx } = useSidebarStyles();
+  const { classes } = useSidebarStyles();
+
+  const menuItems = [
+    {
+      path: "/",
+      label: "Dashboard",
+      icon: <Dashboard size={22} strokeWidth={1.5} />,
+    },
+    {
+      path: "/Category",
+      label: "Categories",
+      icon: <Category size={22} strokeWidth={1.5} />,
+    },
+    {
+      path: "/news",
+      label: "News",
+      icon: <News size={22} strokeWidth={1.5} />,
+    },
+    {
+      path: "/configuration",
+      label: "Configuration",
+      icon: <Settings size={22} strokeWidth={1.5} />,
+    },
+    {
+      path: "/users",
+      label: "Users",
+      icon: <Users size={22} strokeWidth={1.5} />,
+    },
+    {
+      path: "/views",
+      label: "Views",
+      icon: <Eye size={22} strokeWidth={1.5} />,
+    },
+    {
+      path: "/reaction",
+      label: "Reactions",
+      icon: <MoodSmile size={22} strokeWidth={1.5} />,
+    },
+  ];
+
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
-    <div
-      style={{
-        display: "flex",
-        position: "relative",
-        width: "440px",
-        minHeight: "842px",
-        backgroundColor: "#212529",
-        boxShadow: "0 2px 4px 0 #4d3c8233",
-      }}
-      className={cx(isOpen ? classes.open : classes.closed)}
+    <Box
+      className={`${classes.sidebar} ${isOpen ? classes.open : classes.closed}`}
     >
-      {isOpen && (
-        <Button
-          onClick={() => setIsOpen(!isOpen)}
-          variant="outline"
-          styles={() => ({
-            root: {
-              fontSize: 16,
-              fontFamily: "Montserrat",
-              fontWeight: 600,
-              border: "none",
+      {/* Toggle button */}
+      <ActionIcon
+        onClick={toggleSidebar}
+        variant="filled"
+        size="lg"
+        className={
+          isOpen ? classes.toggleButtonOpen : classes.toggleButtonClosed
+        }
+        sx={{
+          backgroundColor: "#26145c",
+          "&:hover": {
+            backgroundColor: "#371e83",
+          },
+        }}
+      >
+        {isOpen ? <PlaystationX size={18} /> : <Menu2 size={18} />}
+      </ActionIcon>
 
-              "&:hover": {
-                backgroundColor: "none",
-              },
-            },
-          })}
-          className="sidebarButton"
-        >
-          <PlaystationX size={25} strokeWidth={2} />
-        </Button>
-      )}
-      {!isOpen && (
-        <Button
-          onClick={() => setIsOpen(!isOpen)}
-          variant="outline"
-          styles={() => ({
-            root: {
-              fontSize: 16,
-              fontFamily: "Montserrat",
-              fontWeight: 600,
-              border: "none",
-              borderRadius: "0",
-              backgroundColor: "#26145c",
-              transitionDuration: "600ms",
+      {/* Sidebar content */}
+      <div className={classes.content}>
+        {isOpen && (
+          <Text
+            component="h1"
+            sx={{
+              fontSize: "26px",
+              fontWeight: 700,
+              color: "white",
+              textAlign: "center",
+              padding: "30px 0 40px",
+              borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+              marginBottom: "20px",
+            }}
+          >
+            Admin Panel
+          </Text>
+        )}
 
-              "&:hover": {
-                backgroundColor: "#26145c",
-              },
-            },
-          })}
-          className="sidebarButtonClosed"
-        >
-          <TextWrapDisabled size={26} strokeWidth={2} color={"white"} />
-        </Button>
-      )}
-      {isOpen && (
-        <div className="sidebarContent">
-          <ul>
-            <NavLink to="/" className="sidebarList">
-              <ArrowBarToRight size={25} strokeWidth={2} color={"white"} />
-              <h1 className="sidebarItems">Dashboard</h1>
+        <ul className={isOpen ? "nav-menu" : "nav-menu-collapsed"}>
+          {menuItems.map((item) => (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              className={({ isActive }) =>
+                `sidebarList ${isActive ? "active" : ""}`
+              }
+              style={({ isActive }) => ({
+                backgroundColor: isActive
+                  ? "rgba(38, 20, 92, 0.8)"
+                  : "transparent",
+                borderRadius: "8px",
+                margin: "8px 0",
+                padding: "10px 15px",
+                justifyContent: isOpen ? "flex-start" : "center",
+              })}
+            >
+              {item.icon}
+              {isOpen && <h1 className="sidebarItems">{item.label}</h1>}
             </NavLink>
-            <NavLink to="/Category" className="sidebarList">
-              <ArrowBarToRight size={25} strokeWidth={2} color={"white"} />
-              <h1 className="sidebarItems">Categories</h1>
-            </NavLink>
-            <NavLink to="/news" className="sidebarList">
-              <ArrowBarToRight size={25} strokeWidth={2} color={"white"} />
-              <h1 className="sidebarItems">News</h1>
-            </NavLink>
-            <NavLink to="/configuration" className="sidebarList">
-              <ArrowBarToRight size={25} strokeWidth={2} color={"white"} />
-              <h1 className="sidebarItems">Configuration</h1>
-            </NavLink>
-            <NavLink to="/users" className="sidebarList">
-              <ArrowBarToRight size={25} strokeWidth={2} color={"white"} />
-              <h1 className="sidebarItems">Users</h1>
-            </NavLink>
-            <NavLink to="/views" className="sidebarList">
-              <ArrowBarToRight size={25} strokeWidth={2} color={"white"} />
-              <h1 className="sidebarItems">Views</h1>
-            </NavLink>
-            <NavLink to="/reaction" className="sidebarList">
-              <ArrowBarToRight size={25} strokeWidth={2} color={"white"} />
-              <h1 className="sidebarItems">Reactions</h1>
-            </NavLink>
-          </ul>
-        </div>
-      )}
-    </div>
+          ))}
+        </ul>
+      </div>
+    </Box>
   );
 };

@@ -2,11 +2,13 @@ import { useNavigate } from "react-router-dom";
 import { Button, Image } from "@mantine/core";
 import { News } from "../../types/news/news";
 import "../MostWatchedNews/MostWatchedNews.css";
-import { Carousel } from "@mantine/carousel";
+import { Carousel, Embla } from "@mantine/carousel";
 import { AddViewModel } from "../../types/administration/administration";
 import jwtDecode from "jwt-decode";
 import { addViews } from "../../api/administration/administration";
 import { useConfiguration } from "../../hooks/useConfiguration/useConfiguration";
+import Autoplay from "embla-carousel-autoplay";
+import { useRef, useEffect, useState } from "react";
 
 type NewsResponse = News[] | { news: News[] };
 
@@ -29,6 +31,8 @@ var id: string =
 export const MostWatchedNews: React.FC<NewsProps> = ({ mostwatched = [] }) => {
   const navigate = useNavigate();
   const { data } = useConfiguration();
+  const [embla, setEmbla] = useState<Embla | null>(null);
+  const autoplay = useRef(Autoplay({ delay: 3500, stopOnInteraction: false }));
 
   // Ensure mostwatched is an array and handle the data structure
   const newsArray: News[] = Array.isArray(mostwatched)
@@ -49,45 +53,67 @@ export const MostWatchedNews: React.FC<NewsProps> = ({ mostwatched = [] }) => {
     addViews(model);
   };
 
+  const handleNewsClick = (newsId: string) => {
+    addView(newsId);
+    navigate(`/news/${newsId}`);
+  };
+
   return (
     <>
       {data?.show_most_watched && (
-        <div className="mostwatchedpage">
-          <h1 className="mostwatched">Më të shikuarat</h1>
-          <>
-            <Carousel
-              height={200}
-              slideSize="33.333333%"
-              slideGap="md"
-              loop
-              align="start"
-              slidesToScroll={1}
-            >
-              {sortedMostWatched.map((news: News, index: number) => (
-                <Carousel.Slide key={index}>
-                  <div className="mostwatcheddiv">
+        <div className="mostwatched-carousel">
+          <Carousel
+            getEmblaApi={setEmbla}
+            height={400}
+            slideSize="33.333333%"
+            slideGap="md"
+            loop
+            align="start"
+            slidesToScroll={1}
+            withControls
+            controlsOffset="xs"
+            controlSize={30}
+            dragFree
+            plugins={[autoplay.current]}
+            onMouseEnter={autoplay.current.stop}
+            onMouseLeave={autoplay.current.reset}
+            styles={{
+              control: {
+                backgroundColor: "rgba(255, 255, 255, 0.9)",
+                color: "#26145c",
+                border: "none",
+                boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+              },
+            }}
+            breakpoints={[
+              { maxWidth: 1200, slideSize: "50%" },
+              { maxWidth: 768, slideSize: "100%", slideGap: "md" },
+            ]}
+          >
+            {sortedMostWatched.map((news: News, index: number) => (
+              <Carousel.Slide key={index}>
+                <div className="mostwatcheddiv">
+                  <div className="mostwatched-image-container">
                     <Image
                       src={news.image}
                       className="mostwatchedimage"
-                      height={300}
+                      height={180}
+                      alt={news.title}
                     />
-                    <div className="mostwatchedsite">
-                      <h2 className="mostwatchedtitle">{news.title}</h2>
-                      <Button
-                        className="readMoreOnMostWatched"
-                        onClick={() => {
-                          addView(news.id);
-                          navigate(`/news/${news.id}`);
-                        }}
-                      >
-                        Read More
-                      </Button>
-                    </div>
                   </div>
-                </Carousel.Slide>
-              ))}
-            </Carousel>
-          </>
+                  <div className="mostwatchedsite">
+                    <h2 className="mostwatchedtitle">{news.title}</h2>
+                    <Button
+                      className="readMoreOnMostWatched"
+                      onClick={() => handleNewsClick(news.id)}
+                    >
+                      Read More
+                    </Button>
+                  </div>
+                </div>
+              </Carousel.Slide>
+            ))}
+          </Carousel>
         </div>
       )}
     </>

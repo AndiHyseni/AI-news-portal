@@ -16,10 +16,6 @@ export const AdminNews: React.FC = () => {
         <Sidebar />
         <Container style={{ width: "100%" }}>
           <div className="adminNewsdiv">
-            <Button className="addButton" onClick={() => navigate("/news/add")}>
-              <CirclePlus size={20} strokeWidth={2} color={"white"} />
-              Add News
-            </Button>
             {data && <NewsTable newses={data} />}
           </div>
         </Container>

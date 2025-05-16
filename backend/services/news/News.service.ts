@@ -153,8 +153,10 @@ export const NewsService = {
   },
   getByTag: async (tag: string) => {
     try {
-      const news = await NewsDbModel.query().whereRaw("tags @> ?", [[tag]]);
-      return ok({ news });
+      const news = await NewsDbModel.query()
+        .where("tags", "like", `%${tag}%`)
+        .where({ is_deleted: false });
+      return ok({ news: news || [] });
     } catch (error) {
       return failure({ error }, StatusCodeEnums.UNPROCESSABLE_ENTITY);
     }

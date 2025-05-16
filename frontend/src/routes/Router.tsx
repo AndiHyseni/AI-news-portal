@@ -20,6 +20,8 @@ import { NewsByCategory } from "../pages/NewsByCategory/NewsByCategory";
 import { NewsByTags } from "../pages/NewsByTags/NewsByTags";
 import { NewsDetails } from "../pages/NewsDetails/NewsDetails";
 import { SavedNews } from "../pages/SavedNews/SavedNews";
+import { About } from "../pages/About/About";
+import { Terms } from "../pages/Terms/Terms";
 import { ErrorPage } from "./ErrorPage";
 import ProtectedRoute from "../components/auth/ProtectedRoute";
 
@@ -36,6 +38,8 @@ export const Router: React.FC = () => {
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/category/:categoryId" element={<NewsByCategory />} />
         <Route path="/tag/:tags" element={<NewsByTags />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/terms" element={<Terms />} />
         <Route path="/denied" element={<ErrorPage />} />
 
         {/* Protected routes for all authenticated users */}

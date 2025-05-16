@@ -1,7 +1,8 @@
-import { Button, Image, Select } from "@mantine/core";
+import { Button, Image, Select, Container, Title, Text } from "@mantine/core";
 import jwtDecode from "jwt-decode";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Clock } from "tabler-icons-react";
 import { addViews } from "../../api/administration/administration";
 import { AddViewModel } from "../../types/administration/administration";
 import { Categories } from "../../types/categories/categories";
@@ -64,11 +65,29 @@ export const SiteNewsOnPage: React.FC<NewsProps> = ({
     addViews(model);
   };
 
+  const handleNewsClick = (newsId: string) => {
+    addView(newsId);
+    navigate(`/news/${newsId}`);
+  };
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  };
+
   const sortedNews = [...newsArray].sort((a, b) => {
     if (sortOption === SortOption.NewestFirst) {
-      return new Date(b.id).getTime() - new Date(a.id).getTime();
+      return (
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      );
     } else if (sortOption === SortOption.OldestFirst) {
-      return new Date(a.id).getTime() - new Date(b.id).getTime();
+      return (
+        new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+      );
     } else if (sortOption === SortOption.MostWatched) {
       return b.number_of_clicks - a.number_of_clicks;
     }
@@ -82,80 +101,100 @@ export const SiteNewsOnPage: React.FC<NewsProps> = ({
   };
 
   return (
-    <div className="sitepage">
-      <div>
-        <h1 className="fokus">Në Fokus</h1>
+    <Container size="xl" px="xs" className="sitepage">
+      <div className="sort-container">
         <div className="selectLabel">
-          <p className="Shiko">Shiko:</p>
+          <Text className="Shiko">Sort by:</Text>
           <Select
             className="selectList"
             value={sortOption}
             onChange={(value) => setSortOption(value as SortOption)}
             data={[
-              { label: "Më të rejat", value: SortOption.NewestFirst },
-              { label: "Më të vjetrat", value: SortOption.OldestFirst },
-              { label: "Më të shikuarat", value: SortOption.MostWatched },
+              { label: "Newest", value: SortOption.NewestFirst },
+              { label: "Oldest", value: SortOption.OldestFirst },
+              { label: "Most Watched", value: SortOption.MostWatched },
             ]}
           />
         </div>
       </div>
+
       <div className="divRead">
         <div className="divReklama">
-          <div>
-            <>
-              {visibleNews.map((news: News, index: number) => (
-                <div key={index} className="sitediv">
-                  <Image
-                    src={news.image}
-                    className="siteimage"
-                    onClick={() => {
-                      addView(news.id);
-                      navigate(`/news/${news.id}`);
+          {visibleNews.map((news: News, index: number) => (
+            <div key={index} className="sitediv">
+              <div className="siteimage-container">
+                <Image
+                  src={news.image}
+                  className="siteimage"
+                  onClick={() => handleNewsClick(news.id)}
+                  alt={news.title}
+                  fit="cover"
+                />
+              </div>
+              <div className="site">
+                <h2
+                  className="sitetitle"
+                  onClick={() => handleNewsClick(news.id)}
+                >
+                  {news.title}
+                </h2>
+                <div className="sitep">
+                  {categoriesArray
+                    .filter((x: Categories) => x.id === news.category_id)
+                    .map((category: Categories, index: number) => (
+                      <span
+                        key={index}
+                        className="sitec"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate(`/category/${category.id}`);
+                        }}
+                      >
+                        {category.name}
+                      </span>
+                    ))}
+                  <span
+                    style={{
+                      marginLeft: "auto",
+                      fontSize: "13px",
+                      color: "#666",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "5px",
                     }}
-                  />
-                  <div className="site">
-                    <h2
-                      className="sitetitle"
-                      onClick={() => {
-                        addView(news.id);
-                        navigate(`/news/${news.id}`);
-                      }}
-                    >
-                      {news.title}
-                    </h2>
-                    <div className="sitep">
-                      <>
-                        {categoriesArray
-                          .filter((x: Categories) => x.id === news.category_id)
-                          .map((category: Categories, index: number) => (
-                            <div
-                              key={index}
-                              className="sitec"
-                              onClick={() => {
-                                navigate(`/category/${category.id}`);
-                              }}
-                            >
-                              {category.name}
-                            </div>
-                          ))}
-                      </>
-                    </div>
-                  </div>
+                  >
+                    <Clock size={14} strokeWidth={1.5} />
+                    {formatDate(news.created_at)}
+                  </span>
                 </div>
-              ))}
-            </>
-          </div>
+              </div>
+            </div>
+          ))}
+
           <div className="button-container">
-            <Button onClick={toggleShowAllNews} color={"indigo"}>
+            <Button onClick={toggleShowAllNews} className="show-more-button">
               {showAllNews ? "Show Less" : "Show More"}
             </Button>
           </div>
         </div>
-        <div>
-          <Image src="../../images/reklama1.jpg" width={500} />
-          <Image src="../../images/reklama.jpg" width={500} height={1000} />
+
+        <div className="ads-container">
+          <div className="ad-image">
+            <Image
+              src="../../images/reklama1.jpg"
+              radius="md"
+              alt="Advertisement 1"
+            />
+          </div>
+          <div className="ad-image">
+            <Image
+              src="../../images/reklama.jpg"
+              radius="md"
+              alt="Advertisement 2"
+            />
+          </div>
         </div>
       </div>
-    </div>
+    </Container>
   );
 };
