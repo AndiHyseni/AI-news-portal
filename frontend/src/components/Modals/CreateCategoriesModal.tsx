@@ -11,6 +11,7 @@ import {
 import { useForm } from "@mantine/form";
 import { useState } from "react";
 import { useCreateCategories } from "../../hooks/useCategories/useCreateCategories";
+import "./Modals.css";
 
 export interface CreateCategoriesModalProps {
   title: string;
@@ -52,11 +53,13 @@ export const CreateCategoriesModal: React.FC<CreateCategoriesModalProps> = ({
   });
 
   const handleClose = () => {
+    form.reset();
     onClose();
   };
 
   const handleSubmit = () => {
     const errors = form.validate();
+    if (errors.hasErrors) return;
 
     createCategoriesMutation.mutate(
       {
@@ -75,54 +78,74 @@ export const CreateCategoriesModal: React.FC<CreateCategoriesModalProps> = ({
   return (
     <Modal
       centered
-      data-testid="delete-modal"
+      classNames={{
+        modal: "custom-modal",
+        title: "modal-title",
+      }}
+      data-testid="create-category-modal"
       size="lg"
       title={title}
       opened={opened}
       onClose={handleClose}
     >
-      <Box>
-        <form className="createNewsForm" onSubmit={form.onSubmit(handleSubmit)}>
-          <TextInput
-            className="createCategoriesElement"
-            size="sm"
-            required
-            label="Name"
-            placeholder="Name..."
-            {...form.getInputProps("name")}
-            error={form.errors.name}
-          />
-          <Textarea
-            className="createCategoriesElement"
-            size="sm"
-            required
-            label="Description"
-            placeholder="Description..."
-            {...form.getInputProps("description")}
-            error={form.errors.description}
-          />
-          <Switch
-            label="Show Online"
-            checked={showOnline}
-            onChange={(event) => setShowOnline(event.currentTarget.checked)}
-          />
-          <Group position="right" mt="md">
+      <Box className="modal-content">
+        <form onSubmit={form.onSubmit(handleSubmit)}>
+          <div className="form-group">
+            <TextInput
+              className="form-element"
+              size="md"
+              required
+              label="Category Name"
+              placeholder="Enter category name..."
+              {...form.getInputProps("name")}
+              error={form.errors.name}
+              styles={{
+                label: { className: "form-label" },
+              }}
+            />
+
+            <Textarea
+              className="form-element"
+              size="md"
+              required
+              label="Description"
+              placeholder="Enter category description (min. 20 characters)..."
+              minRows={4}
+              {...form.getInputProps("description")}
+              error={form.errors.description}
+              styles={{
+                label: { className: "form-label" },
+              }}
+            />
+
+            <div className="custom-switch">
+              <Switch
+                label="Make this category visible to users"
+                checked={showOnline}
+                onChange={(event) => setShowOnline(event.currentTarget.checked)}
+                size="md"
+                color="violet"
+              />
+            </div>
+          </div>
+
+          <div className="action-buttons">
             <Button
-              data-testid="submit-button"
-              type="button"
-              onClick={handleSubmit}
-            >
-              Submit
-            </Button>
-            <Button
-              color="red"
-              data-testid="submit-button"
-              type="button"
+              className="cancel-button"
+              variant="outline"
               onClick={handleClose}
             >
               Cancel
             </Button>
-          </Group>
+
+            <Button
+              className="submit-button"
+              type="submit"
+              loading={createCategoriesMutation.isLoading}
+            >
+              Create Category
+            </Button>
+          </div>
         </form>
       </Box>
     </Modal>

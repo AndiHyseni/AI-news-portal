@@ -12,7 +12,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { useState, useEffect } from "react";
 import { Users } from "../../types/administration/administration";
 import { Role, RoleIds } from "../../types/auth/login";
-import "../AddUsers/AddUsers.css";
+import "./Modals.css";
 
 export interface EditUsersModalProps {
   user: Users;
@@ -177,76 +177,94 @@ export const EditUsersModal: React.FC<EditUsersModalProps> = ({
   return (
     <Modal
       centered
-      data-testid="edit-modal"
+      classNames={{
+        modal: "custom-modal",
+        title: "modal-title",
+      }}
+      data-testid="edit-user-modal"
       size="lg"
       title={title}
       opened={opened}
       onClose={handleClose}
     >
-      <Box>
-        <form className="createNewsForm" onSubmit={form.onSubmit(handleSubmit)}>
-          <TextInput
-            className="addUserElement"
-            size="sm"
-            required
-            label="Name"
-            placeholder="Name..."
-            {...form.getInputProps("name")}
-          />
-          <TextInput
-            className="addUserElement"
-            size="sm"
-            required
-            label="Email"
-            placeholder="Email..."
-            {...form.getInputProps("email")}
-          />
-          <PasswordInput
-            className="addUserElement"
-            {...form.getInputProps("password")}
-            required
-            label="Password"
-            placeholder="Enter Password..."
-            visible={visible}
-            onVisibilityChange={toggle}
-          />
-          <PasswordInput
-            className="addUserElement"
-            {...form.getInputProps("confirmPassword")}
-            required
-            label="Confirm password"
-            placeholder="Confirm Password..."
-            visible={visible}
-            onVisibilityChange={toggle}
-          />
-          <Select
-            className="addUserElement"
-            label="Role"
-            placeholder="Role..."
-            value={addRole}
-            data={roleOptions}
-            searchable
-            maxDropdownHeight={400}
-            required
-            onChange={(addRole) => setAddRole(addRole)}
-          />
-          <Group position="right" mt="md">
+      <Box className="modal-content">
+        <form onSubmit={form.onSubmit(handleSubmit)}>
+          <div className="form-group">
+            <TextInput
+              className="form-element"
+              size="md"
+              required
+              label="Full Name"
+              placeholder="Enter user's full name"
+              {...form.getInputProps("name")}
+              error={form.errors.name}
+            />
+
+            <TextInput
+              className="form-element"
+              size="md"
+              required
+              label="Email Address"
+              placeholder="Enter email address"
+              {...form.getInputProps("email")}
+              error={form.errors.email}
+            />
+
+            <PasswordInput
+              className="form-element"
+              size="md"
+              required
+              label="Password"
+              placeholder="Enter new password"
+              {...form.getInputProps("password")}
+              visible={visible}
+              onVisibilityChange={toggle}
+              error={form.errors.password}
+            />
+
+            <PasswordInput
+              className="form-element"
+              size="md"
+              required
+              label="Confirm Password"
+              placeholder="Confirm new password"
+              {...form.getInputProps("confirmPassword")}
+              visible={visible}
+              onVisibilityChange={toggle}
+              error={form.errors.confirmPassword}
+            />
+
+            <Select
+              className="form-element"
+              size="md"
+              label="User Role"
+              placeholder="Select user role"
+              value={addRole}
+              data={roleOptions}
+              searchable
+              required
+              onChange={(value) => setAddRole(value)}
+            />
+          </div>
+
+          <div className="action-buttons">
             <Button
-              data-testid="submit-button"
-              type="button"
-              onClick={handleSubmit}
-            >
-              Submit
-            </Button>
-            <Button
-              color="red"
-              data-testid="submit-button"
-              type="button"
+              className="cancel-button"
+              variant="outline"
               onClick={handleClose}
             >
               Cancel
             </Button>
-          </Group>
+
+            <Button
+              className="submit-button"
+              type="submit"
+              onClick={handleSubmit}
+              loading={mutation.isLoading}
+            >
+              Update User
+            </Button>
+          </div>
         </form>
       </Box>
     </Modal>

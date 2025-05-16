@@ -109,7 +109,7 @@ export const NewsDetailsId: React.FC<NewsDetailsProps> = ({ news }) => {
       <div className="savedButton">
         {news && reactionsData && (
           <AddSavedNewsButton
-            newsId={Number(newsId)}
+            newsId={String(newsId)}
             savedNews={savedNews}
             mutation={savedNewsMutation}
           />

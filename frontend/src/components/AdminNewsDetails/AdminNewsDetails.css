@@ -1,0 +1,134 @@
+/* Admin News Details Styling */
+.admin-news-details {
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: white;
+  overflow: hidden;
+}
+
+.news-image-container {
+  width: 100%;
+  margin-bottom: 2rem;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.news-image {
+  width: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.news-content {
+  padding: 0.5rem;
+}
+
+.news-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.news-subtitle {
+  font-size: 1.5rem;
+  color: #555;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.news-body {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #444;
+  margin-bottom: 2rem;
+  text-align: justify;
+}
+
+.news-video {
+  margin: 2rem 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.news-video iframe {
+  max-width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.news-tags {
+  margin: 2rem 0;
+}
+
+.tag-button {
+  background-color: #228be6;
+  transition: all 0.3s ease;
+}
+
+.tag-button:hover {
+  background-color: #1c7ed6;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(34, 139, 230, 0.3);
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #eee;
+}
+
+.edit-button {
+  background-color: #4c6ef5;
+  transition: all 0.3s ease;
+}
+
+.edit-button:hover {
+  background-color: #3b5bdb;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(76, 110, 245, 0.3);
+}
+
+.delete-button {
+  background-color: #fa5252;
+  transition: all 0.3s ease;
+}
+
+.delete-button:hover {
+  background-color: #e03131;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(250, 82, 82, 0.3);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .news-title {
+    font-size: 1.8rem;
+  }
+
+  .news-subtitle {
+    font-size: 1.2rem;
+  }
+
+  .news-body {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .action-buttons .mantine-Group-root {
+    display: flex;
+    justify-content: space-between;
+  }
+}

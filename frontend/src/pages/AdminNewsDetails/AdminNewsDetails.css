@@ -1,0 +1,38 @@
+/* Admin layout styling */
+.admin-layout {
+  display: flex;
+  width: 100%;
+  min-height: calc(100vh - 70px);
+}
+
+.admin-content {
+  flex: 1;
+  padding: 1.5rem;
+  background-color: #f8f9fa;
+}
+
+.news-details-container {
+  position: relative;
+  min-height: 300px;
+}
+
+.loading-container {
+  position: relative;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border-radius: 8px;
+}
+
+.error-message {
+  padding: 2rem;
+  text-align: center;
+  background-color: #fff5f5;
+  color: #e03131;
+  border-radius: 8px;
+  border: 1px solid #ffc9c9;
+  margin: 2rem 0;
+  font-size: 1.2rem;
+}

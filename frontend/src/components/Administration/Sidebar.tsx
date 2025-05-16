@@ -97,6 +97,7 @@ export const Sidebar: React.FC = () => {
   return (
     <Box
       className={`${classes.sidebar} ${isOpen ? classes.open : classes.closed}`}
+      style={{ height: "auto", minHeight: "100vh" }}
     >
       {/* Toggle button */}
       <ActionIcon

@@ -52,7 +52,7 @@ export const AdminUsers: React.FC = () => {
                   mutation={editUserMutation}
                 />
                 <DeleteUsersModal
-                  users={selectedUser}
+                  user={selectedUser}
                   title="Delete Users Modal"
                   text="Are you sure you want to delete this user?"
                   onClose={() => setIsDeleteUsersModalOpen(false)}

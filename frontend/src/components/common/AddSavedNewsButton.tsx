@@ -7,7 +7,7 @@ import jwtDecode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 
 export interface SavedNewsProps {
-  newsId: number;
+  newsId: string;
   savedNews: SavedNewsPayload | undefined;
   mutation: any;
 }

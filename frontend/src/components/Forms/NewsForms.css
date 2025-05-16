@@ -1,59 +1,146 @@
-.addNewsForm {
+/* News form styling */
+.news-form-container {
   background-color: white;
-  width: 100%;
-  padding: 30px;
-  margin-top: 10px;
-  border-radius: 20px;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
-.addNewsHeader {
-  font-size: 20px;
-  color: black;
-  margin-top: 0px;
-}
-
-.addNewsSpecialDiv {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  padding-top: 10px;
+.form-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #333;
+  position: relative;
   padding-bottom: 10px;
 }
 
-.addNewsButtons {
+.form-title::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50px;
+  height: 3px;
+  background-color: #228be6;
+  border-radius: 2px;
+}
+
+.form-group {
+  margin-bottom: 24px;
+}
+
+.form-element {
+  margin-bottom: 20px;
+}
+
+.form-grid {
+  margin-top: 15px;
+}
+
+/* Tags styling */
+.tags-container {
   display: flex;
-  justify-content: flex-end;
-  padding: 10px;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
-.addNewsElement {
-  padding: 10px;
+.tag-item {
+  display: inline-flex;
+  align-items: center;
+  background-color: #e9ecef;
+  border-radius: 4px;
+  padding: 6px 10px;
+  margin-right: 5px;
+  font-size: 14px;
 }
 
-.ReactTags__tagInputField {
+.tag-text {
+  margin-right: 8px;
+}
+
+.tag-close {
+  cursor: pointer;
+  font-weight: bold;
+  color: #495057;
+}
+
+.tag-close:hover {
+  color: #212529;
+}
+
+.tags-input {
+  margin-top: 10px;
+}
+
+/* Image upload styling */
+.image-upload-section {
+  margin-top: 20px;
+}
+
+.image-preview {
+  margin-bottom: 15px;
+  border-radius: 8px;
+  overflow: hidden;
+  max-width: 100%;
+  max-height: 400px;
+}
+
+.image-preview img {
   width: 100%;
-  height: 30px;
+  object-fit: contain;
 }
 
-.addNewsImage {
+/* Custom switch styling */
+.custom-switch {
+  padding: 15px 0;
   display: flex;
   align-items: center;
-  flex-direction: column;
-  padding: 10px;
 }
 
-.addNewsButton {
-  background-color: #1c7ed6;
-  margin-top: 10px;
-  margin-bottom: 10px;
+/* Action buttons styling */
+.action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 25px;
+}
+
+.submit-button {
+  background-color: #228be6;
   color: white;
-  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-.label {
-  cursor: pointer;
+.submit-button:hover {
+  background-color: #1c7ed6;
 }
 
-.mantine-Image-image {
-  object-fit: contain;
+.cancel-button {
+  border-color: #dee2e6;
+  color: #495057;
+  transition: all 0.3s ease;
+}
+
+.cancel-button:hover {
+  background-color: #f8f9fa;
+  border-color: #ced4da;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .form-title {
+    font-size: 20px;
+  }
+
+  .form-grid {
+    display: block;
+  }
+
+  .action-buttons {
+    flex-direction: column-reverse;
+  }
+
+  .action-buttons button {
+    width: 100%;
+  }
 }

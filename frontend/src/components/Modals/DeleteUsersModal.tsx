@@ -1,9 +1,11 @@
 import { Box, Button, Group, Modal, Text } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
+import { AlertCircle } from "tabler-icons-react";
 import { Users } from "../../types/administration/administration";
+import "./Modals.css";
 
 export interface DeleteUsersModalProps {
-  users: Users;
+  user: Users;
   title: string;
   text: string;
   opened: boolean;
@@ -12,7 +14,7 @@ export interface DeleteUsersModalProps {
 }
 
 export const DeleteUsersModal: React.FC<DeleteUsersModalProps> = ({
-  users,
+  user,
   title,
   text,
   opened,
@@ -26,7 +28,7 @@ export const DeleteUsersModal: React.FC<DeleteUsersModalProps> = ({
   };
 
   const handleSubmit = () => {
-    mutation.mutate(users.id, {
+    mutation.mutate(user.id, {
       onSuccess: () => {
         handleClose();
         navigate("/users");
@@ -37,31 +39,47 @@ export const DeleteUsersModal: React.FC<DeleteUsersModalProps> = ({
   return (
     <Modal
       centered
-      data-testid="delete-modal"
-      size="lg"
+      classNames={{
+        modal: "custom-modal",
+        title: "modal-title",
+      }}
+      data-testid="delete-user-modal"
+      size="md"
       title={title}
       opened={opened}
       onClose={handleClose}
     >
-      <Box>
-        <Text size="sm">{text}</Text>
-        <Group position="right" mt="md">
+      <Box className="modal-content">
+        <div className="modal-danger">
+          <Group>
+            <AlertCircle size={24} color="#dc3545" />
+            <Text size="md" weight={600} color="#842029">
+              Warning: This action cannot be undone
+            </Text>
+          </Group>
+        </div>
+
+        <Text className="confirmation-text">
+          {text} <strong>{user.name}</strong> ({user.email})?
+        </Text>
+
+        <div className="action-buttons">
           <Button
-            data-testid="submit-button"
-            type="button"
-            onClick={handleSubmit}
-          >
-            Yes
-          </Button>
-          <Button
-            color="red"
-            data-testid="submit-button"
-            type="button"
+            className="cancel-button"
+            variant="outline"
             onClick={handleClose}
           >
-            No
+            Cancel
           </Button>
-        </Group>
+
+          <Button
+            className="delete-button"
+            onClick={handleSubmit}
+            loading={mutation.isLoading}
+          >
+            Remove Admin Rights
+          </Button>
+        </div>
       </Box>
     </Modal>
   );

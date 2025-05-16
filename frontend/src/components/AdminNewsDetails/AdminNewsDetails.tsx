@@ -1,12 +1,21 @@
-import { Button, Image } from "@mantine/core";
+import {
+  Button,
+  Card,
+  Container,
+  Divider,
+  Group,
+  Image,
+  Text,
+  Title,
+} from "@mantine/core";
 import { useState } from "react";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
-import { Edit, Heart, Trash } from "tabler-icons-react";
+import { Edit, Trash } from "tabler-icons-react";
 import { useSavedNews } from "../../hooks/useNews/useSavedNews";
 import { useUsers } from "../../hooks/useUsers/useUsers";
 import { News, SavedNewsPayload } from "../../types/news/news";
 import { AddSavedNewsButton } from "../common/AddSavedNewsButton";
-import "../NewsDetailsId/NewsDetailsId.css";
+import "./AdminNewsDetails.css";
 
 export interface NewsDetailsProps {
   news: News;
@@ -25,54 +34,93 @@ export const AdminNewsDetailsC: React.FC<NewsDetailsProps> = ({
   const navigate = useNavigate();
 
   return (
-    <div className="detailsAdmin">
-      <Image src={news?.image} />
-      <h1 className="titleDetails">{news?.title}</h1>
-      <h2 className="subtitleDetails">{news?.subtitle}</h2>
-      <p className="contentDetails">{news?.content}</p>
-      {
-        <div
-          className="videoDetails"
-          dangerouslySetInnerHTML={{ __html: videoDetails }}
-        ></div>
-      }
-      {news.tags != "" && (
-        <div className="tagsDetails">
-          {news?.tags != null &&
-            news?.tags
-              .split(",")
-              .filter((x) => x != "")
-              .map((tag, index) => (
-                <NavLink key={index} to={`/tag/${tag}`}>
-                  <Button className="tagsButton" key={tag}>
-                    {tag}
-                  </Button>
-                </NavLink>
-              ))}
-        </div>
-      )}
-      <div className="detailsButton">
-        {news && data && (
-          <AddSavedNewsButton
-            newsId={Number(newsId)}
-            savedNews={savedNews}
-            mutation={savedNewsMutation}
+    <Card className="admin-news-details" radius="md" p="xl" shadow="md">
+      <div className="news-image-container">
+        <Image
+          src={news?.image}
+          alt={news?.title}
+          radius="md"
+          height={500}
+          className="news-image"
+        />
+      </div>
+
+      <div className="news-content">
+        <Title order={1} className="news-title">
+          {news?.title}
+        </Title>
+
+        <Text size="xl" className="news-subtitle">
+          {news?.subtitle}
+        </Text>
+
+        <Divider my="lg" />
+
+        <Text className="news-body">{news?.content}</Text>
+
+        {videoDetails && (
+          <div
+            className="news-video"
+            dangerouslySetInnerHTML={{ __html: videoDetails }}
           />
         )}
-        <Button
-          className="detailsButtonList"
-          onClick={() => navigate(`/news/edit/${news.id}`)}
-        >
-          <Edit size={20} strokeWidth={2} color={"white"} /> Edit
-        </Button>
-        <Button
-          className="detailsButtonList deleteButton"
-          onClick={() => onDeleteNews(news)}
-        >
-          <Trash size={20} strokeWidth={2} color={"white"} />
-          Delete
-        </Button>
+
+        {news.tags && news.tags !== "" && (
+          <div className="news-tags">
+            <Text weight={600} color="dimmed" mb="sm">
+              Tags:
+            </Text>
+            <Group spacing="xs">
+              {news?.tags
+                .split(",")
+                .filter((tag) => tag !== "")
+                .map((tag, index) => (
+                  <NavLink key={index} to={`/tag/${tag}`}>
+                    <Button
+                      variant="filled"
+                      radius="xl"
+                      size="sm"
+                      className="tag-button"
+                    >
+                      {tag}
+                    </Button>
+                  </NavLink>
+                ))}
+            </Group>
+          </div>
+        )}
+
+        <div className="action-buttons">
+          {news && data && (
+            <AddSavedNewsButton
+              newsId={String(newsId)}
+              savedNews={savedNews}
+              mutation={savedNewsMutation}
+            />
+          )}
+
+          <Group spacing="md">
+            <Button
+              variant="filled"
+              className="edit-button"
+              onClick={() => navigate(`/news/edit/${news.id}`)}
+              leftIcon={<Edit size={18} />}
+            >
+              Edit
+            </Button>
+
+            <Button
+              variant="filled"
+              className="delete-button"
+              color="red"
+              onClick={() => onDeleteNews(news)}
+              leftIcon={<Trash size={18} />}
+            >
+              Delete
+            </Button>
+          </Group>
+        </div>
       </div>
-    </div>
+    </Card>
   );
 };

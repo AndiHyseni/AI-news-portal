@@ -11,7 +11,7 @@ export const AddNewsPage: React.FC = () => {
       <div style={{ display: "flex" }}>
         <Sidebar />
         <Container style={{ width: "100%" }}>
-          <NewsForms newsId={Number(newsId)} />
+          <NewsForms newsId={String(newsId)} />
         </Container>
       </div>
     </BasePage>
