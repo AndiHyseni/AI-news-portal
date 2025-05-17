@@ -57,6 +57,7 @@ export const Sidebar: React.FC = () => {
       path: "/admin",
       label: "Dashboard",
       icon: <Dashboard size={22} strokeWidth={1.5} />,
+      exact: true,
     },
     {
       path: "/admin/categories",
@@ -141,6 +142,7 @@ export const Sidebar: React.FC = () => {
             <NavLink
               key={item.path}
               to={item.path}
+              end={item.exact}
               className={({ isActive }) =>
                 `sidebarList ${isActive ? "active" : ""}`
               }
