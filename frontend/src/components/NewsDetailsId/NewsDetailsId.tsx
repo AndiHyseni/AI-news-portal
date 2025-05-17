@@ -74,8 +74,6 @@ export const NewsDetailsId: React.FC<NewsDetailsProps> = ({ news }) => {
         sad: sadCount,
         angry: angryCount,
       });
-
-      console.log("Counted reactions:", { happyCount, sadCount, angryCount });
     }
   }, [reactionsData, news.id]);
 

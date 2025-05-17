@@ -16,14 +16,6 @@ export const NewsByTagsC: React.FC<NewsByTagsProps> = ({ news }) => {
   const navigate = useNavigate();
   const [userContext] = useContext(UserContext);
 
-  useEffect(() => {
-    console.log("News data in NewsByTagsC:", news);
-    console.log("Type of news:", Array.isArray(news) ? "Array" : typeof news);
-    if (news && news.length > 0) {
-      console.log("First news item:", news[0]);
-    }
-  }, [news]);
-
   const addView = (newsId: string) => {
     const model: AddViewModel = {
       user_id: userContext.userId || "",
