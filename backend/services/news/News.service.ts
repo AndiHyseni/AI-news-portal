@@ -69,6 +69,23 @@ export const NewsService = {
   },
   addSaved: async (NewsId: string, UserId: string) => {
     try {
+      // Check if the article is already saved by this user
+      const existingSavedNews = await SavedNewsDbModel.query()
+        .where({
+          news_id: NewsId,
+          user_id: UserId,
+        })
+        .first();
+
+      // If it already exists, return an error
+      if (existingSavedNews) {
+        return failure(
+          { error: "Article already saved by this user" },
+          StatusCodeEnums.UNEXPECTED
+        );
+      }
+
+      // If it doesn't exist, save it
       await SavedNewsDbModel.query().insert({
         news_id: NewsId,
         user_id: UserId,
@@ -111,9 +128,37 @@ export const NewsService = {
   },
   getSavedNews: async (UserId: string) => {
     try {
-      const savedNews = await SavedNewsDbModel.query().where("user_id", UserId);
-      return ok({ news: savedNews });
+      const savedNews = await SavedNewsDbModel.query()
+        .where("user_id", UserId)
+        .withGraphFetched("news");
+
+      const formattedSavedNews = savedNews
+        .map((item) => {
+          if (!item.news) {
+            return null;
+          }
+
+          return {
+            saved_id: item.id,
+            news_id: item.news_id,
+            user_id: item.user_id,
+            title: item.news.title,
+            subtitle: item.news.subtitle,
+            content: item.news.content,
+            image: item.news.image,
+            video: item.news.video,
+            category_id: item.news.category_id,
+            tags: item.news.tags,
+            number_of_clicks: item.news.number_of_clicks,
+            created_at: item.news.created_at,
+            id: item.news.id,
+          };
+        })
+        .filter(Boolean);
+
+      return ok({ news: formattedSavedNews });
     } catch (error) {
+      console.error("Error fetching saved news:", error);
       return failure({ error }, StatusCodeEnums.UNPROCESSABLE_ENTITY);
     }
   },
@@ -137,15 +182,32 @@ export const NewsService = {
   },
   getReactionsByNews: async (newsId: string) => {
     try {
-      const reactions = await ReactionDbModel.query().where("news_id", newsId);
+      const reactions = await ReactionDbModel.query()
+        .where("news_id", newsId)
+        .withGraphFetched("[user(selectUser), news(selectNews)]")
+        .modifiers({
+          selectUser: (builder) => {
+            builder.select("id", "name", "email");
+          },
+          selectNews: (builder) => {
+            builder.select("id", "title");
+          },
+        });
       return ok({ reactions });
     } catch (error) {
+      console.error("Error fetching reactions:", error);
       return failure({ error }, StatusCodeEnums.UNPROCESSABLE_ENTITY);
     }
   },
   getAllReactions: async () => {
     try {
-      const reactions = await ReactionDbModel.query();
+      const reactions = await ReactionDbModel.query()
+        .withGraphFetched("news(selectNews)")
+        .modifiers({
+          selectNews: (builder) => {
+            builder.select("id", "title");
+          },
+        });
       return ok({ reactions });
     } catch (error) {
       return failure({ error }, StatusCodeEnums.UNPROCESSABLE_ENTITY);

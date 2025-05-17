@@ -67,8 +67,8 @@ export const getReactions = async (): Promise<Reaction[]> => {
   return data;
 };
 
-export const getreactionsDetails = async (
-  newsId: number
+export const getReactionsDetails = async (
+  newsId: string
 ): Promise<ReactionsDetails[]> => {
   const { data } = await axiosInstance.get(
     `${BaseUrl.DEVELOPMENT}/${NEWS.GET_NEWS}/${REACTION.GET_REACTIONS_DETAILS}/${newsId}`

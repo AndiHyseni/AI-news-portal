@@ -1,12 +1,12 @@
-import { Fragment } from "react";
+import { Fragment, useContext } from "react";
 import { SavedNewsPage } from "../../types/news/news";
 import "../../pages/SavedNews/SavedNews.css";
-import { Button, Image } from "@mantine/core";
-import { Trash } from "tabler-icons-react";
+import { Button, Image, Grid, Title, Text } from "@mantine/core";
+import { Trash, Clock } from "tabler-icons-react";
 import { Link } from "react-router-dom";
-import jwtDecode from "jwt-decode";
 import { AddViewModel } from "../../types/administration/administration";
 import { addViews } from "../../api/administration/administration";
+import { UserContext } from "../../contexts/UserContext";
 
 export interface SavedNewsPageProps {
   savedNews: SavedNewsPage[];
@@ -17,26 +17,13 @@ export const SavedNewsC: React.FC<SavedNewsPageProps> = ({
   savedNews,
   onDeleteSavedNews,
 }) => {
-  var token: any =
-    localStorage.getItem("jwt") != null
-      ? jwtDecode(localStorage.getItem("jwt")!)
-      : null;
-
-  var role: string =
-    token != null
-      ? token["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]
-      : "";
-
-  var id: string =
-    token != null
-      ? token[
-          "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
-        ]
-      : "";
+  const [userContext] = useContext(UserContext);
+  const isAdmin = userContext.roles?.includes("admin");
+  const userId = userContext.userId || "";
 
   const addView = (newsId: string) => {
     const model: AddViewModel = {
-      user_id: id,
+      user_id: userId,
       news_id: newsId,
       finger_print_id: "",
       watch_id: 2,
@@ -44,43 +31,76 @@ export const SavedNewsC: React.FC<SavedNewsPageProps> = ({
     addViews(model);
   };
 
+  const formatDate = (dateString: string) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  };
+
   return (
-    <>
-      {savedNews?.map((news, index) => (
-        <Fragment key={index}>
-          <div className="savedNews">
+    <div>
+      <Title className="savedNews-header">Your Saved Articles</Title>
+      <div className="savedNews-container">
+        {savedNews?.map((news, index) => (
+          <div key={index} className="savedNews">
             <div className="savedNewsBox">
-              <Image src={news.image} />
-              <h1 className="savedNewsTitle">{news.title}</h1>
+              <div className="savedNewsImage">
+                <Image
+                  src={news.image}
+                  alt={news.title}
+                  height={200}
+                  fit="cover"
+                />
+              </div>
+              <h3 className="savedNewsTitle">{news.title}</h3>
+              {news.created_at && (
+                <div className="news-date">
+                  <Text size="xs" color="dimmed" ml={5}>
+                    {formatDate(news.created_at)}
+                  </Text>
+                </div>
+              )}
             </div>
             <div className="savedNewsButtons">
-              {role == "Registered" && (
-                <Button
-                  component={Link}
-                  to={`/news/${news.news_id}`}
-                  onClick={() => addView(news.news_id)}
-                >
-                  Read more
-                </Button>
-              )}
-              {role == "Admin" && (
-                <Button component={Link} to={`/news/details/${news.news_id}`}>
-                  Read more
-                </Button>
-              )}
+              <Button
+                component={Link}
+                to={
+                  !isAdmin
+                    ? `/news/${news.news_id}`
+                    : `/admin/news/details/${news.news_id}`
+                }
+                onClick={() => !isAdmin && addView(news.news_id)}
+                variant="filled"
+                radius="md"
+                size="sm"
+              >
+                Read More
+              </Button>
               <Button
                 color="red"
-                onClick={() => {
-                  onDeleteSavedNews(news);
-                }}
+                onClick={() => onDeleteSavedNews(news)}
+                variant="outline"
+                radius="md"
+                size="sm"
               >
-                <Trash size={20} strokeWidth={2} color={"white"} />
-                Delete
+                <Trash size={16} strokeWidth={2} style={{ marginRight: 5 }} />
+                Remove
               </Button>
             </div>
           </div>
-        </Fragment>
-      ))}
-    </>
+        ))}
+      </div>
+      {savedNews.length === 0 && (
+        <div className="no-saved-news">
+          <div className="empty-icon">📰</div>
+          <h2>No saved articles found</h2>
+          <p>Articles you save will appear here for later reading</p>
+        </div>
+      )}
+    </div>
   );
 };

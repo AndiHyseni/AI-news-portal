@@ -85,7 +85,7 @@ export const Navbar: React.FC<CategoriesProps> = ({
               {isAdmin && (
                 <Menu.Item
                   icon={<User size={16} />}
-                  onClick={() => navigate("/news")}
+                  onClick={() => navigate("/admin")}
                 >
                   <h1 className="menuItem">Admin Dashboard</h1>
                 </Menu.Item>

@@ -24,6 +24,7 @@ import { About } from "../pages/About/About";
 import { Terms } from "../pages/Terms/Terms";
 import { ErrorPage } from "./ErrorPage";
 import ProtectedRoute from "../components/auth/ProtectedRoute";
+import { AdminDashboard } from "../pages/AdminDashboard/AdminDashboard";
 
 export const Router: React.FC = () => {
   return (
@@ -49,18 +50,25 @@ export const Router: React.FC = () => {
 
         {/* Protected routes for admin users */}
         <Route element={<ProtectedRoute requiredRoles={["admin"]} />}>
-          <Route path="/news" element={<AdminNews />} />
-          <Route path="/news/add" element={<AddNewsPage />} />
-          <Route path="/news/details/:newsId" element={<AdminNewsDetails />} />
-          <Route path="/news/edit/:newsId" element={<EditNewsPage />} />
-          <Route path="/users" element={<AdminUsers />} />
-          <Route path="/Category" element={<AdminCategories />} />
-          <Route path="/views" element={<AdminViews />} />
-          <Route path="/views/:newsId" element={<AdminViewsDetails />} />
-          <Route path="/reaction" element={<AdminReactions />} />
-          <Route path="/reaction/:newsId" element={<AdminReactionsDetails />} />
-          <Route path="/addAdmin" element={<AddUsersPage />} />
-          <Route path="/configuration" element={<Configuration />} />
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/news" element={<AdminNews />} />
+          <Route path="/admin/news/add" element={<AddNewsPage />} />
+          <Route
+            path="/admin/news/details/:newsId"
+            element={<AdminNewsDetails />}
+          />
+          <Route path="/admin/news/edit/:newsId" element={<EditNewsPage />} />
+          <Route path="/admin/users" element={<AdminUsers />} />
+          <Route path="/admin/categories" element={<AdminCategories />} />
+          <Route path="/admin/views" element={<AdminViews />} />
+          <Route path="/admin/views/:newsId" element={<AdminViewsDetails />} />
+          <Route path="/admin/reactions" element={<AdminReactions />} />
+          <Route
+            path="/admin/reactions/:newsId"
+            element={<AdminReactionsDetails />}
+          />
+          <Route path="/admin/users/add" element={<AddUsersPage />} />
+          <Route path="/admin/configuration" element={<Configuration />} />
         </Route>
       </Routes>
     </BrowserRouter>

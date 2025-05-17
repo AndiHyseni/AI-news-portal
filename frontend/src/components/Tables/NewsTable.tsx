@@ -31,7 +31,10 @@ export const NewsTable: React.FC<TableProps> = ({ newses }) => {
           News Management
         </Text>
 
-        <Button onClick={() => navigate("/news/add")} className="action-button">
+        <Button
+          onClick={() => navigate("/admin/news/add")}
+          className="action-button"
+        >
           <CirclePlus size={20} strokeWidth={2} color={"white"} />
           Add News
         </Button>
@@ -78,7 +81,7 @@ export const NewsTable: React.FC<TableProps> = ({ newses }) => {
                 <td>
                   <Button
                     component={Link}
-                    to={`/news/details/${news.id}`}
+                    to={`/admin/news/details/${news.id}`}
                     className="action-button"
                     variant="filled"
                     compact

@@ -1,10 +1,10 @@
 import { Image, SimpleGrid, Container, Paper, Title, Box } from "@mantine/core";
-import jwtDecode from "jwt-decode";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { addViews } from "../../api/administration/administration";
 import { AddViewModel } from "../../types/administration/administration";
 import { News } from "../../types/news/news";
+import { UserContext } from "../../contexts/UserContext";
 import "../NewsByCategory/NewsByCategory.css";
 import { Categories } from "../../types/categories/categories";
 
@@ -12,18 +12,6 @@ export interface NewsByCategoryProps {
   news: News[] | { news: News[] };
   categories: Categories[] | { categories: Categories[] };
 }
-
-var token: any =
-  localStorage.getItem("jwt") != null
-    ? jwtDecode(localStorage.getItem("jwt")!)
-    : "";
-
-var id: string =
-  token != null
-    ? token[
-        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
-      ]
-    : "";
 
 export const NewsByCategoryC: React.FC<NewsByCategoryProps> = ({
   news,
@@ -33,6 +21,7 @@ export const NewsByCategoryC: React.FC<NewsByCategoryProps> = ({
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [filteredNews, setFilteredNews] = useState<News[]>([]);
   const navigate = useNavigate();
+  const [userContext] = useContext(UserContext);
 
   // Ensure news is an array
   const newsArray = Array.isArray(news)
@@ -62,7 +51,7 @@ export const NewsByCategoryC: React.FC<NewsByCategoryProps> = ({
 
   const addView = (newsId: string) => {
     const model: AddViewModel = {
-      user_id: id,
+      user_id: userContext.userId || "",
       news_id: newsId,
       finger_print_id: "",
       watch_id: 2,

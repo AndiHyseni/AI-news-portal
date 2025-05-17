@@ -1,19 +1,17 @@
 import {
   Button,
   Card,
-  Container,
   Divider,
   Group,
   Image,
   Text,
   Title,
 } from "@mantine/core";
-import { useState } from "react";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { Edit, Trash } from "tabler-icons-react";
 import { useSavedNews } from "../../hooks/useNews/useSavedNews";
 import { useUsers } from "../../hooks/useUsers/useUsers";
-import { News, SavedNewsPayload } from "../../types/news/news";
+import { News } from "../../types/news/news";
 import { AddSavedNewsButton } from "../common/AddSavedNewsButton";
 import "./AdminNewsDetails.css";
 
@@ -29,7 +27,6 @@ export const AdminNewsDetailsC: React.FC<NewsDetailsProps> = ({
   const videoDetails: string = news?.video!;
   const { newsId } = useParams();
   const { data } = useUsers();
-  const [savedNews, setSavedNews] = useState<SavedNewsPayload>();
   const savedNewsMutation = useSavedNews();
   const navigate = useNavigate();
 
@@ -94,7 +91,6 @@ export const AdminNewsDetailsC: React.FC<NewsDetailsProps> = ({
           {news && data && (
             <AddSavedNewsButton
               newsId={String(newsId)}
-              savedNews={savedNews}
               mutation={savedNewsMutation}
             />
           )}
@@ -103,7 +99,7 @@ export const AdminNewsDetailsC: React.FC<NewsDetailsProps> = ({
             <Button
               variant="filled"
               className="edit-button"
-              onClick={() => navigate(`/news/edit/${news.id}`)}
+              onClick={() => navigate(`/admin/news/edit/${news.id}`)}
               leftIcon={<Edit size={18} />}
             >
               Edit

@@ -1,12 +1,12 @@
 import { Button, Image, Select, Container, Title, Text } from "@mantine/core";
-import jwtDecode from "jwt-decode";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Clock } from "tabler-icons-react";
 import { addViews } from "../../api/administration/administration";
 import { AddViewModel } from "../../types/administration/administration";
 import { Categories } from "../../types/categories/categories";
 import { News } from "../../types/news/news";
+import { UserContext } from "../../contexts/UserContext";
 import "../SiteNewsOnPage/SiteNewsOnPage.css";
 
 type NewsResponse = News[] | { news: News[] };
@@ -23,18 +23,6 @@ enum SortOption {
   MostWatched = "Most Watched",
 }
 
-var token: any =
-  localStorage.getItem("jwt") != null
-    ? jwtDecode(localStorage.getItem("jwt")!)
-    : "";
-
-var id: string =
-  token != null
-    ? token[
-        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
-      ]
-    : "";
-
 export const SiteNewsOnPage: React.FC<NewsProps> = ({
   homenews = [],
   categories = [],
@@ -44,6 +32,7 @@ export const SiteNewsOnPage: React.FC<NewsProps> = ({
     SortOption.NewestFirst
   );
   const [showAllNews, setShowAllNews] = useState<boolean>(false);
+  const [userContext] = useContext(UserContext);
 
   // Ensure homenews is an array and handle the data structure
   const newsArray: News[] = Array.isArray(homenews)
@@ -57,7 +46,7 @@ export const SiteNewsOnPage: React.FC<NewsProps> = ({
 
   const addView = (newsId: string) => {
     const model: AddViewModel = {
-      user_id: id,
+      user_id: userContext.userId || "",
       news_id: newsId,
       finger_print_id: "",
       watch_id: 2,

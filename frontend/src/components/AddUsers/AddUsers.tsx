@@ -98,7 +98,7 @@ export const AddUsers: React.FC = () => {
       },
       {
         onSuccess: () => {
-          navigate("/users");
+          navigate("/admin/users");
         },
         onError: (error) => {
           console.error("Error adding user:", error);
@@ -181,7 +181,7 @@ export const AddUsers: React.FC = () => {
               <Button
                 className="cancel-button"
                 variant="outline"
-                onClick={() => navigate("/users")}
+                onClick={() => navigate("/admin/users")}
               >
                 Cancel
               </Button>

@@ -8,7 +8,7 @@ import "../AdminReactions/AdminReactions.css";
 
 export const AdminReactionsDetails: React.FC = () => {
   const { newsId } = useParams();
-  const { data } = useReactionsDetails(Number(newsId));
+  const { data } = useReactionsDetails(String(newsId));
 
   return (
     <BasePage>

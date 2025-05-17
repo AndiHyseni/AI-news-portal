@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import { getreactionsDetails } from "../../api/administration/administration";
+import { getReactionsDetails } from "../../api/administration/administration";
 
-export const useReactionsDetails = (newsId: number) => {
+export const useReactionsDetails = (newsId: string) => {
   return useQuery(["useReactionsDetails", newsId], () =>
-    getreactionsDetails(newsId)
+    getReactionsDetails(newsId)
   );
 };

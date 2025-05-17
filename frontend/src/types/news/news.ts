@@ -37,6 +37,11 @@ export interface SavedNewsPayload {
   user_id: string;
 }
 
+export interface DeleteSavedNewsPayload {
+  news_id: string;
+  user_id: string;
+}
+
 export interface SavedNewsPage {
   news_id: string;
   user_id: string;
@@ -50,4 +55,6 @@ export interface SavedNewsPage {
   subTitle: string;
   tags: string;
   video: string;
+  created_at?: string;
+  id: string;
 }

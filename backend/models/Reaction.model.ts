@@ -21,7 +21,7 @@ export default class ReactionDbModel extends Model {
   static relationMappings = {
     news: {
       relation: Model.BelongsToOneRelation,
-      modelClass: NewsDbModel,
+      modelClass: __dirname + "/News.model",
       join: {
         from: "reactions.news_id",
         to: "news.id",
@@ -29,7 +29,7 @@ export default class ReactionDbModel extends Model {
     },
     user: {
       relation: Model.BelongsToOneRelation,
-      modelClass: UserDbModel,
+      modelClass: __dirname + "/Users.model",
       join: {
         from: "reactions.user_id",
         to: "users.id",

@@ -8,7 +8,7 @@ interface RoleResponse {
 export const getUserRoles = async (userId: string): Promise<string[]> => {
   try {
     const { data } = await axiosInstance.get<RoleResponse>(
-      `${BaseUrl.DEVELOPMENT}/api/roles/user/${userId}`
+      `${BaseUrl.DEVELOPMENT}/roles/user/${userId}`
     );
     return data.roles || [];
   } catch (error) {

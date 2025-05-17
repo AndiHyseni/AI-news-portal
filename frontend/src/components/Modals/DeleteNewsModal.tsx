@@ -31,7 +31,7 @@ export const DeleteNewsModal: React.FC<DeleteNewsModalProps> = ({
     mutation.mutate(news.id, {
       onSuccess: () => {
         handleClose();
-        navigate("/news");
+        navigate("/admin/news");
       },
     });
   };

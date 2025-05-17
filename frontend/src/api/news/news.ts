@@ -5,6 +5,7 @@ import {
   News,
   SavedNewsPage,
   SavedNewsPayload,
+  DeleteSavedNewsPayload,
 } from "../../types/news/news";
 import { axiosInstance } from "../config";
 
@@ -41,7 +42,7 @@ export const deleteNews = async (newsId: string): Promise<void> => {
 
 export const savedNews = async (payload: SavedNewsPayload): Promise<number> => {
   const { data } = await axiosInstance.post(
-    `${BaseUrl.DEVELOPMENT}/${SAVED_NEWS.SAVED_NEWS}`,
+    `${BaseUrl.DEVELOPMENT}/${NEWS.GET_NEWS}/${SAVED_NEWS.SAVED_NEWS}`,
     payload
   );
   return data;
@@ -51,17 +52,22 @@ export const savedNewsPage = async (
   userId: string
 ): Promise<SavedNewsPage[]> => {
   const { data } = await axiosInstance.get(
-    `${BaseUrl.DEVELOPMENT}/${SAVED_NEWS.GET_SAVED}/${userId.split(",")[0]}`
+    `${BaseUrl.DEVELOPMENT}/${NEWS.GET_NEWS}/${SAVED_NEWS.GET_SAVED}/${userId}`
   );
   return data;
 };
 
-export const deleteSavedNews = async (newsId: string): Promise<void> => {
-  const { data } = await axiosInstance.post(
-    `${BaseUrl.DEVELOPMENT}/${SAVED_NEWS.DELETE_SAVED}`,
-    newsId
+export const deleteSavedNews = async (
+  payload: DeleteSavedNewsPayload | string
+): Promise<void> => {
+  // If payload is a string (old method), wrap it in an object
+  const data = typeof payload === "string" ? { news_id: payload } : payload;
+
+  const response = await axiosInstance.post(
+    `${BaseUrl.DEVELOPMENT}/${NEWS.GET_NEWS}/${SAVED_NEWS.DELETE_SAVED}`,
+    data
   );
-  return data;
+  return response.data;
 };
 
 export const getNewsByTags = async (tags: string): Promise<News[]> => {

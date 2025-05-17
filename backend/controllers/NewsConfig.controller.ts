@@ -20,18 +20,14 @@ NewsConfigController.get(
   }
 );
 
-// POST: Edit the news configuration row.
-// If the provided NewsConfigId is 0, it will be set to 1.
+// POST: Edit the news configuration
 NewsConfigController.post(
   "/",
+  authorize(),
   ValidationMiddleware(NewsConfigValidator, {}, (req: Request) => req.body),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      let newsConfig = req.body;
-      if (newsConfig.NewsConfigId === 0) {
-        newsConfig.NewsConfigId = 1;
-      }
-      const result = await NewsConfigService.editConfigRow(newsConfig);
+      const result = await NewsConfigService.editConfigRow(req.body);
       res.status(result.httpCode).send(result.data);
     } catch (err) {
       next(err);

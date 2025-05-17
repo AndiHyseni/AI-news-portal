@@ -172,7 +172,7 @@ export const EditNewsForm: React.FC<NewsFormProps> = ({
       },
       {
         onSuccess: () => {
-          navigate("/news");
+          navigate("/admin/news");
         },
         onError: (error: AxiosError<ApiError>) => {
           if (
@@ -340,7 +340,7 @@ export const EditNewsForm: React.FC<NewsFormProps> = ({
               <Button
                 className="cancel-button"
                 variant="outline"
-                onClick={() => navigate("/news")}
+                onClick={() => navigate("/admin/news")}
               >
                 Cancel
               </Button>

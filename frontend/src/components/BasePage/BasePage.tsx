@@ -1,7 +1,6 @@
 import React, { useContext, useMemo } from "react";
 import { UserContext } from "../../contexts/UserContext";
 import { useCategories } from "../../hooks/useCategories/useCategories";
-import { useUserRoles } from "../../hooks/useAuth/useUserRoles";
 import { useUserProfile } from "../../hooks/useAuth/useUserProfile";
 import { Footer } from "../Footer/Footer";
 import { Navbar } from "../Navbar/Navbar";
@@ -37,13 +36,10 @@ export const BasePage: React.FC<BasePageProps> = ({ children }) => {
     return null;
   }, [categoriesData]);
 
-  const { data: userRoles } = useUserRoles();
   const { data: userProfile } = useUserProfile();
 
-  // Check if user has the 'registered' role
-  const isRegisteredUser = userRoles?.some(
-    (role) => role.toLowerCase() === "registered"
-  );
+  // Check if user is an admin (don't show footer for admins)
+  const isAdmin = userContext.roles?.includes("admin");
 
   return (
     <div className="base-page-container">
@@ -59,7 +55,7 @@ export const BasePage: React.FC<BasePageProps> = ({ children }) => {
       <div className="base-page-content">{children}</div>
 
       <div className="base-page-footer">
-        {(!userContext.isAuthenticated || isRegisteredUser) && categories && (
+        {(!userContext.isAuthenticated || !isAdmin) && categories && (
           <Footer categories={categories} />
         )}
       </div>

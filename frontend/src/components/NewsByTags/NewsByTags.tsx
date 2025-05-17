@@ -1,32 +1,20 @@
-import { Image, Title, Text, Container, Grid } from "@mantine/core";
-import jwtDecode from "jwt-decode";
-import { useEffect } from "react";
+import { Image, Title, Text, Grid } from "@mantine/core";
+import { useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Clock } from "tabler-icons-react";
 import { addViews } from "../../api/administration/administration";
 import { AddViewModel } from "../../types/administration/administration";
 import { News } from "../../types/news/news";
+import { UserContext } from "../../contexts/UserContext";
 import "../NewsByTags/NewsByTags.css";
 
 export interface NewsByTagsProps {
   news: News[];
 }
 
-var token: any =
-  localStorage.getItem("jwt") != null
-    ? jwtDecode(localStorage.getItem("jwt")!)
-    : "";
-
-var id: string =
-  token != null
-    ? token[
-        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
-      ]
-    : "";
-
 export const NewsByTagsC: React.FC<NewsByTagsProps> = ({ news }) => {
   const { tags } = useParams();
   const navigate = useNavigate();
+  const [userContext] = useContext(UserContext);
 
   useEffect(() => {
     console.log("News data in NewsByTagsC:", news);
@@ -38,7 +26,7 @@ export const NewsByTagsC: React.FC<NewsByTagsProps> = ({ news }) => {
 
   const addView = (newsId: string) => {
     const model: AddViewModel = {
-      user_id: id,
+      user_id: userContext.userId || "",
       news_id: newsId,
       finger_print_id: "",
       watch_id: 2,

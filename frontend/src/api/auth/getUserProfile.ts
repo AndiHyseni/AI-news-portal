@@ -7,10 +7,10 @@ export interface UserProfile {
   email: string;
 }
 
-export const getUserProfile = async (userId: string): Promise<UserProfile> => {
+export const getUserProfile = async (): Promise<UserProfile> => {
   try {
     const { data } = await axiosInstance.get<{ user: UserProfile }>(
-      `${BaseUrl.DEVELOPMENT}/Account/user/${userId}`
+      `${BaseUrl.DEVELOPMENT}/Account/getCurrentUser`
     );
     return data.user;
   } catch (error) {

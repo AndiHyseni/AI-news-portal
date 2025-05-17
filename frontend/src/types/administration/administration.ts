@@ -45,6 +45,9 @@ export interface Reaction {
   happy: number;
   news_id: string;
   sad: number;
+  reaction: number;
+  id: string;
+  user_id: string;
 }
 
 export interface AddReaction {
@@ -54,28 +57,19 @@ export interface AddReaction {
 }
 
 export interface ReactionsDetails {
-  news: string;
-  news_id: number;
-  reaction: number;
-  reaction_id: number;
-  user: {
-    accessFailedCount: number;
-    concurrencyStamp: string;
-    email: string;
-    emailConfirmed: Boolean;
-    id: string;
-    lockoutEnabled: Boolean;
-    lockoutEnd: string;
-    normalizedEmail: string;
-    normalizedUserName: string;
-    passwordHash: string;
-    phoneNumber: string;
-    phoneNumberConfirmed: Boolean;
-    securityStamp: string;
-    twoFactorEnabled: Boolean;
-    username: string;
-  };
+  id: string;
+  news_id: string;
   user_id: string;
+  reaction: number;
+  news?: {
+    id: string;
+    title: string;
+  };
+  user?: {
+    id: string;
+    name: string;
+    email: string;
+  };
 }
 
 export interface AddAdmin {

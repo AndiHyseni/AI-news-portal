@@ -31,7 +31,7 @@ export const DeleteUsersModal: React.FC<DeleteUsersModalProps> = ({
     mutation.mutate(user.id, {
       onSuccess: () => {
         handleClose();
-        navigate("/users");
+        navigate("/admin/users");
       },
     });
   };

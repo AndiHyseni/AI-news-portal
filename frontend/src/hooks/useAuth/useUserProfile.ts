@@ -29,7 +29,7 @@ export const useUserProfile = () => {
 
   return useQuery<UserProfile, Error>(
     ["userProfile", userId],
-    () => getUserProfile(userId as string),
+    () => getUserProfile(),
     {
       enabled: !!userId && userContext.isAuthenticated,
       staleTime: 5 * 60 * 1000, // Cache for 5 minutes

@@ -23,7 +23,9 @@ export const NewsValidator = Joi.object({
 
 export const NewsConfigValidator = Joi.object({
   id: Joi.string(),
-  show_featured: Joi.boolean(),
-  show_most_watched: Joi.boolean(),
-  show_related_news: Joi.boolean(),
+  show_featured: Joi.any(),
+  show_most_watched: Joi.any(),
+  show_related_news: Joi.any(),
+  header_logo: Joi.string(),
+  footer_logo: Joi.string(),
 });

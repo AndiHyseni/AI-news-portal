@@ -54,37 +54,37 @@ export const Sidebar: React.FC = () => {
 
   const menuItems = [
     {
-      path: "/",
+      path: "/admin",
       label: "Dashboard",
       icon: <Dashboard size={22} strokeWidth={1.5} />,
     },
     {
-      path: "/Category",
+      path: "/admin/categories",
       label: "Categories",
       icon: <Category size={22} strokeWidth={1.5} />,
     },
     {
-      path: "/news",
+      path: "/admin/news",
       label: "News",
       icon: <News size={22} strokeWidth={1.5} />,
     },
     {
-      path: "/configuration",
+      path: "/admin/configuration",
       label: "Configuration",
       icon: <Settings size={22} strokeWidth={1.5} />,
     },
     {
-      path: "/users",
+      path: "/admin/users",
       label: "Users",
       icon: <Users size={22} strokeWidth={1.5} />,
     },
     {
-      path: "/views",
+      path: "/admin/views",
       label: "Views",
       icon: <Eye size={22} strokeWidth={1.5} />,
     },
     {
-      path: "/reaction",
+      path: "/admin/reactions",
       label: "Reactions",
       icon: <MoodSmile size={22} strokeWidth={1.5} />,
     },

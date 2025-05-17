@@ -48,7 +48,7 @@ export const UsersTable: React.FC<TableProps> = ({
 
         <Button
           leftIcon={<CirclePlus size={20} />}
-          onClick={() => navigate("/addAdmin")}
+          onClick={() => navigate("/admin/users/add")}
           className="action-button"
         >
           Add Users

@@ -44,7 +44,7 @@ export const ConfigurationC: React.FC<ConfigurationProps> = ({
     initialValues: {
       header_logo: configuration.header_logo,
       footer_logo: configuration.footer_logo,
-      news_config_id: configuration.news_config_id,
+      id: configuration.news_config_id,
       show_featured: configuration.show_featured,
       show_most_watched: configuration.show_most_watched,
     },
@@ -72,7 +72,7 @@ export const ConfigurationC: React.FC<ConfigurationProps> = ({
 
   const handleSubmit = () => {
     axiosInstance
-      .post("https://localhost:5000/api/NewsConfig", {
+      .post("http://localhost:5000/api/NewsConfig", {
         header_logo: headerImage,
         footer_logo: footerImage,
         show_featured: showFeatured,
@@ -84,8 +84,11 @@ export const ConfigurationC: React.FC<ConfigurationProps> = ({
         });
       })
       .catch((error) => {
-        toast.error("Failed to update configuration", { autoClose: 3000 });
         console.error("Config update error:", error);
+        toast.error(
+          error.response?.data?.error || "Failed to update configuration",
+          { autoClose: 3000 }
+        );
       });
   };
 

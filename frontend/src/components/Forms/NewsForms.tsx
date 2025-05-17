@@ -155,7 +155,7 @@ export const NewsForms: React.FC<NewsFormProps> = (newsId) => {
       },
       {
         onSuccess: () => {
-          navigate("/news");
+          navigate("/admin/news");
         },
       }
     );
@@ -319,7 +319,7 @@ export const NewsForms: React.FC<NewsFormProps> = (newsId) => {
               <Button
                 className="cancel-button"
                 variant="outline"
-                onClick={() => navigate("/news")}
+                onClick={() => navigate("/admin/news")}
               >
                 Cancel
               </Button>

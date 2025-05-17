@@ -22,7 +22,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ requiredRoles }) => {
     );
 
     if (!hasRequiredRole) {
-      return <Navigate to="/unauthorized" />;
+      return <Navigate to="/denied" />;
     }
   }
 

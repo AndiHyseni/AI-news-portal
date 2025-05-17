@@ -43,7 +43,7 @@ export const ViewsDetailsTable: React.FC<TableProps> = ({ viewsDetails }) => {
           <tr>
             <th>News ID</th>
             <th>User</th>
-            <th>Fingerprint ID</th>
+            {/* <th>Fingerprint ID</th> */}
             <th>Timestamp</th>
           </tr>
         </thead>
@@ -67,11 +67,11 @@ export const ViewsDetailsTable: React.FC<TableProps> = ({ viewsDetails }) => {
                     </Badge>
                   )}
                 </td>
-                <td>
+                {/* <td>
                   <Text size="sm" color="dimmed">
                     {view.finger_print_id || "Not available"}
                   </Text>
-                </td>
+                </td> */}
                 <td>
                   <Text size="sm" className="timestamp">
                     {formatDate(view.watched_on)}

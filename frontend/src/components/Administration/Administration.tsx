@@ -1,4 +1,4 @@
-import { Image, Title, Container, Grid, Paper, Text } from "@mantine/core";
+import { Image, Title, Grid, Paper } from "@mantine/core";
 import { Rapport } from "../../types/administration/administration";
 import "../Administration/Administration.css";
 

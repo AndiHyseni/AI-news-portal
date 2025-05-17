@@ -1,13 +1,14 @@
-import { Button, Image, Text, Paper } from "@mantine/core";
-import jwtDecode from "jwt-decode";
-import { useState } from "react";
+import { Button, Image, Paper, Loader } from "@mantine/core";
+import { useContext, useEffect, useState } from "react";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { useSavedNews } from "../../hooks/useNews/useSavedNews";
 import { useAddReaction } from "../../hooks/useReactions/useAddReactions";
 import { useReactions } from "../../hooks/useReactions/useReactions";
-import { News, SavedNewsPayload } from "../../types/news/news";
+import { News } from "../../types/news/news";
 import { Reaction } from "../../types/administration/administration";
 import { AddSavedNewsButton } from "../common/AddSavedNewsButton";
+import { UserContext } from "../../contexts/UserContext";
+import { toast } from "react-toastify";
 import "../NewsDetailsId/NewsDetailsId.css";
 
 // Define interface for the API response
@@ -23,40 +24,110 @@ export const NewsDetailsId: React.FC<NewsDetailsProps> = ({ news }) => {
   const videoDetails: string = news?.video!;
   const addReactionMutation = useAddReaction();
   const { newsId } = useParams();
-  const [savedNews, setSavedNews] = useState<SavedNewsPayload>();
   const savedNewsMutation = useSavedNews();
-  const { data: reactionsData } = useReactions();
+  const {
+    data: reactionsData,
+    isLoading: reactionsLoading,
+    refetch: refetchReactions,
+  } = useReactions();
   const navigate = useNavigate();
+  const [userContext] = useContext(UserContext);
+  const [reactionCounts, setReactionCounts] = useState({
+    happy: 0,
+    sad: 0,
+    angry: 0,
+  });
 
-  var token: any =
-    localStorage.getItem("jwt") != null
-      ? jwtDecode(localStorage.getItem("jwt")!)
-      : "";
+  // Get user ID from context instead of directly decoding the JWT
+  const userId = userContext.userId || "";
+  const isAuthenticated = userContext.isAuthenticated;
 
-  var id: string =
-    token != null
-      ? token[
-          "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
-        ]
-      : "";
+  // Process reactions data when it's available
+  useEffect(() => {
+    if (reactionsData) {
+      // Access reactions array safely
+      const reactionsArray = Array.isArray(reactionsData)
+        ? reactionsData
+        : (reactionsData as ReactionsResponse)?.reactions || [];
+
+      // Initialize counters
+      let happyCount = 0;
+      let sadCount = 0;
+      let angryCount = 0;
+
+      // Count reactions by type for current news
+      reactionsArray.forEach((reactionItem: any) => {
+        if (reactionItem.news_id === news.id) {
+          if (reactionItem.reaction === 1) {
+            happyCount++;
+          } else if (reactionItem.reaction === 2) {
+            sadCount++;
+          } else if (reactionItem.reaction === 3) {
+            angryCount++;
+          }
+        }
+      });
+
+      // Update state with counted reactions
+      setReactionCounts({
+        happy: happyCount,
+        sad: sadCount,
+        angry: angryCount,
+      });
+
+      console.log("Counted reactions:", { happyCount, sadCount, angryCount });
+    }
+  }, [reactionsData, news.id]);
 
   const handleSubmit = (reaction: number) => {
-    addReactionMutation.mutate({
-      news_id: news.id,
-      user_id: id,
-      reaction: reaction,
-    });
+    // Show loading toast
+    const toastId = toast.loading("Adding your reaction...");
+
+    addReactionMutation.mutate(
+      {
+        news_id: news.id,
+        user_id: userId,
+        reaction: reaction,
+      },
+      {
+        onSuccess: () => {
+          // Update loading toast to success
+          toast.update(toastId, {
+            render: getReactionMessage(reaction),
+            type: "success",
+            isLoading: false,
+            autoClose: 3000,
+          });
+          // Refetch reactions to update counts
+          refetchReactions();
+        },
+        onError: (error) => {
+          // Update loading toast to error
+          toast.update(toastId, {
+            render: "Failed to add reaction. Please try again.",
+            type: "error",
+            isLoading: false,
+            autoClose: 3000,
+          });
+          console.error("Error adding reaction:", error);
+        },
+      }
+    );
   };
 
-  // Access reactions array safely
-  const reactionsArray = Array.isArray(reactionsData)
-    ? reactionsData
-    : (reactionsData as ReactionsResponse | undefined)?.reactions || [];
-
-  // Find the reaction for current news
-  const currentNewsReaction = reactionsArray.find(
-    (reaction: Reaction) => reaction.news_id === news.id
-  ) || { happy: 0, sad: 0, angry: 0 };
+  // Helper function to get reaction message
+  const getReactionMessage = (reactionType: number): string => {
+    switch (reactionType) {
+      case 1:
+        return "Thanks for your happy reaction! 😊";
+      case 2:
+        return "Thanks for your sad reaction! 😔";
+      case 3:
+        return "Thanks for your angry reaction! 😠";
+      default:
+        return "Thanks for your reaction!";
+    }
+  };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -110,7 +181,6 @@ export const NewsDetailsId: React.FC<NewsDetailsProps> = ({ news }) => {
         {news && reactionsData && (
           <AddSavedNewsButton
             newsId={String(newsId)}
-            savedNews={savedNews}
             mutation={savedNewsMutation}
           />
         )}
@@ -119,83 +189,80 @@ export const NewsDetailsId: React.FC<NewsDetailsProps> = ({ news }) => {
       <Paper shadow="sm" radius="lg" p="xl" className="reactions">
         <h2 className="reactionTitle">Cili është vlerësimi juaj për këtë?</h2>
         <div className="reactionEmoji">
-          <div className="reaction-container">
-            <span className="counter">{currentNewsReaction.happy}</span>
-            {!id ? (
-              <div
-                className="reactionImage happy-emoji"
-                onClick={() => navigate("/login")}
-              >
-                <span role="img" aria-label="happy">
-                  😊
-                </span>
+          {reactionsLoading ? (
+            <Loader color="#26145c" size="lg" />
+          ) : (
+            <>
+              <div className="reaction-container">
+                <span className="counter">{reactionCounts.happy}</span>
+                {!isAuthenticated ? (
+                  <div
+                    className="reactionImage happy-emoji"
+                    onClick={() => navigate("/login")}
+                  >
+                    <span role="img" aria-label="happy">
+                      😊
+                    </span>
+                  </div>
+                ) : (
+                  <div
+                    className="reactionImage happy-emoji"
+                    onClick={() => handleSubmit(1)}
+                  >
+                    <span role="img" aria-label="happy">
+                      😊
+                    </span>
+                  </div>
+                )}
               </div>
-            ) : (
-              <div
-                className="reactionImage happy-emoji"
-                onClick={() => {
-                  handleSubmit(1);
-                  window.location.reload();
-                }}
-              >
-                <span role="img" aria-label="happy">
-                  😊
-                </span>
-              </div>
-            )}
-          </div>
 
-          <div className="reaction-container">
-            <span className="counter">{currentNewsReaction.sad}</span>
-            {!id ? (
-              <div
-                className="reactionImage sad-emoji"
-                onClick={() => navigate("/login")}
-              >
-                <span role="img" aria-label="sad">
-                  😔
-                </span>
+              <div className="reaction-container">
+                <span className="counter">{reactionCounts.sad}</span>
+                {!isAuthenticated ? (
+                  <div
+                    className="reactionImage sad-emoji"
+                    onClick={() => navigate("/login")}
+                  >
+                    <span role="img" aria-label="sad">
+                      😔
+                    </span>
+                  </div>
+                ) : (
+                  <div
+                    className="reactionImage sad-emoji"
+                    onClick={() => handleSubmit(2)}
+                  >
+                    <span role="img" aria-label="sad">
+                      😔
+                    </span>
+                  </div>
+                )}
               </div>
-            ) : (
-              <div
-                className="reactionImage sad-emoji"
-                onClick={() => {
-                  handleSubmit(2);
-                  window.location.reload();
-                }}
-              >
-                <span role="img" aria-label="sad">
-                  😔
-                </span>
-              </div>
-            )}
-          </div>
 
-          <div className="reaction-container">
-            <span className="counter">{currentNewsReaction.angry}</span>
-            {!id ? (
-              <div
-                className="reactionImage angry-emoji"
-                onClick={() => navigate("/login")}
-              >
-                <span role="img" aria-label="angry">
-                  😠
-                </span>
+              <div className="reaction-container">
+                <span className="counter">{reactionCounts.angry}</span>
+                {!isAuthenticated ? (
+                  <div
+                    className="reactionImage angry-emoji"
+                    onClick={() => navigate("/login")}
+                  >
+                    <span role="img" aria-label="angry">
+                      😠
+                    </span>
+                  </div>
+                ) : (
+                  <div
+                    className="reactionImage angry-emoji"
+                    onClick={() => handleSubmit(3)}
+                  >
+                    <span role="img" aria-label="angry">
+                      😠
+                    </span>
+                  </div>
+                )}
               </div>
-            ) : (
-              <div
-                className="reactionImage angry-emoji"
-                onClick={() => {
-                  handleSubmit(3);
-                  window.location.reload();
-                }}
-              >
-                <span role="img" aria-label="angry">
-                  😠
-                </span>
-              </div>
-            )}
-          </div>
+            </>
+          )}
         </div>
       </Paper>
     </div>

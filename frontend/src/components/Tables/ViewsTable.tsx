@@ -102,7 +102,7 @@ export const ViewsTable: React.FC<TableProps> = ({ views }) => {
                   {view.id && (
                     <Button
                       component={Link}
-                      to={`/views/${view.id}`}
+                      to={`/admin/views/${view.id}`}
                       className="action-button"
                       variant="filled"
                       leftIcon={<ChartBar size={16} />}

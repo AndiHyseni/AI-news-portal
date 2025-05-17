@@ -5,23 +5,38 @@ import { endNotification, startNotification } from "../../utils/notifications";
 import { generateRandomString } from "../../utils/randomString";
 import { queryClient } from "../../App";
 
+interface DeleteSavedNewsPayload {
+  news_id: string;
+  user_id: string;
+}
+
 export const useDeleteSavedNews = () => {
   const randomId = generateRandomString(20);
 
-  return useMutation((newsId: string) => deleteSavedNews(newsId), {
-    onMutate: () => {
-      startNotification(randomId);
+  return useMutation(
+    (payload: DeleteSavedNewsPayload | string) => {
+      // Pass the full payload object to the API call
+      return deleteSavedNews(payload);
     },
-    onSuccess: () => {
-      endNotification(
-        randomId,
-        i18n.t("Saved news deleted succesfully!"),
-        true
-      );
-      queryClient.invalidateQueries(["useDeleteSavedNews"]);
-    },
-    onError: () => {
-      endNotification(randomId, i18n.t("Saved news failed to delete!"), false);
-    },
-  });
+    {
+      onMutate: () => {
+        startNotification(randomId);
+      },
+      onSuccess: () => {
+        endNotification(
+          randomId,
+          i18n.t("Saved news deleted successfully!"),
+          true
+        );
+        // We no longer invalidate queries here since we're using local state updates
+      },
+      onError: () => {
+        endNotification(
+          randomId,
+          i18n.t("Saved news failed to delete!"),
+          false
+        );
+      },
+    }
+  );
 };

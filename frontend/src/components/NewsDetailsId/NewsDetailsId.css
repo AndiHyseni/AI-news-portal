@@ -102,6 +102,21 @@
   box-shadow: 0 5px 10px rgba(38, 20, 92, 0.2);
 }
 
+.tagsButton-saved {
+  background-color: #43a047;
+  border-radius: 20px;
+  padding: 6px 15px;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.tagsButton-saved:hover {
+  background-color: #43a047;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(67, 160, 71, 0.2);
+}
+
 .videoDetails {
   padding-top: 30px;
   padding-bottom: 40px;
@@ -123,6 +138,18 @@
 .deleteButton:hover {
   background-color: #c62828;
   box-shadow: 0 5px 10px rgba(229, 57, 53, 0.3);
+}
+
+.detailsButtonList-saved {
+  margin-right: 15px;
+  transition: all 0.3s ease;
+  background-color: #43a047;
+}
+
+.detailsButtonList-saved:hover {
+  background-color: #43a047;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(67, 160, 71, 0.2);
 }
 
 .savedButton {
