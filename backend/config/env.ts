@@ -15,3 +15,9 @@ export const DB_PORT = process.env.DB_PORT || 3306;
 export const DB_USERNAME = process.env.DB_USERNAME || "root";
 export const DB_NAME = process.env.DB_NAME || "news-portal";
 export const DB_PASSWORD = process.env.DB_PASSWORD || "1234";
+
+// OpenAI
+export const OPENAI_API_KEY = process.env.OPENAI_API_KEY || "";
+
+// NewsAPI
+export const NEWSAPI_KEY = process.env.NEWSAPI_KEY || "";

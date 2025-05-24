@@ -11,9 +11,13 @@
     "jsonwebtoken": "^9.0.2",
     "knex": "^3.1.0",
     "mysql2": "^3.14.0",
+    "natural": "^8.1.0",
     "nodemailer": "^6.10.0",
     "nodemon": "^3.1.9",
     "objection": "^3.1.5",
+    "openai": "^4.102.0",
+    "similarity": "^1.2.1",
+    "stopword": "^3.1.4",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
@@ -23,6 +27,8 @@
     "@types/jsonwebtoken": "^9.0.9",
     "@types/knex": "^0.16.1",
     "@types/node": "^22.13.14",
+    "@types/stopword": "^2.0.3",
+    "node-summarizer": "^1.0.7",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.2"
   },

@@ -147,6 +147,13 @@ export const NewsDetailsId: React.FC<NewsDetailsProps> = ({ news }) => {
       <h1 className="titleDetails">{news?.title}</h1>
       <h2 className="subtitleDetails">{news?.subtitle}</h2>
 
+      {news?.summary && (
+        <div className="summaryDetails">
+          <h3>Summary</h3>
+          <p>{news.summary}</p>
+        </div>
+      )}
+
       <div className="news-meta">
         <span>Published: {formatDate(news?.created_at)}</span>
       </div>

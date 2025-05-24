@@ -294,3 +294,26 @@
     font-size: 12px;
   }
 }
+
+.summaryDetails {
+  margin: 20px 0;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-left: 4px solid #26145c;
+  border-radius: 4px;
+}
+
+.summaryDetails h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #26145c;
+  font-size: 1.2rem;
+}
+
+.summaryDetails p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #444;
+  font-style: italic;
+}

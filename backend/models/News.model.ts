@@ -1,6 +1,7 @@
 import { Model } from "objection";
 import { v4 as uuidv4 } from "uuid";
 import CategoryDbModel from "./Category.model";
+import WatchedDbModel from "./Watched.model";
 
 export default class NewsDbModel extends Model {
   id!: string;
@@ -11,6 +12,7 @@ export default class NewsDbModel extends Model {
   is_deleted!: boolean;
   number_of_clicks!: number;
   content!: string;
+  summary?: string;
   image?: string;
   video?: string;
   expire_date?: Date;
@@ -38,9 +40,10 @@ export default class NewsDbModel extends Model {
         id: { type: "string", minLength: 1, maxLength: 36 },
         title: { type: "string", minLength: 1 },
         category_id: { type: "string", minLength: 1 },
-        subtitle: { type: "string", minLength: 1 },
+        subtitle: { type: "string" },
         is_featured: { type: "boolean" },
         content: { type: "string", minLength: 1 },
+        summary: { type: "string" },
         image: { type: "string" },
       },
     };

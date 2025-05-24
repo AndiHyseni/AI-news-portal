@@ -1,5 +1,13 @@
 import { BaseUrl } from "../../enums/baseUrl";
-import { CREATE_NEWS, NEWS, SAVED_NEWS, TAGS } from "../../enums/news/url";
+import {
+  CREATE_NEWS,
+  GENERATE_SUMMARIES,
+  GENERATE_TAGS,
+  NEWS,
+  NEWS_API,
+  SAVED_NEWS,
+  TAGS,
+} from "../../enums/news/url";
 import {
   CreateNewsPayload,
   News,
@@ -7,6 +15,10 @@ import {
   SavedNewsPayload,
   DeleteSavedNewsPayload,
 } from "../../types/news/news";
+import {
+  ImportNewsAPIPayload,
+  NewsAPIResponse,
+} from "../../types/news/newsapi";
 import { axiosInstance } from "../config";
 
 export const getNews = async () => {
@@ -36,6 +48,56 @@ export const createNews = async (
 export const deleteNews = async (newsId: string): Promise<void> => {
   const { data } = await axiosInstance.delete(
     `${BaseUrl.DEVELOPMENT}/${NEWS.GET_NEWSID}/${newsId}`
+  );
+  return data;
+};
+
+export const generateSummaries = async (): Promise<any> => {
+  const { data } = await axiosInstance.post(
+    `${BaseUrl.DEVELOPMENT}/${NEWS.GET_NEWS}/${GENERATE_SUMMARIES.GENERATE}`
+  );
+  return data;
+};
+
+// NewsAPI functions
+export const searchNewsAPI = async (
+  query: string
+): Promise<NewsAPIResponse> => {
+  const { data } = await axiosInstance.get(
+    `${BaseUrl.DEVELOPMENT}/${NEWS_API.SEARCH}`,
+    {
+      params: { query },
+    }
+  );
+  return data;
+};
+
+export const getTopHeadlines = async (
+  category?: string,
+  country: string = "us"
+): Promise<NewsAPIResponse> => {
+  const { data } = await axiosInstance.get(
+    `${BaseUrl.DEVELOPMENT}/${NEWS_API.TOP_HEADLINES}`,
+    {
+      params: { category, country },
+    }
+  );
+  return data;
+};
+
+export const importNewsFromAPI = async (
+  payload: ImportNewsAPIPayload
+): Promise<any> => {
+  const { data } = await axiosInstance.post(
+    `${BaseUrl.DEVELOPMENT}/${NEWS_API.IMPORT}`,
+    payload
+  );
+  return data;
+};
+
+export const generateSummariesWithNewsAPI = async (): Promise<any> => {
+  const { data } = await axiosInstance.post(
+    `${BaseUrl.DEVELOPMENT}/${NEWS_API.GENERATE_SUMMARIES}`
   );
   return data;
 };
@@ -84,4 +146,36 @@ export const getNewsByTags = async (tags: string): Promise<News[]> => {
   }
 
   return [];
+};
+
+// NLP functions
+export const generateSummariesWithNLP = async (): Promise<any> => {
+  const { data } = await axiosInstance.post(
+    `${BaseUrl.DEVELOPMENT}/${NEWS.GET_NEWS}/${GENERATE_SUMMARIES.GENERATE}`
+  );
+  return data;
+};
+
+export const generateTagsWithNLP = async (): Promise<any> => {
+  const { data } = await axiosInstance.post(
+    `${BaseUrl.DEVELOPMENT}/${NEWS.GET_NEWS}/${GENERATE_TAGS.GENERATE}`
+  );
+  return data;
+};
+
+// NLP functions for individual articles
+export const generateSummaryForArticle = async (
+  newsId: string
+): Promise<any> => {
+  const { data } = await axiosInstance.post(
+    `${BaseUrl.DEVELOPMENT}/${NEWS.GET_NEWS}/generate-summary/${newsId}`
+  );
+  return data;
+};
+
+export const generateTagsForArticle = async (newsId: string): Promise<any> => {
+  const { data } = await axiosInstance.post(
+    `${BaseUrl.DEVELOPMENT}/${NEWS.GET_NEWS}/generate-tags/${newsId}`
+  );
+  return data;
 };

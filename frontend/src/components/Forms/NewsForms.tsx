@@ -64,6 +64,7 @@ export const NewsForms: React.FC<NewsFormProps> = (newsId) => {
       tags: "",
       title: "",
       video: "",
+      summary: "",
     },
     validateInputOnChange: false,
     validate: {
@@ -152,6 +153,7 @@ export const NewsForms: React.FC<NewsFormProps> = (newsId) => {
         title: form.values.title,
         tags: tags.join(","),
         video: form.values.video || "",
+        summary: form.values.summary,
       },
       {
         onSuccess: () => {
@@ -189,6 +191,16 @@ export const NewsForms: React.FC<NewsFormProps> = (newsId) => {
                 placeholder="Enter a brief subtitle or description..."
                 {...form.getInputProps("subtitle")}
                 error={formSubmitted && form.errors.subtitle}
+              />
+
+              <Textarea
+                className="form-element"
+                size="md"
+                label="Summary (2-3 sentences)"
+                placeholder="Enter a concise summary of the article (will be auto-generated if left blank)..."
+                minRows={2}
+                maxRows={3}
+                {...form.getInputProps("summary")}
               />
 
               <Textarea

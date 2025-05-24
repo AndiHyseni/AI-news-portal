@@ -118,6 +118,7 @@ export const SiteNewsOnPage: React.FC<NewsProps> = ({
                   onClick={() => handleNewsClick(news.id)}
                   alt={news.title}
                   fit="cover"
+                  height={268}
                 />
               </div>
               <div className="site">
@@ -127,6 +128,13 @@ export const SiteNewsOnPage: React.FC<NewsProps> = ({
                 >
                   {news.title}
                 </h2>
+                {news.summary && (
+                  <p className="site-summary">
+                    {news.summary.length > 150
+                      ? `${news.summary.substring(0, 150)}...`
+                      : news.summary}
+                  </p>
+                )}
                 <div className="sitep">
                   {categoriesArray
                     .filter((x: Categories) => x.id === news.category_id)

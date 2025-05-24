@@ -87,7 +87,9 @@ export const MostWatchedNews: React.FC<NewsProps> = ({ mostwatched = [] }) => {
                 />
               </div>
               <div className="mostwatchedsite">
-                <h2 className="mostwatchedtitle">{news.title}</h2>
+                <h2 className="mostwatchedtitle" title={news.title}>
+                  {news.title}
+                </h2>
                 <Button
                   className="readMoreOnMostWatched"
                   onClick={() => handleNewsClick(news.id)}

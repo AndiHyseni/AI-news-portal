@@ -73,6 +73,24 @@ NewsController.delete(
   }
 );
 
+// POST generate summaries for existing articles without summaries (Admin only)
+NewsController.post(
+  "/generate-summaries",
+  authorize(),
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const result = await NewsService.generateSummariesForExistingArticles();
+      if (result.httpCode === 200) {
+        res.status(result.httpCode).send(result.data);
+      } else {
+        res.status(result.httpCode).send("Something went wrong");
+      }
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
 // POST add view count (no role restrictions)
 NewsController.post(
   "/addView",
@@ -231,6 +249,62 @@ NewsController.get(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const result = await NewsService.getMostViewed();
+      if (result.httpCode === 200) {
+        res.status(result.httpCode).send(result.data);
+      } else {
+        res.status(result.httpCode).send("Something went wrong");
+      }
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+// POST generate tags for existing articles without tags (Admin only)
+NewsController.post(
+  "/generate-tags",
+  authorize(),
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const result = await NewsService.generateTagsForExistingArticles();
+      if (result.httpCode === 200) {
+        res.status(result.httpCode).send(result.data);
+      } else {
+        res.status(result.httpCode).send("Something went wrong");
+      }
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+// POST generate summary for specific article
+NewsController.post(
+  "/generate-summary/:id",
+  authorize(),
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params;
+      const result = await NewsService.generateSummaryForArticle(id);
+      if (result.httpCode === 200) {
+        res.status(result.httpCode).send(result.data);
+      } else {
+        res.status(result.httpCode).send("Something went wrong");
+      }
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+// POST generate tags for specific article
+NewsController.post(
+  "/generate-tags/:id",
+  authorize(),
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params;
+      const result = await NewsService.generateTagsForArticle(id);
       if (result.httpCode === 200) {
         res.status(result.httpCode).send(result.data);
       } else {

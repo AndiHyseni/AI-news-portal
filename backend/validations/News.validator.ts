@@ -7,6 +7,7 @@ export const NewsValidator = Joi.object({
   category_id: Joi.any(),
   is_featured: Joi.boolean(),
   content: Joi.string(),
+  summary: Joi.string(),
   number_of_clicks: Joi.number(),
   tags: Joi.string(),
   video: Joi.string(),

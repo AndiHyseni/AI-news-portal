@@ -28,13 +28,14 @@
     "typeRoots": [
       "./environment.d.ts",
       "./node_modules/@types",
-      "./src/global.d.ts"
+      "./src/global.d.ts",
+      "./types"
     ],
     "paths": {
       "@envfile": ["./.env"]
     }
   },
-  "include": ["src/**/*", "index.ts"],
+  "include": ["src/**/*", "index.ts", "types/**/*"],
   "exclude": ["node_modules"],
   "strictNullChecks": true
 }

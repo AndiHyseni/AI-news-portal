@@ -5,6 +5,7 @@ export interface News {
   user_id: string;
   category_id: string;
   content: string;
+  summary?: string;
   expire_date: string;
   image: string;
   is_deleted: boolean;
@@ -22,6 +23,7 @@ export interface News {
 export interface CreateNewsPayload {
   category_id: string;
   content: string;
+  summary?: string;
   expire_date: string;
   image: string;
   is_deleted?: Boolean;
@@ -49,6 +51,7 @@ export interface SavedNewsPage {
   title: string;
   image: string;
   content: string;
+  summary?: string;
   expireDate: string;
   is_deleted: Boolean;
   is_featured: Boolean;
