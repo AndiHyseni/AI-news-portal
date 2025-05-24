@@ -442,4 +442,104 @@ export const NewsService = {
       return failure({ error }, StatusCodeEnums.UNPROCESSABLE_ENTITY);
     }
   },
+  // Get related news based on tags and category
+  getRelatedNews: async (newsId: string, limit: number = 4) => {
+    try {
+      // Get the current news article to find related ones
+      const currentNews = await NewsDbModel.query()
+        .findById(newsId)
+        .where({ is_deleted: false });
+
+      if (!currentNews) {
+        return failure({ error: "News not found" }, StatusCodeEnums.UNEXPECTED);
+      }
+
+      // Extract tags from the current article
+      const tags = currentNews.tags
+        ? currentNews.tags.split(",").map((tag) => tag.trim())
+        : [];
+      const categoryId = currentNews.category_id;
+
+      // Base query for related news
+      let relatedNewsQuery = NewsDbModel.query()
+        .where({ is_deleted: false })
+        .whereNot("id", newsId) // Exclude the current article
+        .orderBy("created_at", "DESC")
+        .withGraphFetched("category")
+        .limit(limit);
+
+      // Add tag-based filtering if tags exist
+      if (tags.length > 0) {
+        relatedNewsQuery = relatedNewsQuery.where((builder) => {
+          // For each tag, add an OR condition
+          tags.forEach((tag) => {
+            if (tag) {
+              builder.orWhere("tags", "like", `%${tag}%`);
+            }
+          });
+        });
+      }
+
+      // Add category-based filtering if category exists
+      if (categoryId) {
+        // Prioritize articles with same tags and category
+        const tagAndCategoryMatches = await relatedNewsQuery
+          .clone()
+          .where("category_id", categoryId)
+          .limit(limit);
+
+        // If we have enough articles with tag and category matches, return them
+        if (tagAndCategoryMatches.length >= limit) {
+          return ok({ relatedNews: tagAndCategoryMatches });
+        }
+
+        // Otherwise, get additional articles by category to fill up to the limit
+        const remainingNeeded = limit - tagAndCategoryMatches.length;
+
+        if (remainingNeeded > 0) {
+          const categoryMatches = await NewsDbModel.query()
+            .where({ is_deleted: false, category_id: categoryId })
+            .whereNot("id", newsId)
+            .whereNotIn(
+              "id",
+              tagAndCategoryMatches.map((article) => article.id)
+            )
+            .orderBy("created_at", "DESC")
+            .withGraphFetched("category")
+            .limit(remainingNeeded);
+
+          return ok({
+            relatedNews: [...tagAndCategoryMatches, ...categoryMatches],
+          });
+        }
+
+        return ok({ relatedNews: tagAndCategoryMatches });
+      }
+
+      // If no category or not enough matches, just return the tag-based matches
+      const relatedNews = await relatedNewsQuery;
+
+      // If still not enough related news, fetch the most recent articles
+      if (relatedNews.length < limit) {
+        const remainingNeeded = limit - relatedNews.length;
+        const recentNews = await NewsDbModel.query()
+          .where({ is_deleted: false })
+          .whereNot("id", newsId)
+          .whereNotIn(
+            "id",
+            relatedNews.map((article) => article.id)
+          )
+          .orderBy("created_at", "DESC")
+          .withGraphFetched("category")
+          .limit(remainingNeeded);
+
+        return ok({ relatedNews: [...relatedNews, ...recentNews] });
+      }
+
+      return ok({ relatedNews });
+    } catch (error) {
+      console.error("Error fetching related news:", error);
+      return failure({ error }, StatusCodeEnums.UNPROCESSABLE_ENTITY);
+    }
+  },
 };

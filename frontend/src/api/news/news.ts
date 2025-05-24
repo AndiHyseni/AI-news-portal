@@ -148,6 +148,30 @@ export const getNewsByTags = async (tags: string): Promise<News[]> => {
   return [];
 };
 
+// Get related news for a specific article
+export const getRelatedNews = async (
+  newsId: string,
+  limit: number = 4
+): Promise<News[]> => {
+  try {
+    const { data } = await axiosInstance.get(
+      `${BaseUrl.DEVELOPMENT}/${NEWS.GET_NEWS}/${newsId}/related`,
+      {
+        params: { limit },
+      }
+    );
+
+    if (data && data.relatedNews && Array.isArray(data.relatedNews)) {
+      return data.relatedNews;
+    }
+
+    return [];
+  } catch (error) {
+    console.error("Error fetching related news:", error);
+    return [];
+  }
+};
+
 // NLP functions
 export const generateSummariesWithNLP = async (): Promise<any> => {
   const { data } = await axiosInstance.post(

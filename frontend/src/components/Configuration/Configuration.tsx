@@ -39,6 +39,9 @@ export const ConfigurationC: React.FC<ConfigurationProps> = ({
   const [mostWatched, setMostWatched] = useState<boolean>(
     configuration.show_most_watched
   );
+  const [showRelatedNews, setShowRelatedNews] = useState<boolean>(
+    configuration.show_related_news
+  );
 
   const form = useForm({
     initialValues: {
@@ -47,6 +50,7 @@ export const ConfigurationC: React.FC<ConfigurationProps> = ({
       id: configuration.news_config_id,
       show_featured: configuration.show_featured,
       show_most_watched: configuration.show_most_watched,
+      show_related_news: configuration.show_related_news,
     },
   });
 
@@ -77,6 +81,7 @@ export const ConfigurationC: React.FC<ConfigurationProps> = ({
         footer_logo: footerImage,
         show_featured: showFeatured,
         show_most_watched: mostWatched,
+        show_related_news: showRelatedNews,
       })
       .then(() => {
         toast.success("Configuration updated successfully", {
@@ -124,7 +129,7 @@ export const ConfigurationC: React.FC<ConfigurationProps> = ({
                 />
               </Group>
 
-              <Group position="apart">
+              <Group position="apart" mb={15}>
                 <div>
                   <Text weight={500}>Most Watched Section</Text>
                   <Text size="sm" color="dimmed">
@@ -137,6 +142,23 @@ export const ConfigurationC: React.FC<ConfigurationProps> = ({
                   color="violet"
                   onChange={(event) =>
                     setMostWatched(event.currentTarget.checked)
+                  }
+                />
+              </Group>
+
+              <Group position="apart">
+                <div>
+                  <Text weight={500}>Related News Section</Text>
+                  <Text size="sm" color="dimmed">
+                    Show related news suggestions at the bottom of news articles
+                  </Text>
+                </div>
+                <Switch
+                  size="lg"
+                  checked={showRelatedNews}
+                  color="violet"
+                  onChange={(event) =>
+                    setShowRelatedNews(event.currentTarget.checked)
                   }
                 />
               </Group>

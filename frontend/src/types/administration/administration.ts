@@ -93,4 +93,5 @@ export interface Configuration {
   header_logo: string;
   show_featured: boolean;
   show_most_watched: boolean;
+  show_related_news: boolean;
 }

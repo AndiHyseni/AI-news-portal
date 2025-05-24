@@ -27,9 +27,10 @@ export const MostWatchedNews: React.FC<NewsProps> = ({ mostwatched = [] }) => {
     ? mostwatched
     : (mostwatched as { news: News[] }).news || [];
 
-  const sortedMostWatched = [...newsArray].sort(
-    (a, b) => b.number_of_clicks - a.number_of_clicks
-  );
+  // Sort by most watched and limit to 10 items
+  const sortedMostWatched = [...newsArray]
+    .sort((a, b) => b.number_of_clicks - a.number_of_clicks)
+    .slice(0, 10);
 
   const addView = (newsId: string) => {
     const model: AddViewModel = {

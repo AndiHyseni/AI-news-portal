@@ -13,14 +13,6 @@ interface ServiceResponse {
   } | null;
 }
 
-/**
- * This script will generate summaries for all existing articles that don't have one.
- * It uses the OpenAI API to create concise 2-3 sentence summaries.
- *
- * To run this script:
- * 1. First run the migration: npm run migrate:latest
- * 2. Then run: npx ts-node scripts/generate-summaries.ts
- */
 async function generateSummaries() {
   console.log("Starting to generate summaries for articles without them...");
 

@@ -4,11 +4,13 @@ import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { useSavedNews } from "../../hooks/useNews/useSavedNews";
 import { useAddReaction } from "../../hooks/useReactions/useAddReactions";
 import { useReactions } from "../../hooks/useReactions/useReactions";
+import { useConfiguration } from "../../hooks/useConfiguration/useConfiguration";
 import { News } from "../../types/news/news";
 import { Reaction } from "../../types/administration/administration";
 import { AddSavedNewsButton } from "../common/AddSavedNewsButton";
 import { UserContext } from "../../contexts/UserContext";
 import { toast } from "react-toastify";
+import { RelatedNews } from "../RelatedNews/RelatedNews";
 import "../NewsDetailsId/NewsDetailsId.css";
 
 // Define interface for the API response
@@ -30,6 +32,7 @@ export const NewsDetailsId: React.FC<NewsDetailsProps> = ({ news }) => {
     isLoading: reactionsLoading,
     refetch: refetchReactions,
   } = useReactions();
+  const { data } = useConfiguration();
   const navigate = useNavigate();
   const [userContext] = useContext(UserContext);
   const [reactionCounts, setReactionCounts] = useState({
@@ -270,6 +273,10 @@ export const NewsDetailsId: React.FC<NewsDetailsProps> = ({ news }) => {
           )}
         </div>
       </Paper>
+
+      {data?.show_related_news == true && news && news.id && (
+        <RelatedNews newsId={news.id} />
+      )}
     </div>
   );
 };

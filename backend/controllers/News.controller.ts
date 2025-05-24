@@ -260,6 +260,21 @@ NewsController.get(
   }
 );
 
+// GET related news by news ID
+NewsController.get(
+  "/:id/related",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params;
+      const limit = req.query.limit ? parseInt(req.query.limit as string) : 4;
+      const result = await NewsService.getRelatedNews(id, limit);
+      res.status(result.httpCode).send(result.data);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
 // POST generate tags for existing articles without tags (Admin only)
 NewsController.post(
   "/generate-tags",

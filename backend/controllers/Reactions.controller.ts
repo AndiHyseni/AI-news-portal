@@ -7,7 +7,7 @@ export const ReactionsController: Router = Router();
 // Get all views
 ReactionsController.get(
   "/",
-  authorize(),
+  // authorize(),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const result = await NewsService.getAllReactions();

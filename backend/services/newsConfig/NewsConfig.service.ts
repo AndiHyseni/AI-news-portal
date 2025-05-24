@@ -7,6 +7,7 @@ interface NewsConfigInput {
   footer_logo: string;
   show_featured: boolean;
   show_most_watched: boolean;
+  show_related_news: boolean;
 }
 
 export const NewsConfigService = {
@@ -36,6 +37,7 @@ export const NewsConfigService = {
         footer_logo: newsConfig.footer_logo,
         show_featured: newsConfig.show_featured,
         show_most_watched: newsConfig.show_most_watched,
+        show_related_news: newsConfig.show_related_news,
       });
 
       // Fetch the updated record
