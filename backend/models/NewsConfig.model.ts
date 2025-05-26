@@ -8,6 +8,7 @@ export default class NewsConfigDbModel extends Model {
   show_featured!: boolean;
   show_most_watched!: boolean;
   show_related_news!: boolean;
+  show_chatbot!: boolean;
 
   static tableName = "news_config";
 

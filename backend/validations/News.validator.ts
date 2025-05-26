@@ -27,6 +27,7 @@ export const NewsConfigValidator = Joi.object({
   show_featured: Joi.any(),
   show_most_watched: Joi.any(),
   show_related_news: Joi.any(),
+  show_chatbot: Joi.any(),
   header_logo: Joi.string(),
   footer_logo: Joi.string(),
 });

@@ -42,6 +42,9 @@ export const ConfigurationC: React.FC<ConfigurationProps> = ({
   const [showRelatedNews, setShowRelatedNews] = useState<boolean>(
     configuration.show_related_news
   );
+  const [showChatbot, setShowChatbot] = useState<boolean>(
+    configuration.show_chatbot
+  );
 
   const form = useForm({
     initialValues: {
@@ -51,6 +54,7 @@ export const ConfigurationC: React.FC<ConfigurationProps> = ({
       show_featured: configuration.show_featured,
       show_most_watched: configuration.show_most_watched,
       show_related_news: configuration.show_related_news,
+      show_chatbot: configuration.show_chatbot,
     },
   });
 
@@ -82,11 +86,17 @@ export const ConfigurationC: React.FC<ConfigurationProps> = ({
         show_featured: showFeatured,
         show_most_watched: mostWatched,
         show_related_news: showRelatedNews,
+        show_chatbot: showChatbot,
       })
       .then(() => {
         toast.success("Configuration updated successfully", {
           autoClose: 2000,
         });
+
+        // Refresh the page after a short delay to show the success message
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       })
       .catch((error) => {
         console.error("Config update error:", error);
@@ -146,7 +156,7 @@ export const ConfigurationC: React.FC<ConfigurationProps> = ({
                 />
               </Group>
 
-              <Group position="apart">
+              <Group position="apart" mb={15}>
                 <div>
                   <Text weight={500}>Related News Section</Text>
                   <Text size="sm" color="dimmed">
@@ -159,6 +169,24 @@ export const ConfigurationC: React.FC<ConfigurationProps> = ({
                   color="violet"
                   onChange={(event) =>
                     setShowRelatedNews(event.currentTarget.checked)
+                  }
+                />
+              </Group>
+
+              <Group position="apart">
+                <div>
+                  <Text weight={500}>AI Chatbot Assistant</Text>
+                  <Text size="sm" color="dimmed">
+                    Show the AI chatbot assistant for users to ask questions
+                    about news
+                  </Text>
+                </div>
+                <Switch
+                  size="lg"
+                  checked={showChatbot}
+                  color="violet"
+                  onChange={(event) =>
+                    setShowChatbot(event.currentTarget.checked)
                   }
                 />
               </Group>

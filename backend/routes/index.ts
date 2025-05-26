@@ -10,6 +10,7 @@ import RoleController from "../controllers/Role.controller";
 import { ViewsController } from "../controllers/Views.controller";
 import { ReactionsController } from "../controllers/Reactions.controller";
 import { NewsAPIController } from "../controllers/NewsAPI.controller";
+import { ChatbotController } from "../controllers/Chatbot.controller";
 
 const endpoints: [string, Router][] = [
   ["/api/Account", AccountController],
@@ -21,6 +22,7 @@ const endpoints: [string, Router][] = [
   ["/api/views", ViewsController],
   ["/api/reaction", ReactionsController],
   ["/api/newsapi", NewsAPIController],
+  ["/api/chatbot", ChatbotController],
 ];
 
 export const routes = (app: Application): void => {
