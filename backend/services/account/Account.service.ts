@@ -12,6 +12,7 @@ import MailService from "../mail/MailService";
 import RefreshTokenDbModel from "../../models/RefreshToken.model";
 import UserDbModel from "../../models/Users.model";
 import UserRoleDbModel from "../../models/UserRole.model";
+import RoleDbModel from "../../models/Role.model";
 
 export const AccountService = {
   register: async (data: any) => {
@@ -27,18 +28,43 @@ export const AccountService = {
       }
       // Hash password
       const hashedPassword = await hashPassword(password);
+
+      // Create the new user
       const newUser = await UserDbModel.query().insert({
         email,
         name: email.split("@")[0],
         password: hashedPassword,
       });
+
+      // Get the registered role (or create it if it doesn't exist)
+      let registeredRole = await RoleDbModel.query().findOne({
+        name: "registered",
+      });
+
+      if (!registeredRole) {
+        // Create the registered role if it doesn't exist
+        registeredRole = await RoleDbModel.query().insert({
+          name: "registered",
+          description: "Regular user with limited access",
+        });
+      }
+
+      // Assign the registered role to the new user
+      await UserRoleDbModel.query().insert({
+        user_id: newUser.id,
+        role_id: registeredRole.id,
+      });
+
       const userViewModel = {
         UserId: newUser.id,
         Email: newUser.email,
         UserName: newUser.name,
+        Role: "registered",
       };
+
       return ok({ user: userViewModel });
     } catch (error) {
+      console.error("Registration error:", error);
       return failure({ error }, StatusCodeEnums.UNPROCESSABLE_ENTITY);
     }
   },

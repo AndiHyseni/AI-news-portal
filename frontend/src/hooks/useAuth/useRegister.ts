@@ -8,7 +8,7 @@ import { endNotification, startNotification } from "../../utils/notifications";
 import { generateRandomString } from "../../utils/randomString";
 
 export const useRegister = () => {
-  const [, setUserContext] = useContext(UserContext);
+  // const [, setUserContext] = useContext(UserContext);
   const randomId = generateRandomString(20);
 
   return useMutation((payload: RegisterRequest) => register(payload), {
@@ -16,15 +16,25 @@ export const useRegister = () => {
       startNotification(randomId);
     },
     onSuccess: (data) => {
-      endNotification(randomId, i18n.t("Successed"), true);
+      endNotification(
+        randomId,
+        i18n.t("Registration successful! Please log in."),
+        true
+      );
 
-      setUserContext({
-        isAuthenticated: true,
-        token: data.token,
-      });
+      // Remove automatic authentication after registration
+      // Let the user explicitly log in after registration
+      // setUserContext({
+      //   isAuthenticated: true,
+      //   token: data.token,
+      // });
     },
     onError: () => {
-      endNotification(randomId, i18n.t("Something went wrong!"), false);
+      endNotification(
+        randomId,
+        i18n.t("Registration failed. Please try again."),
+        false
+      );
     },
   });
 };

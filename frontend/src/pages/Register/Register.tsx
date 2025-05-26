@@ -3,6 +3,7 @@ import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { useNavigate } from "react-router-dom";
 import { useConfiguration } from "../../hooks/useConfiguration/useConfiguration";
+import { toast } from "react-toastify";
 import "../Register/Register.css";
 
 export interface RegisterProps {
@@ -57,13 +58,42 @@ export const Register: React.FC<RegisterProps> = ({ mutation }) => {
   });
 
   const handleSubmit = () => {
+    // Show loading toast
+    const loadingToastId = toast.loading("Creating your account...");
+
     mutation.mutate(
       {
         ...form.values,
       },
       {
         onSuccess: () => {
-          navigate("/login");
+          // Update toast to success
+          toast.update(loadingToastId, {
+            render: "Registration successful! Redirecting to login...",
+            type: "success",
+            isLoading: false,
+            autoClose: 3000,
+          });
+
+          // Reset form
+          form.reset();
+
+          // Navigate to login after a short delay to allow the user to see the success message
+          setTimeout(() => {
+            navigate("/login");
+          }, 2000);
+        },
+        onError: (error: any) => {
+          // Handle error - update toast
+          const errorMessage =
+            error?.response?.data?.message ||
+            "Registration failed. Please try again.";
+          toast.update(loadingToastId, {
+            render: errorMessage,
+            type: "error",
+            isLoading: false,
+            autoClose: 5000,
+          });
         },
       }
     );
@@ -107,7 +137,12 @@ export const Register: React.FC<RegisterProps> = ({ mutation }) => {
             onVisibilityChange={toggle}
             size="md"
           />
-          <Button className="registerButton" type="submit" size="md">
+          <Button
+            className="registerButton"
+            type="submit"
+            size="md"
+            loading={mutation.isLoading}
+          >
             Register
           </Button>
         </Stack>

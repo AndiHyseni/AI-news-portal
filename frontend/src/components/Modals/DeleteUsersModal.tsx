@@ -77,7 +77,7 @@ export const DeleteUsersModal: React.FC<DeleteUsersModalProps> = ({
             onClick={handleSubmit}
             loading={mutation.isLoading}
           >
-            Remove Admin Rights
+            Remove User
           </Button>
         </div>
       </Box>

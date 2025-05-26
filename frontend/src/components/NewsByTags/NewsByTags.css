@@ -1,7 +1,8 @@
 .newsByTags-container {
   padding: 40px 30px;
-  max-width: 1200px;
-  margin: 0 auto;
+  max-width: 1600px;
+  margin: 20px 0 20px 0;
+  place-self: center;
   background-color: white;
   border-radius: 16px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);

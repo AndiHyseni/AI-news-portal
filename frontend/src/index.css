@@ -102,7 +102,7 @@ select:focus {
 .mantine-Container-root {
   padding-left: 16px !important;
   padding-right: 16px !important;
-  max-width: 1200px !important;
+  max-width: 1600px !important;
   margin-left: auto !important;
   margin-right: auto !important;
 }
@@ -111,7 +111,8 @@ select:focus {
 .mantine-15pjuqq {
   padding-left: 16px !important;
   padding-right: 16px !important;
-  max-width: 1200px !important;
+  max-width: 1600px !important;
+  margin: 20px 0 20px 0;
   margin-left: auto !important;
   margin-right: auto !important;
 }

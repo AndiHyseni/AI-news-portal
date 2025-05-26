@@ -85,7 +85,7 @@ export const UsersTable: React.FC<TableProps> = ({
                     <Avatar
                       radius="xl"
                       size="sm"
-                      color={user.role === "Admin" ? "violet" : "blue"}
+                      color={user.role.includes("admin") ? "violet" : "blue"}
                     >
                       {user.name.substring(0, 2).toUpperCase()}
                     </Avatar>
@@ -97,36 +97,33 @@ export const UsersTable: React.FC<TableProps> = ({
                 </td>
                 <td>
                   <Badge
-                    color={user.role === "Admin" ? "violet" : "blue"}
+                    color={user.role.includes("admin") ? "violet" : "blue"}
                     variant="light"
                   >
                     {user.role}
                   </Badge>
                 </td>
-                <td>
-                  {user.role === "Admin" ? (
-                    <ActionIcon
-                      color="red"
-                      variant="light"
-                      onClick={() => onDeleteUsers(user)}
-                      radius="md"
-                      size="lg"
-                      title="Remove Admin"
-                    >
-                      <UserX size={18} />
-                    </ActionIcon>
-                  ) : (
-                    <ActionIcon
-                      color="green"
-                      variant="light"
-                      onClick={() => onEditUser(user)}
-                      radius="md"
-                      size="lg"
-                      title="Make Admin"
-                    >
-                      <UserCheck size={18} />
-                    </ActionIcon>
-                  )}
+                <td style={{ display: "flex", gap: "10px" }}>
+                  <ActionIcon
+                    color="green"
+                    variant="light"
+                    onClick={() => onEditUser(user)}
+                    radius="md"
+                    size="lg"
+                    title="Edit User"
+                  >
+                    <UserCheck size={18} />
+                  </ActionIcon>
+                  <ActionIcon
+                    color="red"
+                    variant="light"
+                    onClick={() => onDeleteUsers(user)}
+                    radius="md"
+                    size="lg"
+                    title="Remove User"
+                  >
+                    <UserX size={18} />
+                  </ActionIcon>
                 </td>
               </tr>
             ))}

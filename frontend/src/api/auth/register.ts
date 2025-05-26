@@ -6,7 +6,7 @@ import { axiosInstance } from "../config";
 
 export const register = async (payload: RegisterPayload) => {
   const { data } = await axiosInstance.post<LoginResponse>(
-    `${BaseUrl.DEVELOPMENT}/${REGISTER.REGISTER}`,
+    `${BaseUrl.DEVELOPMENT}/Account/${REGISTER.REGISTER}`,
     payload
   );
   return data;

@@ -10,5 +10,6 @@ export const AccountValidator = Joi.object({
     .label("Email"),
   password: Joi.string().trim().min(8).required().label("Password"),
   password_hash: Joi.string().trim().min(8).label("Password"),
+  confirmPassword: Joi.any(),
   role: Joi.any(),
 });

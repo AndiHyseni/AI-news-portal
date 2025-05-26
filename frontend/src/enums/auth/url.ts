@@ -1,5 +1,5 @@
 export enum REGISTER {
-  REGISTER = "account",
+  REGISTER = "register",
 }
 
 export enum LOGIN {
