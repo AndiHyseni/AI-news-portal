@@ -176,3 +176,27 @@
     bottom: 10px;
   }
 }
+
+.news-articles-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.news-article-card {
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background-color: white;
+  border: 1px solid #eaeaea;
+}
+
+.news-article-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.message.bot .news-article-card {
+  max-width: 100%;
+  margin-bottom: 8px;
+}

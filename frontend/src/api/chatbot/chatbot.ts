@@ -5,9 +5,27 @@ interface ChatbotMessage {
   message: string;
 }
 
-interface ChatbotResponse {
-  response: string;
+interface Article {
+  id: string;
+  title: string;
+  subtitle?: string;
+  imageUrl?: string;
 }
+
+interface NewsResponse {
+  type: "news";
+  message: string;
+  articles: Article[];
+}
+
+interface TextResponse {
+  type: "text";
+  message: string;
+}
+
+type ChatbotResponse = {
+  response: NewsResponse | TextResponse;
+};
 
 export const sendChatbotMessage = async (
   message: string

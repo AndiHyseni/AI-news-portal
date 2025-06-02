@@ -8,26 +8,43 @@ import {
   Avatar,
   Group,
   ActionIcon,
+  Card,
+  Image,
 } from "@mantine/core";
 import { Send, X, Robot } from "tabler-icons-react";
 import { toast } from "react-toastify";
 import { sendChatbotMessage } from "../../api/chatbot/chatbot";
+import { useNavigate } from "react-router-dom";
 import "./Chatbot.css";
 
 interface Message {
   id: string;
-  text: string;
+  content: {
+    type: "text" | "news";
+    message: string;
+    articles?: Array<{
+      id: string;
+      title: string;
+      subtitle?: string;
+      imageUrl?: string;
+    }>;
+  };
   isUser: boolean;
   timestamp: Date;
 }
 
 export const Chatbot: React.FC = () => {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
-      text: "Hello! I'm your AI assistant. How can I help you with news today?",
+      content: {
+        type: "text",
+        message:
+          "Hello! I'm your AI assistant. How can I help you with news today?",
+      },
       isUser: false,
       timestamp: new Date(),
     },
@@ -37,7 +54,6 @@ export const Chatbot: React.FC = () => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    // Scroll to bottom when messages change
     if (scrollAreaRef.current) {
       scrollAreaRef.current.scrollTo({
         top: scrollAreaRef.current.scrollHeight,
@@ -46,7 +62,6 @@ export const Chatbot: React.FC = () => {
     }
   }, [messages]);
 
-  // Focus input when chat opens
   useEffect(() => {
     if (isOpen && inputRef.current) {
       setTimeout(() => {
@@ -58,10 +73,12 @@ export const Chatbot: React.FC = () => {
   const handleSendMessage = async () => {
     if (!message.trim()) return;
 
-    // Add user message
     const userMessage: Message = {
       id: Date.now().toString(),
-      text: message,
+      content: {
+        type: "text",
+        message: message,
+      },
       isUser: true,
       timestamp: new Date(),
     };
@@ -71,13 +88,11 @@ export const Chatbot: React.FC = () => {
     setIsLoading(true);
 
     try {
-      // Call API to get response
       const data = await sendChatbotMessage(message.trim());
 
-      // Add bot response
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: data.response || "I'm sorry, I couldn't process your request.",
+        content: data.response,
         isUser: false,
         timestamp: new Date(),
       };
@@ -87,10 +102,13 @@ export const Chatbot: React.FC = () => {
       console.error("Error fetching chatbot response:", error);
       toast.error("Failed to get a response. Please try again later.");
 
-      // Add error message from bot
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: "I'm having trouble connecting right now. Please try again later.",
+        content: {
+          type: "text",
+          message:
+            "I'm having trouble connecting right now. Please try again later.",
+        },
         isUser: false,
         timestamp: new Date(),
       };
@@ -112,28 +130,54 @@ export const Chatbot: React.FC = () => {
     return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
 
-  // Mock responses for now - will be replaced with actual API call
-  const getMockResponse = (userMessage: string) => {
-    const lowerCaseMessage = userMessage.toLowerCase();
-    if (lowerCaseMessage.includes("hello") || lowerCaseMessage.includes("hi")) {
-      return "Hello! How can I assist you with news today?";
-    } else if (lowerCaseMessage.includes("latest news")) {
-      return "Our latest headlines include updates on technology, politics, sports, and health. What topic are you interested in?";
-    } else if (lowerCaseMessage.includes("sport")) {
-      return "Our top sports stories today include major league updates, tournament results, and athlete interviews. Would you like me to find specific sports news for you?";
-    } else if (
-      lowerCaseMessage.includes("tech") ||
-      lowerCaseMessage.includes("technology")
-    ) {
-      return "Today's technology news features new product launches, industry trends, and innovation stories. Any specific technology topic you'd like to know more about?";
-    } else {
-      return "I understand you're asking about that. Let me help you find relevant articles on our site. You can also browse news by category using our main navigation menu.";
+  const handleArticleClick = (articleId: string) => {
+    navigate(`/news/${articleId}`);
+    setIsOpen(false);
+  };
+
+  const renderMessage = (msg: Message) => {
+    if (msg.content.type === "news" && msg.content.articles) {
+      return (
+        <>
+          <Text size="sm" mb="sm">
+            {msg.content.message}
+          </Text>
+          <div className="news-articles-container">
+            {msg.content.articles.map((article, index) => (
+              <Card
+                key={article.id}
+                className="news-article-card"
+                onClick={() => handleArticleClick(article.id)}
+              >
+                {article.imageUrl && (
+                  <Card.Section>
+                    <Image
+                      src={article.imageUrl}
+                      height={120}
+                      alt={article.title}
+                    />
+                  </Card.Section>
+                )}
+                <Text size="sm" weight={500} lineClamp={2}>
+                  {article.title}
+                </Text>
+                {article.subtitle && (
+                  <Text size="xs" color="dimmed" lineClamp={1}>
+                    {article.subtitle}
+                  </Text>
+                )}
+              </Card>
+            ))}
+          </div>
+        </>
+      );
     }
+
+    return <Text size="sm">{msg.content.message}</Text>;
   };
 
   return (
     <>
-      {/* Chat button */}
       <div className="chatbot-button-container">
         <Button
           className="chatbot-button"
@@ -146,7 +190,6 @@ export const Chatbot: React.FC = () => {
         </Button>
       </div>
 
-      {/* Chat modal */}
       {isOpen && (
         <div className="chatbot-modal">
           <Paper shadow="md" radius="md" className="chatbot-container">
@@ -176,7 +219,7 @@ export const Chatbot: React.FC = () => {
                   }`}
                 >
                   <div className={`message ${msg.isUser ? "user" : "bot"}`}>
-                    <Text size="sm">{msg.text}</Text>
+                    {renderMessage(msg)}
                     <Text size="xs" color="dimmed" className="message-time">
                       {formatTime(msg.timestamp)}
                     </Text>
