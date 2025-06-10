@@ -59,99 +59,121 @@ ul.nav-menu-collapsed {
   color: #fff;
 }
 
+.category-page-title {
+  color: #2c3e50;
+  position: relative;
+  padding-bottom: 10px;
+}
+
 .category-page-title::after {
-  justify-self: anchor-center;
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 4px;
+  background: #6366f1;
+  border-radius: 2px;
 }
 
 /* Dashboard styling */
 .dashboard {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  margin: 0 auto;
-  margin-top: 20px;
+  padding: 15px;
 }
 
 .raports {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 40px;
-  flex-wrap: wrap;
+  margin-bottom: 15px;
 }
 
 .raportBox {
-  flex: 1;
-  min-width: 280px;
-  border: none;
-  border-radius: 16px;
+  height: 100%;
   padding: 20px;
-  background-color: white;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  overflow: hidden;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  border: 1px solid #e2e8f0;
+  background: white;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  cursor: pointer;
 }
 
 .raportBox:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 12px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.image-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15px;
+  padding: 15px;
+  background: #f8fafc;
+  border-radius: 10px;
+  transition: all 0.3s ease;
 }
 
 .boxTitle {
-  color: #26145c;
-  font-size: 22px;
-  font-weight: 700;
-  margin-top: 15px;
-  margin-bottom: 10px;
-  text-align: center;
+  font-size: 1.2rem;
+  color: #1e293b;
+  margin: 10px 0 8px;
+  font-weight: 600;
 }
 
 .boxParagraph {
-  color: #333;
-  font-size: 18px;
+  color: #64748b;
+  font-size: 1rem;
+  margin: 0;
+  padding: 3px 0;
   font-weight: 500;
-  text-align: center;
-  margin-bottom: 0;
 }
 
-/* Responsive styling */
-@media (max-width: 980px) {
+/* Add gradient backgrounds for different sections */
+.raportBox:nth-child(1) {
+  background: linear-gradient(145deg, #ffffff, #f0f9ff);
+}
+
+.raportBox:nth-child(2) {
+  background: linear-gradient(145deg, #ffffff, #fdf2f8);
+}
+
+.raportBox:nth-child(3) {
+  background: linear-gradient(145deg, #ffffff, #f0fdf4);
+}
+
+/* Statistics Cards */
+.stat-card {
+  background: white;
+  transition: all 0.3s ease;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
   .dashboard {
-    padding: 30px 20px;
-    border-radius: 14px;
+    padding: 10px;
   }
 
   .raportBox {
-    min-width: 240px;
     padding: 15px;
   }
 
   .boxTitle {
-    font-size: 20px;
-  }
-}
-
-@media (max-width: 768px) {
-  .dashboard {
-    padding: 25px 15px;
-    border-radius: 12px;
-  }
-
-  .raports {
-    flex-direction: column;
-    margin-bottom: 30px;
-  }
-
-  .raportBox {
-    width: 100%;
-    min-width: unset;
-    margin-bottom: 15px;
-  }
-
-  .boxTitle {
-    font-size: 18px;
+    font-size: 1.25rem;
   }
 
   .boxParagraph {
-    font-size: 16px;
+    font-size: 1rem;
+  }
+
+  .stat-card {
+    padding: 15px;
   }
 }
