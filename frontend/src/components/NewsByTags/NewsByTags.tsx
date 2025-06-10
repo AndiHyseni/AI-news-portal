@@ -1,10 +1,12 @@
-import { Image, Title, Text, Grid } from "@mantine/core";
-import { useEffect, useContext } from "react";
+import { Grid, Image, Container, Title, Box, Group, Text } from "@mantine/core";
+import { DateRangePicker } from "@mantine/dates";
+import { useState, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { addViews } from "../../api/administration/administration";
 import { AddViewModel } from "../../types/administration/administration";
 import { News } from "../../types/news/news";
 import { UserContext } from "../../contexts/UserContext";
+import { SearchBar } from "../SearchBar/SearchBar";
 import "../NewsByTags/NewsByTags.css";
 
 export interface NewsByTagsProps {
@@ -15,6 +17,14 @@ export const NewsByTagsC: React.FC<NewsByTagsProps> = ({ news }) => {
   const { tags } = useParams();
   const navigate = useNavigate();
   const [userContext] = useContext(UserContext);
+  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
+    null,
+    null,
+  ]);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Ensure news is an array
+  const newsArray = Array.isArray(news) ? news : [];
 
   const addView = (newsId: string) => {
     const model: AddViewModel = {
@@ -26,9 +36,6 @@ export const NewsByTagsC: React.FC<NewsByTagsProps> = ({ news }) => {
     addViews(model);
   };
 
-  // Ensure news is an array
-  const newsArray = Array.isArray(news) ? news : [];
-
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-GB", {
@@ -38,49 +45,97 @@ export const NewsByTagsC: React.FC<NewsByTagsProps> = ({ news }) => {
     });
   };
 
-  return (
-    <div className="newsByTags-container">
-      <Title className="newsByTags-header">News tagged with "{tags}"</Title>
+  // Filter news by date range and search query
+  const filteredNews = newsArray.filter((newsItem) => {
+    const matchesSearch =
+      !searchQuery.trim() ||
+      newsItem.title.toLowerCase().includes(searchQuery.toLowerCase().trim());
+    if (!matchesSearch) return false;
 
-      {newsArray.length > 0 ? (
-        <Grid gutter={25}>
-          {newsArray.map((newsItem, index) => (
-            <Grid.Col xs={12} sm={6} md={4} key={index}>
-              <div className="newsByTagsBox">
-                <div className="image-container">
-                  <Image
-                    className="newsByTagsImage"
-                    src={newsItem.image}
-                    alt={newsItem.title}
+    if (dateRange[0] && dateRange[1]) {
+      const newsDate = new Date(newsItem.created_at);
+      return newsDate >= dateRange[0] && newsDate <= dateRange[1];
+    }
+    return true;
+  });
+
+  return (
+    <div className="newsByTags">
+      <Container size="xl">
+        <Box mb={30}>
+          <Title order={1} className="tags-page-title">
+            News tagged with "{tags}"
+          </Title>
+        </Box>
+
+        <Box mb={30} className="filters-container">
+          <Group position="left" align="flex-end" spacing="lg">
+            <div className="filter-group">
+              <Text size="sm" weight={500}>
+                Search:
+              </Text>
+              <SearchBar
+                value={searchQuery}
+                onChange={setSearchQuery}
+                placeholder="Search in tagged news..."
+              />
+            </div>
+            <div className="filter-group">
+              <Text size="sm" weight={500}>
+                Filter by Date:
+              </Text>
+              <DateRangePicker
+                value={dateRange}
+                onChange={setDateRange}
+                clearable
+                placeholder="Pick date range"
+                style={{ minWidth: 300 }}
+              />
+            </div>
+          </Group>
+        </Box>
+
+        {filteredNews.length > 0 ? (
+          <Grid gutter={25}>
+            {filteredNews.map((newsItem, index) => (
+              <Grid.Col xs={12} sm={6} md={4} key={index}>
+                <div className="newsByTagsBox">
+                  <div className="image-container">
+                    <Image
+                      className="newsByTagsImage"
+                      src={newsItem.image}
+                      alt={newsItem.title}
+                      onClick={() => {
+                        addView(newsItem.id);
+                        navigate(`/news/${newsItem.id}`);
+                      }}
+                      fit="cover"
+                    />
+                  </div>
+                  <div
+                    className="newsByTagsTitle"
                     onClick={() => {
                       addView(newsItem.id);
                       navigate(`/news/${newsItem.id}`);
                     }}
-                    fit="cover"
-                  />
-                  {/* <div className="category-label">{tags}</div> */}
+                  >
+                    {newsItem.title}
+                  </div>
+                  <div className="news-date">
+                    {formatDate(newsItem.created_at)}
+                  </div>
                 </div>
-                <div
-                  className="newsByTagsTitle"
-                  onClick={() => {
-                    addView(newsItem.id);
-                    navigate(`/news/${newsItem.id}`);
-                  }}
-                >
-                  {newsItem.title}
-                </div>
-                <div className="news-date">
-                  {formatDate(newsItem.created_at)}
-                </div>
-              </div>
-            </Grid.Col>
-          ))}
-        </Grid>
-      ) : (
-        <div className="newsByTags-empty">
-          <Text size="lg">No news found for tag "{tags}"</Text>
-        </div>
-      )}
+              </Grid.Col>
+            ))}
+          </Grid>
+        ) : (
+          <div className="no-results">
+            <Text size="lg" color="dimmed">
+              No news found for tag "{tags}" with the selected filters
+            </Text>
+          </div>
+        )}
+      </Container>
     </div>
   );
 };

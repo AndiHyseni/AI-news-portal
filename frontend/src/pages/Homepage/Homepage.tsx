@@ -5,6 +5,7 @@ import { useNews } from "../../hooks/useNews/useNews";
 import "./Homepage.css";
 import { SiteNewsOnPage } from "../../components/SiteNewsOnPage/SiteNewsOnPage";
 import { MostWatchedNews } from "../../components/MostWatchedNews/MostWatchedNews";
+import { NewsByCategories } from "../../components/NewsByCategories/NewsByCategories";
 import { useCategories } from "../../hooks/useCategories/useCategories";
 import { useConfiguration } from "../../hooks/useConfiguration/useConfiguration";
 
@@ -43,6 +44,15 @@ export const Homepage: React.FC = () => {
                 Most Watched
               </Title>
               {newsData && <MostWatchedNews mostwatched={newsData} />}
+            </div>
+          )}
+
+          {categories && newsData && (
+            <div className="homepage-section">
+              <Title order={2} className="homepage-title">
+                News by Categories
+              </Title>
+              <NewsByCategories news={newsData} categories={categories} />
             </div>
           )}
         </div>

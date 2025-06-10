@@ -1,0 +1,140 @@
+.news-by-categories {
+  margin-top: 2rem;
+}
+
+.category-section {
+  margin-bottom: 3rem;
+}
+
+.category-section:last-child {
+  margin-bottom: 0;
+}
+
+.category-title {
+  font-size: 1.5rem;
+  color: #26145c;
+  font-weight: 600;
+  position: relative;
+  padding-left: 1rem;
+}
+
+.category-title::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 24px;
+  background: linear-gradient(135deg, #4b21b0 0%, #2e1470 100%);
+  border-radius: 2px;
+}
+
+.view-all {
+  color: #4b21b0;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  background-color: rgba(75, 33, 176, 0.1);
+}
+
+.view-all:hover {
+  color: #2e1470;
+  background-color: rgba(75, 33, 176, 0.15);
+}
+
+.news-card {
+  height: 100%;
+  overflow: hidden;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  background-color: white;
+}
+
+.news-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+}
+
+.news-image-container {
+  position: relative;
+  overflow: hidden;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.news-image {
+  transition: transform 0.5s ease;
+  cursor: pointer;
+}
+
+.news-card:hover .news-image {
+  transform: scale(1.05);
+}
+
+.news-content {
+  padding: 1rem;
+}
+
+.news-title {
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.4;
+  margin-bottom: 0.5rem;
+  color: #333;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.news-title:hover {
+  color: #4b21b0;
+}
+
+.news-date {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.news-date::before {
+  content: "🕒";
+  font-size: 0.875rem;
+}
+
+/* Responsive styles */
+@media (max-width: 992px) {
+  .category-title {
+    font-size: 1.25rem;
+  }
+
+  .news-title {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .category-section {
+    margin-bottom: 2rem;
+  }
+
+  .news-content {
+    padding: 0.75rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .category-title {
+    font-size: 1.125rem;
+  }
+
+  .view-all {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.875rem;
+  }
+}

@@ -35,30 +35,35 @@ export const Navbar: React.FC<CategoriesProps> = ({
     window.location.reload();
   };
 
+  const handleLogoClick = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+    navigate("/");
+  };
+
   return (
     <div className="navbar">
       <div className="navbar-logo">
-        <Link to="/">
+        <Link to="/" onClick={handleLogoClick}>
           <Image src={data?.header_logo} height={45} width={45} radius="md" />
         </Link>
       </div>
 
-      {/* Only show categories if user is not an admin */}
-      {!isAdmin && (
-        <div className="navbar-links">
-          {categoriesArray
-            .filter((category: Categories) => Boolean(category.show_online))
-            .map((category: Categories, index: number) => (
-              <NavLink
-                key={index}
-                to={`/category/${category.id}`}
-                className={({ isActive }) => (isActive ? "active" : "")}
-              >
-                <div className="navbarItem">{category.name}</div>
-              </NavLink>
-            ))}
-        </div>
-      )}
+      <div className="navbar-links">
+        {categoriesArray
+          .filter((category: Categories) => Boolean(category.show_online))
+          .map((category: Categories, index: number) => (
+            <NavLink
+              key={index}
+              to={`/category/${category.id}`}
+              className={({ isActive }) => (isActive ? "active" : "")}
+            >
+              <div className="navbarItem">{category.name}</div>
+            </NavLink>
+          ))}
+      </div>
 
       {userContext.isAuthenticated ? (
         <div className="loginNavbar">

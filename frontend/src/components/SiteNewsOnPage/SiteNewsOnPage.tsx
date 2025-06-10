@@ -1,4 +1,5 @@
-import { Button, Image, Select, Container, Title, Text } from "@mantine/core";
+import { Button, Image, Select, Container, Text, Group } from "@mantine/core";
+import { DateRangePicker } from "@mantine/dates";
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Clock } from "tabler-icons-react";
@@ -7,6 +8,7 @@ import { AddViewModel } from "../../types/administration/administration";
 import { Categories } from "../../types/categories/categories";
 import { News } from "../../types/news/news";
 import { UserContext } from "../../contexts/UserContext";
+import { SearchBar } from "../SearchBar/SearchBar";
 import "../SiteNewsOnPage/SiteNewsOnPage.css";
 
 type NewsResponse = News[] | { news: News[] };
@@ -32,6 +34,14 @@ export const SiteNewsOnPage: React.FC<NewsProps> = ({
     SortOption.NewestFirst
   );
   const [showAllNews, setShowAllNews] = useState<boolean>(false);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(
+    "all"
+  );
+  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
+    null,
+    null,
+  ]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [userContext] = useContext(UserContext);
 
   // Ensure homenews is an array and handle the data structure
@@ -68,7 +78,25 @@ export const SiteNewsOnPage: React.FC<NewsProps> = ({
     });
   };
 
-  const sortedNews = [...newsArray].sort((a, b) => {
+  // Filter news based on selected category, date range, and search query
+  const filteredNews = newsArray.filter((news) => {
+    const matchesCategory =
+      selectedCategory === "all" || news.category_id === selectedCategory;
+
+    const matchesSearch =
+      !searchQuery.trim() ||
+      news.title.toLowerCase().includes(searchQuery.toLowerCase().trim());
+
+    const newsDate = new Date(news.created_at);
+    const matchesDateRange =
+      !dateRange[0] ||
+      !dateRange[1] ||
+      (newsDate >= dateRange[0] && newsDate <= dateRange[1]);
+
+    return matchesCategory && matchesDateRange && matchesSearch;
+  });
+
+  const sortedNews = [...filteredNews].sort((a, b) => {
     if (sortOption === SortOption.NewestFirst) {
       return (
         new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
@@ -89,90 +117,150 @@ export const SiteNewsOnPage: React.FC<NewsProps> = ({
     setShowAllNews(!showAllNews);
   };
 
+  // Prepare categories for select dropdown
+  const categoryOptions = [
+    { value: "all", label: "All Categories" },
+    ...categoriesArray.map((cat) => ({
+      value: cat.id,
+      label: cat.name,
+    })),
+  ];
+
   return (
     <Container size="xl" px="xs" className="sitepage">
-      <div className="sort-container">
-        <div className="selectLabel">
-          <Text className="Shiko">Sort by:</Text>
-          <Select
-            className="selectList"
-            value={sortOption}
-            onChange={(value) => setSortOption(value as SortOption)}
-            data={[
-              { label: "Newest", value: SortOption.NewestFirst },
-              { label: "Oldest", value: SortOption.OldestFirst },
-              { label: "Most Watched", value: SortOption.MostWatched },
-            ]}
-          />
-        </div>
+      <div className="filters-container">
+        <Group spacing="md" align="flex-end">
+          <div className="filter-group">
+            <Text size="sm" weight={500}>
+              Search:
+            </Text>
+            <SearchBar
+              value={searchQuery}
+              onChange={setSearchQuery}
+              placeholder="Search in latest news..."
+            />
+          </div>
+
+          <div className="filter-group">
+            <Text size="sm" weight={500}>
+              Category:
+            </Text>
+            <Select
+              value={selectedCategory}
+              onChange={setSelectedCategory}
+              data={categoryOptions}
+              clearable={false}
+              style={{ minWidth: 200 }}
+            />
+          </div>
+
+          <div className="filter-group">
+            <Text size="sm" weight={500}>
+              Date Range:
+            </Text>
+            <DateRangePicker
+              value={dateRange}
+              onChange={setDateRange}
+              clearable
+              placeholder="Pick date range"
+              style={{ minWidth: 300 }}
+            />
+          </div>
+
+          <div className="filter-group">
+            <Text size="sm" weight={500}>
+              Sort by:
+            </Text>
+            <Select
+              value={sortOption}
+              onChange={(value) => setSortOption(value as SortOption)}
+              data={[
+                { label: "Newest", value: SortOption.NewestFirst },
+                { label: "Oldest", value: SortOption.OldestFirst },
+                { label: "Most Watched", value: SortOption.MostWatched },
+              ]}
+              style={{ minWidth: 150 }}
+            />
+          </div>
+        </Group>
       </div>
 
       <div className="divRead">
         <div className="divReklama">
-          {visibleNews.map((news: News, index: number) => (
-            <div key={index} className="sitediv">
-              <div className="siteimage-container">
-                <Image
-                  src={news.image}
-                  className="siteimage"
-                  onClick={() => handleNewsClick(news.id)}
-                  alt={news.title}
-                  fit="cover"
-                  height={268}
-                />
-              </div>
-              <div className="site">
-                <h2
-                  className="sitetitle"
-                  onClick={() => handleNewsClick(news.id)}
-                >
-                  {news.title}
-                </h2>
-                {news.summary && (
-                  <p className="site-summary">
-                    {news.summary.length > 150
-                      ? `${news.summary.substring(0, 150)}...`
-                      : news.summary}
-                  </p>
-                )}
-                <div className="sitep">
-                  {categoriesArray
-                    .filter((x: Categories) => x.id === news.category_id)
-                    .map((category: Categories, index: number) => (
-                      <span
-                        key={index}
-                        className="sitec"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          navigate(`/category/${category.id}`);
-                        }}
-                      >
-                        {category.name}
-                      </span>
-                    ))}
-                  <span
-                    style={{
-                      marginLeft: "auto",
-                      fontSize: "13px",
-                      color: "#666",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "5px",
-                    }}
+          {visibleNews.length > 0 ? (
+            visibleNews.map((news, index) => (
+              <div key={index} className="sitediv">
+                <div className="siteimage-container">
+                  <Image
+                    src={news.image}
+                    className="siteimage"
+                    onClick={() => handleNewsClick(news.id)}
+                    alt={news.title}
+                    fit="cover"
+                    height={268}
+                  />
+                </div>
+                <div className="site">
+                  <h2
+                    className="sitetitle"
+                    onClick={() => handleNewsClick(news.id)}
                   >
-                    <Clock size={14} strokeWidth={1.5} />
-                    {formatDate(news.created_at)}
-                  </span>
+                    {news.title}
+                  </h2>
+                  {news.summary && (
+                    <p className="site-summary">
+                      {news.summary.length > 150
+                        ? `${news.summary.substring(0, 150)}...`
+                        : news.summary}
+                    </p>
+                  )}
+                  <div className="sitep">
+                    {categoriesArray
+                      .filter((x: Categories) => x.id === news.category_id)
+                      .map((category: Categories, index: number) => (
+                        <span
+                          key={index}
+                          className="sitec"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(`/category/${category.id}`);
+                          }}
+                        >
+                          {category.name}
+                        </span>
+                      ))}
+                    <span
+                      style={{
+                        marginLeft: "auto",
+                        fontSize: "13px",
+                        color: "#666",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "5px",
+                      }}
+                    >
+                      <Clock size={14} strokeWidth={1.5} />
+                      {formatDate(news.created_at)}
+                    </span>
+                  </div>
                 </div>
               </div>
+            ))
+          ) : (
+            <div className="no-results">
+              <Text size="lg" color="dimmed">
+                No news articles found matching the selected filters
+              </Text>
             </div>
-          ))}
+          )}
 
-          <div className="button-container">
-            <Button onClick={toggleShowAllNews} className="show-more-button">
-              {showAllNews ? "Show Less" : "Show More"}
-            </Button>
-          </div>
+          {sortedNews.length > 10 && (
+            <div className="button-container">
+              <Button onClick={toggleShowAllNews} className="show-more-button">
+                {showAllNews ? "Show Less" : "Show More"}
+              </Button>
+            </div>
+          )}
         </div>
 
         <div className="ads-container">

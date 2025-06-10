@@ -1,5 +1,15 @@
-import { Image, SimpleGrid, Container, Paper, Title, Box } from "@mantine/core";
-import { useState, useEffect, useContext } from "react";
+import {
+  Image,
+  SimpleGrid,
+  Container,
+  Paper,
+  Title,
+  Box,
+  Group,
+  Text,
+} from "@mantine/core";
+import { DateRangePicker } from "@mantine/dates";
+import { useState, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { addViews } from "../../api/administration/administration";
 import { AddViewModel } from "../../types/administration/administration";
@@ -7,6 +17,7 @@ import { News } from "../../types/news/news";
 import { UserContext } from "../../contexts/UserContext";
 import "../NewsByCategory/NewsByCategory.css";
 import { Categories } from "../../types/categories/categories";
+import { SearchBar } from "../SearchBar/SearchBar";
 
 export interface NewsByCategoryProps {
   news: News[] | { news: News[] };
@@ -18,8 +29,11 @@ export const NewsByCategoryC: React.FC<NewsByCategoryProps> = ({
   categories,
 }) => {
   const { categoryId } = useParams();
-  const [selectedCategory, setSelectedCategory] = useState<string>("All");
-  const [filteredNews, setFilteredNews] = useState<News[]>([]);
+  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
+    null,
+    null,
+  ]);
+  const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
   const [userContext] = useContext(UserContext);
 
@@ -32,22 +46,6 @@ export const NewsByCategoryC: React.FC<NewsByCategoryProps> = ({
   const categoriesArray = Array.isArray(categories)
     ? categories
     : (categories as { categories: Categories[] }).categories || [];
-
-  useEffect(() => {
-    if (selectedCategory === "All") {
-      setFilteredNews(newsArray);
-    } else {
-      // Filter news by categoryId matching the selectedCategory
-      setFilteredNews(
-        newsArray.filter((item) => {
-          const category = categoriesArray.find(
-            (cat) => cat.id === item.category_id
-          );
-          return category?.name === selectedCategory;
-        })
-      );
-    }
-  }, [selectedCategory, newsArray, categoriesArray]);
 
   const addView = (newsId: string) => {
     const model: AddViewModel = {
@@ -81,6 +79,24 @@ export const NewsByCategoryC: React.FC<NewsByCategoryProps> = ({
     });
   };
 
+  // Filter news by category, date range, and search query
+  const filteredNews = newsArray.filter((x) => {
+    const matchesCategory = x.category_id === String(categoryId);
+    if (!matchesCategory) return false;
+
+    const matchesSearch =
+      !searchQuery.trim() ||
+      x.title.toLowerCase().includes(searchQuery.toLowerCase().trim());
+    if (!matchesSearch) return false;
+
+    if (dateRange[0] && dateRange[1]) {
+      const newsDate = new Date(x.created_at);
+      return newsDate >= dateRange[0] && newsDate <= dateRange[1];
+    }
+
+    return true;
+  });
+
   const currentCategoryName = getCategoryName(categoryId || "");
 
   return (
@@ -92,18 +108,44 @@ export const NewsByCategoryC: React.FC<NewsByCategoryProps> = ({
           </Title>
         </Box>
 
-        <SimpleGrid
-          cols={3}
-          spacing="xl"
-          breakpoints={[
-            { maxWidth: 1200, cols: 3, spacing: "md" },
-            { maxWidth: 980, cols: 2, spacing: "md" },
-            { maxWidth: 755, cols: 1, spacing: "sm" },
-          ]}
-        >
-          {filteredNews
-            .filter((x) => x.category_id == String(categoryId))
-            .map((news, index) => (
+        <Box mb={30} className="filters-container">
+          <Group position="left" align="flex-end" spacing="lg">
+            <div className="filter-group">
+              <Text size="sm" weight={500}>
+                Search:
+              </Text>
+              <SearchBar
+                value={searchQuery}
+                onChange={setSearchQuery}
+                placeholder="Search in this category..."
+              />
+            </div>
+            <div className="filter-group">
+              <Text size="sm" weight={500}>
+                Filter by Date:
+              </Text>
+              <DateRangePicker
+                value={dateRange}
+                onChange={setDateRange}
+                clearable
+                placeholder="Pick date range"
+                style={{ minWidth: 300 }}
+              />
+            </div>
+          </Group>
+        </Box>
+
+        {filteredNews.length > 0 ? (
+          <SimpleGrid
+            cols={3}
+            spacing="xl"
+            breakpoints={[
+              { maxWidth: 1200, cols: 3, spacing: "md" },
+              { maxWidth: 980, cols: 2, spacing: "md" },
+              { maxWidth: 755, cols: 1, spacing: "sm" },
+            ]}
+          >
+            {filteredNews.map((news, index) => (
               <Paper
                 key={index}
                 className="newsByCategory"
@@ -134,7 +176,14 @@ export const NewsByCategoryC: React.FC<NewsByCategoryProps> = ({
                 </div>
               </Paper>
             ))}
-        </SimpleGrid>
+          </SimpleGrid>
+        ) : (
+          <div className="no-results">
+            <Text size="lg" color="dimmed">
+              No news articles found for this category with the selected filters
+            </Text>
+          </div>
+        )}
       </Container>
     </>
   );

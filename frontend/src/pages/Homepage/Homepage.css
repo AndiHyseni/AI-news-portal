@@ -67,6 +67,14 @@
   box-shadow: 0 12px 25px rgba(0, 0, 0, 0.09);
 }
 
+.homepage-search {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
 /* Responsive adjustments */
 @media (max-width: 992px) {
   .homepage {

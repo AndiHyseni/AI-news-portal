@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from "react";
+import React, { useContext, useMemo, ReactNode } from "react";
 import { UserContext } from "../../contexts/UserContext";
 import { useCategories } from "../../hooks/useCategories/useCategories";
 import { useUserProfile } from "../../hooks/useAuth/useUserProfile";
@@ -8,9 +8,10 @@ import { Chatbot } from "../Chatbot/Chatbot";
 import "./BasePage.css";
 import { Categories } from "../../types/categories/categories";
 import { useConfiguration } from "../../hooks/useConfiguration/useConfiguration";
+import { useScrollToTop } from "../../hooks/useScrollToTop/useScrollToTop";
 
-export interface BasePageProps {
-  children?: React.ReactNode;
+interface BasePageProps {
+  children: ReactNode;
 }
 
 export const BasePage: React.FC<BasePageProps> = ({ children }) => {
@@ -43,6 +44,8 @@ export const BasePage: React.FC<BasePageProps> = ({ children }) => {
 
   // Check if user is an admin (don't show footer for admins)
   const isAdmin = userContext.roles?.includes("admin");
+
+  useScrollToTop();
 
   return (
     <div className="base-page-container">
