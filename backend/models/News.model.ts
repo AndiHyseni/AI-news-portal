@@ -22,6 +22,9 @@ export default class NewsDbModel extends Model {
   created_by?: string;
   tags?: string;
   views?: number;
+  is_verified?: boolean;
+  verification_data?: string;
+  verified_at?: Date;
 
   category?: CategoryDbModel;
 
@@ -45,6 +48,8 @@ export default class NewsDbModel extends Model {
         content: { type: "string", minLength: 1 },
         summary: { type: "string" },
         image: { type: "string" },
+        is_verified: { type: "boolean" },
+        verification_data: { type: "string" },
       },
     };
   }

@@ -22,7 +22,7 @@ export const OpenAIService = {
         content.length > 15000 ? content.substring(0, 15000) + "..." : content;
 
       const response = await openai.chat.completions.create({
-        model: "gpt-3.5-turbo",
+        model: "gpt-4.1-nano",
         messages: [
           {
             role: "system",
