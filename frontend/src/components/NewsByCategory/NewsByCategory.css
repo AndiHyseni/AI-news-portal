@@ -68,7 +68,7 @@
   padding: 20px 25px 15px;
   font-weight: 700;
   font-size: 16px;
-  line-height: 1.4;
+  line-height: 1.2;
   transition: color 0.3s ease;
   height: 80px;
   overflow: hidden;
@@ -223,4 +223,35 @@
   .filter-group {
     width: 100%;
   }
+}
+
+@media print {
+  .print-only {
+    display: block !important;
+  }
+
+  .category-container,
+  .filters-container,
+  .navbar,
+  .footer {
+    display: none !important;
+  }
+}
+
+.filter-group button {
+  transition: all 0.3s ease;
+}
+
+.filter-group button:hover {
+  background-color: #4b21b0;
+  transform: translateY(-2px);
+}
+
+.filter-group button:disabled {
+  background-color: #e0e0e0;
+  transform: none;
+}
+
+.print-only {
+  display: none !important;
 }

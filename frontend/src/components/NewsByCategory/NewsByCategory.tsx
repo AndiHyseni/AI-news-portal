@@ -7,9 +7,10 @@ import {
   Box,
   Group,
   Text,
+  Button,
 } from "@mantine/core";
 import { DateRangePicker } from "@mantine/dates";
-import { useState, useContext } from "react";
+import { useState, useContext, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { addViews } from "../../api/administration/administration";
 import { AddViewModel } from "../../types/administration/administration";
@@ -18,6 +19,9 @@ import { UserContext } from "../../contexts/UserContext";
 import "../NewsByCategory/NewsByCategory.css";
 import { Categories } from "../../types/categories/categories";
 import { SearchBar } from "../SearchBar/SearchBar";
+import { NewsPaper } from "../NewsPaper/NewsPaper";
+import { FileText } from "tabler-icons-react";
+import { PrintStyles } from "../NewsPaper/PrintStyles";
 
 export interface NewsByCategoryProps {
   news: News[] | { news: News[] };
@@ -36,6 +40,7 @@ export const NewsByCategoryC: React.FC<NewsByCategoryProps> = ({
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
   const [userContext] = useContext(UserContext);
+  const newspaperRef = useRef<HTMLDivElement>(null);
 
   // Ensure news is an array
   const newsArray = Array.isArray(news)
@@ -99,6 +104,36 @@ export const NewsByCategoryC: React.FC<NewsByCategoryProps> = ({
 
   const currentCategoryName = getCategoryName(categoryId || "");
 
+  const handleExport = () => {
+    setTimeout(() => {
+      if (newspaperRef.current) {
+        const printWindow = window.open("", "_blank");
+        if (printWindow) {
+          printWindow.document.write(`
+            <html>
+              <head>
+                <title>${currentCategoryName} News</title>
+                <style>${PrintStyles}</style>
+              </head>
+              <body>
+                ${newspaperRef.current.outerHTML}
+                <script>
+                  window.onload = function() {
+                    window.print();
+                    window.onafterprint = function() {
+                      window.close();
+                    };
+                  };
+                </script>
+              </body>
+            </html>
+          `);
+          printWindow.document.close();
+        }
+      }
+    }, 100);
+  };
+
   return (
     <>
       <Container size="xl" px="md" className="category-container">
@@ -131,6 +166,17 @@ export const NewsByCategoryC: React.FC<NewsByCategoryProps> = ({
                 placeholder="Pick date range"
                 style={{ minWidth: 300 }}
               />
+            </div>
+            <div className="filter-group">
+              <Button
+                leftIcon={<FileText size={16} />}
+                onClick={handleExport}
+                variant="filled"
+                color="indigo"
+                disabled={filteredNews.length === 0}
+              >
+                Export as Newspaper
+              </Button>
             </div>
           </Group>
         </Box>
@@ -185,6 +231,14 @@ export const NewsByCategoryC: React.FC<NewsByCategoryProps> = ({
           </div>
         )}
       </Container>
+
+      <div style={{ display: "none" }}>
+        <NewsPaper
+          ref={newspaperRef}
+          news={filteredNews}
+          categoryName={currentCategoryName}
+        />
+      </div>
     </>
   );
 };

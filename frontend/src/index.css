@@ -173,3 +173,51 @@ h6 {
     font-size: 1rem;
   }
 }
+
+@media print {
+  /* Hide everything by default */
+  body > * {
+    display: none !important;
+  }
+
+  /* Only show print-only content */
+  .print-only {
+    display: block !important;
+  }
+
+  /* Reset all backgrounds to white and text to black */
+  * {
+    background: transparent !important;
+    color: black !important;
+    text-shadow: none !important;
+    filter: none !important;
+    -ms-filter: none !important;
+    font-family: "Times New Roman", Times, serif !important;
+  }
+
+  /* Ensure images print properly */
+  img {
+    max-width: 100% !important;
+    page-break-inside: avoid;
+  }
+
+  /* Avoid page breaks inside important elements */
+  h1,
+  h2,
+  h3,
+  img {
+    page-break-after: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Force page breaks where needed */
+  h1 {
+    page-break-before: always;
+  }
+
+  /* Remove shadows and transitions */
+  * {
+    box-shadow: none !important;
+    transition: none !important;
+  }
+}
