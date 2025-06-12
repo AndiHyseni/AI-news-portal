@@ -64,7 +64,7 @@ export const NLPService = {
   generateSummary: async (
     title: string,
     content: string,
-    maxLength: number = 250
+    maxLength: number = 3 // Changed to represent number of sentences
   ): Promise<string> => {
     try {
       // If content is empty, return empty string
@@ -79,7 +79,7 @@ export const NLPService = {
       }
 
       // Set number of sentences for the summary
-      const numSentences = 3;
+      const numSentences = maxLength;
 
       // Use the node-summarizer library
       try {
@@ -101,13 +101,15 @@ export const NLPService = {
           } else {
             // Fallback: Join sentence_list if available
             if (Array.isArray(summaryResult.sentence_list)) {
-              summaryText = summaryResult.sentence_list.join(" ");
+              summaryText = summaryResult.sentence_list
+                .slice(0, numSentences)
+                .join(" ");
             } else {
               console.log(
                 "Unexpected summary format:",
                 JSON.stringify(summaryResult)
               );
-              return fallbackSummarize(title, content, maxLength);
+              return fallbackSummarize(title, content, numSentences);
             }
           }
         }
@@ -118,16 +120,12 @@ export const NLPService = {
           .replace(/\s+/g, " ") // Replace multiple spaces with a single space
           .trim(); // Trim whitespace
 
-        // Truncate if too long
-        if (summaryText.length > maxLength) {
-          return summaryText.substring(0, maxLength) + "...";
-        }
         return summaryText;
       } catch (summarizerError) {
         console.error("Error using node-summarizer:", summarizerError);
 
         // Fallback to our simple approach if the library fails
-        return fallbackSummarize(title, content, maxLength);
+        return fallbackSummarize(title, content, numSentences);
       }
     } catch (error) {
       console.error("Error generating summary:", error);
@@ -142,7 +140,7 @@ export const NLPService = {
 function fallbackSummarize(
   title: string,
   content: string,
-  maxLength: number = 150
+  numSentences: number = 3 // Changed to represent number of sentences
 ): string {
   try {
     // Include title in the summary if available
@@ -161,16 +159,8 @@ function fallbackSummarize(
       return "";
     }
 
-    // Take the first 2-3 sentences as a summary
-    const numSentences = Math.min(sentences.length, 3);
-    let summaryText = sentences.slice(0, numSentences).join(" ");
-
-    // Truncate if too long
-    if (summaryText.length > maxLength) {
-      summaryText = summaryText.substring(0, maxLength) + "...";
-    }
-
-    return summaryText;
+    // Take the specified number of sentences as summary
+    return sentences.slice(0, numSentences).join(" ");
   } catch (error) {
     console.error("Error in fallback summarization:", error);
     return "";

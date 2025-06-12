@@ -148,9 +148,18 @@ export const NewsForms: React.FC<NewsFormProps> = ({ newsId }) => {
         })()
       : "";
 
+    // Convert plain text to HTML
+    const convertToHtml = (text: string) => {
+      return text
+        .split("\n\n")
+        .filter((para) => para.trim() !== "")
+        .map((para) => `<p>${para.trim().replace(/\n/g, "<br>")}</p>`)
+        .join("\n\n");
+    };
+
     const payload = {
       category_id: categoryId ? String(categoryId) : "",
-      content: form.values.content,
+      content: convertToHtml(form.values.content),
       expire_date: formattedDate,
       image: image || "",
       is_featured: Boolean(isFeatured),

@@ -67,6 +67,15 @@ export const EditNewsForm: React.FC<NewsFormProps> = ({
 
   const formattedate = news.expire_date ? new Date(news.expire_date) : null;
 
+  // Convert plain text back to HTML
+  const convertToHtml = (text: string) => {
+    return text
+      .split("\n\n")
+      .filter((para) => para.trim() !== "")
+      .map((para) => `<p>${para.trim().replace(/\n/g, "<br>")}</p>`)
+      .join("\n\n");
+  };
+
   const form = useForm({
     initialValues: {
       id: newsId,
@@ -163,7 +172,7 @@ export const EditNewsForm: React.FC<NewsFormProps> = ({
     mutation.mutate(
       {
         category_id: categoryId,
-        content: form.values.content,
+        content: convertToHtml(form.values.content),
         expire_date: formattedDate,
         image: newsImage || "",
         is_featured: Boolean(isFeatured),

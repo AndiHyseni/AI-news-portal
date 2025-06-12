@@ -161,7 +161,10 @@ export const NewsDetailsId: React.FC<NewsDetailsProps> = ({ news }) => {
         <span>Published: {formatDate(news?.created_at)}</span>
       </div>
 
-      <p className="contentDetails">{news?.content}</p>
+      <div
+        className="contentDetails"
+        dangerouslySetInnerHTML={{ __html: news?.content }}
+      />
 
       {videoDetails && (
         <div

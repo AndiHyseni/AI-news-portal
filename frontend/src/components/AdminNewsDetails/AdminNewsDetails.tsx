@@ -208,7 +208,10 @@ export const AdminNewsDetailsC: React.FC<NewsDetailsProps> = ({
           </Box>
         )}
 
-        <Text className="news-body">{news?.content}</Text>
+        <div
+          className="news-body"
+          dangerouslySetInnerHTML={{ __html: news?.content }}
+        />
 
         {videoDetails && (
           <div
