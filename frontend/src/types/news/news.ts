@@ -18,6 +18,11 @@ export interface News {
   created_at: string;
   updated_at: string;
   category: Categories;
+  created_by?: string;
+  updated_by?: string;
+  is_verified?: boolean;
+  verification_data?: string;
+  verified_at?: string;
 }
 
 export interface CreateNewsPayload {

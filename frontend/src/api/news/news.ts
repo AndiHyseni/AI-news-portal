@@ -201,3 +201,11 @@ export const generateTagsForArticle = async (newsId: string): Promise<any> => {
   );
   return data;
 };
+
+// Verify news article
+export const verifyNews = async (newsId: string): Promise<any> => {
+  const { data } = await axiosInstance.post(
+    `${BaseUrl.DEVELOPMENT}/${NEWS.GET_NEWS}/verify/${newsId}`
+  );
+  return data;
+};

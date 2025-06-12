@@ -1,4 +1,4 @@
-import { Button, Image, Paper, Loader } from "@mantine/core";
+import { Button, Image, Paper, Loader, Group } from "@mantine/core";
 import { useContext, useEffect, useState } from "react";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { useSavedNews } from "../../hooks/useNews/useSavedNews";
@@ -12,6 +12,10 @@ import { UserContext } from "../../contexts/UserContext";
 import { toast } from "react-toastify";
 import { RelatedNews } from "../RelatedNews/RelatedNews";
 import "../NewsDetailsId/NewsDetailsId.css";
+import { VerificationStatus } from "../common/VerificationStatus";
+import { VerificationDetailsModal } from "../common/VerificationDetailsModal";
+import { useVerifyNews } from "../../hooks/useNews/useVerifyNews";
+import { IconShieldCheck } from "@tabler/icons-react";
 
 // Define interface for the API response
 interface ReactionsResponse {
@@ -40,6 +44,13 @@ export const NewsDetailsId: React.FC<NewsDetailsProps> = ({ news }) => {
     sad: 0,
     angry: 0,
   });
+  const [verificationModalOpened, setVerificationModalOpened] = useState(false);
+  const verifyNewsMutation = useVerifyNews();
+
+  // Parse verification data if it exists
+  const verificationData = news.verification_data
+    ? JSON.parse(news.verification_data)
+    : null;
 
   // Get user ID from context instead of directly decoding the JWT
   const userId = userContext.userId || "";
@@ -150,16 +161,40 @@ export const NewsDetailsId: React.FC<NewsDetailsProps> = ({ news }) => {
       <h1 className="titleDetails">{news?.title}</h1>
       <h2 className="subtitleDetails">{news?.subtitle}</h2>
 
+      <div className="news-meta">
+        <span>Published: {formatDate(news?.created_at)}</span>
+        <Group spacing={12} ml="auto" align="center">
+          <VerificationStatus
+            isVerified={news.is_verified || false}
+            confidence={verificationData?.confidence}
+            onClick={() => setVerificationModalOpened(true)}
+          />
+          {!news.is_verified && (
+            <Button
+              size="xs"
+              variant="outline"
+              color="teal"
+              leftIcon={<IconShieldCheck size={16} />}
+              loading={verifyNewsMutation.isLoading}
+              onClick={() => verifyNewsMutation.mutate(news.id)}
+              disabled={verifyNewsMutation.isLoading}
+            >
+              {verifyNewsMutation.isLoading ? "Verifying..." : "Verify"}
+            </Button>
+          )}
+          <AddSavedNewsButton
+            newsId={String(newsId)}
+            mutation={savedNewsMutation}
+          />
+        </Group>
+      </div>
+
       {news?.summary && (
         <div className="summaryDetails">
           <h3>Summary</h3>
           <p>{news.summary}</p>
         </div>
       )}
-
-      <div className="news-meta">
-        <span>Published: {formatDate(news?.created_at)}</span>
-      </div>
 
       <div
         className="contentDetails"
@@ -187,15 +222,6 @@ export const NewsDetailsId: React.FC<NewsDetailsProps> = ({ news }) => {
             ))}
         </div>
       )}
-
-      <div className="savedButton">
-        {news && reactionsData && (
-          <AddSavedNewsButton
-            newsId={String(newsId)}
-            mutation={savedNewsMutation}
-          />
-        )}
-      </div>
 
       <Paper shadow="sm" radius="lg" p="xl" className="reactions">
         <h2 className="reactionTitle">Cili është vlerësimi juaj për këtë?</h2>
@@ -279,6 +305,14 @@ export const NewsDetailsId: React.FC<NewsDetailsProps> = ({ news }) => {
 
       {data?.show_related_news == true && news && news.id && (
         <RelatedNews newsId={news.id} />
+      )}
+
+      {verificationData && (
+        <VerificationDetailsModal
+          opened={verificationModalOpened}
+          onClose={() => setVerificationModalOpened(false)}
+          verificationData={verificationData}
+        />
       )}
     </div>
   );

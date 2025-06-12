@@ -122,41 +122,53 @@ export const AddSavedNewsButton: React.FC<SavedNewsProps> = ({
   return (
     <>
       {!isAuthenticated && (
-        <Button className="tagsButton" onClick={() => navigate("/login")}>
-          <Heart size={25} strokeWidth={2} color={"white"} />
+        <Button
+          variant="outline"
+          color="red"
+          size="xs"
+          leftIcon={<Heart size={16} strokeWidth={2} color={"red"} />}
+          onClick={() => navigate("/login")}
+        >
+          Save
         </Button>
       )}
       {isAuthenticated && !isAdmin && (
         <Button
-          className={isAlreadySaved ? "tagsButton-saved" : "tagsButton"}
-          onClick={() => handleSubmit()}
+          variant={isAlreadySaved ? "filled" : "outline"}
+          color={isAlreadySaved ? "red" : "red"}
+          size="xs"
+          leftIcon={
+            <Heart
+              size={16}
+              strokeWidth={2}
+              color={isAlreadySaved ? "white" : "red"}
+              fill={isAlreadySaved ? "red" : "none"}
+            />
+          }
+          onClick={handleSubmit}
           disabled={isSaving || isAlreadySaved}
           loading={isSaving}
         >
-          <Heart
-            size={25}
-            strokeWidth={2}
-            color={"white"}
-            fill={isAlreadySaved ? "white" : "none"}
-          />
-          {isAlreadySaved && " Saved"}
+          {isAlreadySaved ? "Saved" : "Save"}
         </Button>
       )}
       {isAdmin && (
         <Button
-          className={
-            isAlreadySaved ? "detailsButtonList-saved" : "detailsButtonList"
+          variant={isAlreadySaved ? "filled" : "outline"}
+          color={isAlreadySaved ? "red" : "red"}
+          size="xs"
+          leftIcon={
+            <Heart
+              size={16}
+              strokeWidth={2}
+              color={isAlreadySaved ? "white" : "red"}
+              fill={isAlreadySaved ? "red" : "none"}
+            />
           }
-          onClick={() => handleSubmit()}
+          onClick={handleSubmit}
           disabled={isSaving || isAlreadySaved}
           loading={isSaving}
         >
-          <Heart
-            size={20}
-            strokeWidth={2}
-            color={"white"}
-            fill={isAlreadySaved ? "white" : "none"}
-          />
           {isAlreadySaved ? "Saved" : "Save"}
         </Button>
       )}

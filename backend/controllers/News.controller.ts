@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { NewsService } from "../services/news/News.service";
+import { NewsVerificationService } from "../services/news/NewsVerification.service";
 import authorize from "../utils/authorize";
 import { ValidationMiddleware } from "../middlewares/Validation.middleware";
 import { NewsValidator } from "../validations/News.validator";
@@ -324,6 +325,25 @@ NewsController.post(
         res.status(result.httpCode).send(result.data);
       } else {
         res.status(result.httpCode).send("Something went wrong");
+      }
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+// POST verify news article
+NewsController.post(
+  "/verify/:id",
+  // authorize(),
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params;
+      const result = await NewsVerificationService.verifyArticle(id);
+      if (result.httpCode === 200) {
+        res.status(result.httpCode).send(result.data);
+      } else {
+        res.status(result.httpCode).send(result.data || "Something went wrong");
       }
     } catch (err) {
       next(err);
