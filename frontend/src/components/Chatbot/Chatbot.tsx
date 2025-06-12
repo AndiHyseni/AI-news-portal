@@ -11,7 +11,7 @@ import {
   Card,
   Image,
 } from "@mantine/core";
-import { Send, X, Robot } from "tabler-icons-react";
+import { Send, X, Robot, Microphone, MicrophoneOff } from "tabler-icons-react";
 import { toast } from "react-toastify";
 import { sendChatbotMessage } from "../../api/chatbot/chatbot";
 import { useNavigate } from "react-router-dom";
@@ -52,6 +52,44 @@ export const Chatbot: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [isListening, setIsListening] = useState(false);
+  const [speechError, setSpeechError] = useState<string | null>(null);
+
+  // Speech recognition setup
+  const recognitionRef = useRef<any>(null);
+
+  useEffect(() => {
+    if (
+      !("webkitSpeechRecognition" in window) &&
+      !("SpeechRecognition" in window)
+    ) {
+      recognitionRef.current = null;
+      return;
+    }
+    const SpeechRecognition =
+      (window as any).SpeechRecognition ||
+      (window as any).webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    recognition.lang = "en-US";
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+    recognition.continuous = false;
+
+    recognition.onresult = (event: any) => {
+      const transcript = event.results[0][0].transcript;
+      setMessage((prev) => prev + (prev ? " " : "") + transcript);
+      setIsListening(false);
+    };
+    recognition.onerror = (event: any) => {
+      setSpeechError(event.error);
+      setIsListening(false);
+      toast.error("Speech recognition error: " + event.error);
+    };
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+    recognitionRef.current = recognition;
+  }, []);
 
   useEffect(() => {
     if (scrollAreaRef.current) {
@@ -133,6 +171,21 @@ export const Chatbot: React.FC = () => {
   const handleArticleClick = (articleId: string) => {
     navigate(`/news/${articleId}`);
     setIsOpen(false);
+  };
+
+  const handleMicClick = () => {
+    if (!recognitionRef.current) {
+      toast.error("Speech recognition is not supported in this browser.");
+      return;
+    }
+    if (isListening) {
+      recognitionRef.current.stop();
+      setIsListening(false);
+    } else {
+      setSpeechError(null);
+      setIsListening(true);
+      recognitionRef.current.start();
+    }
   };
 
   const renderMessage = (msg: Message) => {
@@ -245,16 +298,33 @@ export const Chatbot: React.FC = () => {
                 value={message}
                 onChange={(e) => setMessage(e.currentTarget.value)}
                 onKeyPress={handleKeyPress}
-                placeholder="Type your question..."
+                placeholder="Type or speak your question..."
                 disabled={isLoading}
                 rightSection={
-                  <ActionIcon
-                    color="violet"
-                    onClick={handleSendMessage}
-                    disabled={!message.trim() || isLoading}
-                  >
-                    <Send size={16} />
-                  </ActionIcon>
+                  <Group spacing={4} noWrap style={{ marginRight: 36 }}>
+                    <ActionIcon
+                      color={isListening ? "red" : "gray"}
+                      onClick={handleMicClick}
+                      variant={isListening ? "filled" : "subtle"}
+                      title={
+                        isListening ? "Listening... Click to stop" : "Speak"
+                      }
+                      disabled={isLoading}
+                    >
+                      {isListening ? (
+                        <MicrophoneOff size={16} />
+                      ) : (
+                        <Microphone size={16} />
+                      )}
+                    </ActionIcon>
+                    <ActionIcon
+                      color="violet"
+                      onClick={handleSendMessage}
+                      disabled={!message.trim() || isLoading}
+                    >
+                      <Send size={16} />
+                    </ActionIcon>
+                  </Group>
                 }
                 radius="xl"
                 size="md"
