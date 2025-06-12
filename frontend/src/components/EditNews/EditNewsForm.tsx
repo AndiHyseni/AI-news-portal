@@ -4,7 +4,6 @@ import {
   Container,
   FileInput,
   Grid,
-  Group,
   Image,
   Paper,
   Select,
@@ -24,6 +23,8 @@ import { useCategories } from "../../hooks/useCategories/useCategories";
 import { ApiError, ErrorMessage } from "../../types/auth/ApiError";
 import { Categories } from "../../types/categories/categories";
 import { News } from "../../types/news/news";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "../Forms/NewsForms.css";
 
 export interface NewsFormProps {
@@ -156,6 +157,9 @@ export const EditNewsForm: React.FC<NewsFormProps> = ({
     const errors = form.validate();
     if (errors.hasErrors) return;
 
+    // Show loading toast
+    const toastId = toast.loading("Updating article...");
+
     mutation.mutate(
       {
         category_id: categoryId,
@@ -171,16 +175,64 @@ export const EditNewsForm: React.FC<NewsFormProps> = ({
         video: form.values.video || "",
       },
       {
-        onSuccess: () => {
-          navigate("/admin/news");
+        onSuccess: (response: any) => {
+          // Check if the response indicates an error
+          if (response?.statusIsOk === false) {
+            // Handle the error case
+            const errorMessage =
+              response.statusMessage || "Failed to update article";
+
+            // Update toast to error
+            toast.update(toastId, {
+              render: errorMessage,
+              type: "error",
+              isLoading: false,
+              autoClose: 5000,
+            });
+
+            // Set form error if it's related to a specific field
+            if (errorMessage.toLowerCase().includes("tags")) {
+              form.setFieldError("tags", errorMessage);
+            }
+
+            return;
+          }
+
+          // Success case
+          toast.update(toastId, {
+            render: "Article updated successfully!",
+            type: "success",
+            isLoading: false,
+            autoClose: 3000,
+          });
+
+          // Navigate after a short delay to allow the user to see the success message
+          setTimeout(() => {
+            navigate("/admin/news");
+          }, 2000);
         },
         onError: (error: AxiosError<ApiError>) => {
+          // Handle network or other errors
+          let errorMessage = "Failed to update article. Please try again.";
+
           if (
             error.response?.data.errorMessage === ErrorMessage.MORE_CARACTERS
           ) {
-            form.setFieldError("title", "Title has too many characters");
+            errorMessage = "Title has too many characters";
+            form.setFieldError("title", errorMessage);
+          } else if (error.response?.data.statusMessage) {
+            errorMessage = error.response.data.statusMessage;
           }
-          console.error("Error submitting form:", error);
+
+          // Update toast to error
+          toast.update(toastId, {
+            render: errorMessage,
+            type: "error",
+            isLoading: false,
+            autoClose: 5000,
+          });
+
+          console.error("Error updating article:", error);
         },
       }
     );

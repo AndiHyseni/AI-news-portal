@@ -22,13 +22,15 @@ import { Categories } from "../../types/categories/categories";
 import { useState } from "react";
 import { useCreateNews } from "../../hooks/useCreateNews/useCreateNews";
 import { IconUpload } from "@tabler/icons-react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./NewsForms.css";
 
 export interface NewsFormProps {
-  newsId: string;
+  newsId?: string; // Make it optional since it's not used in create mode
 }
 
-export const NewsForms: React.FC<NewsFormProps> = (newsId) => {
+export const NewsForms: React.FC<NewsFormProps> = ({ newsId }) => {
   const navigate = useNavigate();
   const createNewsMutation = useCreateNews();
   const [isFeatured, setIsFeatured] = useState<boolean>(false);
@@ -121,7 +123,8 @@ export const NewsForms: React.FC<NewsFormProps> = (newsId) => {
     setTags(tags.filter((_, index) => index !== indexToRemove));
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault(); // Prevent default form submission
     setFormSubmitted(true);
 
     const errors = form.validate();
@@ -130,6 +133,9 @@ export const NewsForms: React.FC<NewsFormProps> = (newsId) => {
     if (!categoryId) {
       return; // Don't proceed if category is not selected
     }
+
+    // Show loading toast
+    const toastId = toast.loading("Publishing article...");
 
     const formattedDate = form.values.expire_date
       ? (() => {
@@ -142,25 +148,81 @@ export const NewsForms: React.FC<NewsFormProps> = (newsId) => {
         })()
       : "";
 
-    createNewsMutation.mutate(
-      {
-        category_id: categoryId ? String(categoryId) : "",
-        content: form.values.content,
-        expire_date: formattedDate,
-        image: image || "",
-        is_featured: Boolean(isFeatured),
-        subtitle: form.values.subtitle,
-        title: form.values.title,
-        tags: tags.join(","),
-        video: form.values.video || "",
-        summary: form.values.summary,
-      },
-      {
-        onSuccess: () => {
+    const payload = {
+      category_id: categoryId ? String(categoryId) : "",
+      content: form.values.content,
+      expire_date: formattedDate,
+      image: image || "",
+      is_featured: Boolean(isFeatured),
+      is_deleted: Boolean(isDeleted),
+      subtitle: form.values.subtitle,
+      title: form.values.title,
+      tags: tags.join(","),
+      video: form.values.video || "",
+      summary: form.values.summary,
+    };
+
+    console.log("Submitting payload:", payload); // Add this for debugging
+
+    createNewsMutation.mutate(payload, {
+      onSuccess: (response) => {
+        console.log("Response:", response); // Add this for debugging
+        // Check if the response indicates an error
+        if (response?.statusIsOk === false) {
+          // Handle the error case
+          const errorMessage =
+            response.statusMessage || "Failed to publish article";
+
+          // Update toast to error
+          toast.update(toastId, {
+            render: errorMessage,
+            type: "error",
+            isLoading: false,
+            autoClose: 5000,
+          });
+
+          // Set form error if it's related to a specific field
+          if (errorMessage.toLowerCase().includes("tags")) {
+            form.setFieldError("tags", errorMessage);
+          }
+
+          console.error("Error publishing article:", response);
+          return;
+        }
+
+        // Success case
+        toast.update(toastId, {
+          render: "Article published successfully!",
+          type: "success",
+          isLoading: false,
+          autoClose: 3000,
+        });
+
+        // Navigate after a short delay to allow the user to see the success message
+        setTimeout(() => {
           navigate("/admin/news");
-        },
-      }
-    );
+        }, 2000);
+      },
+      onError: (error: any) => {
+        console.log("Error:", error); // Add this for debugging
+        // Handle network or other errors
+        let errorMessage = "Failed to publish article. Please try again.";
+
+        if (error.response?.data?.statusMessage) {
+          errorMessage = error.response.data.statusMessage;
+        }
+
+        // Update toast to error
+        toast.update(toastId, {
+          render: errorMessage,
+          type: "error",
+          isLoading: false,
+          autoClose: 5000,
+        });
+
+        console.error("Error publishing article:", error);
+      },
+    });
   };
 
   return (
@@ -171,7 +233,7 @@ export const NewsForms: React.FC<NewsFormProps> = (newsId) => {
         </Title>
 
         <Box mt="md">
-          <form onSubmit={form.onSubmit(handleSubmit)}>
+          <form onSubmit={handleSubmit}>
             <div className="form-group">
               <TextInput
                 className="form-element"
@@ -332,6 +394,7 @@ export const NewsForms: React.FC<NewsFormProps> = (newsId) => {
                 className="cancel-button"
                 variant="outline"
                 onClick={() => navigate("/admin/news")}
+                type="button"
               >
                 Cancel
               </Button>

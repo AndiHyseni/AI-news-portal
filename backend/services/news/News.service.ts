@@ -151,7 +151,10 @@ export const NewsService = {
     try {
       const savedNews = await SavedNewsDbModel.query()
         .where("user_id", UserId)
-        .withGraphFetched("news");
+        .withGraphFetched("news")
+        .modifyGraph("news", (builder) => {
+          builder.where("is_deleted", false);
+        });
 
       const formattedSavedNews = savedNews
         .map((item) => {

@@ -1,5 +1,8 @@
 export interface ApiError {
-  errorMessage: ErrorMessage;
+  errorMessage?: ErrorMessage;
+  statusMessage?: string;
+  statusIsOk?: boolean;
+  statusCode?: string;
 }
 
 export enum ErrorMessage {

@@ -35,9 +35,7 @@ export const getNewsId = async (newsId: string): Promise<News> => {
   return data;
 };
 
-export const createNews = async (
-  payload: CreateNewsPayload
-): Promise<number> => {
+export const createNews = async (payload: CreateNewsPayload) => {
   const { data } = await axiosInstance.post(
     `${BaseUrl.DEVELOPMENT}/${NEWS.GET_NEWS}/${CREATE_NEWS.CREATE_NEWS}`,
     payload
