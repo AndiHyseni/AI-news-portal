@@ -81,11 +81,6 @@
   transition: opacity 0.3s ease;
 }
 
-.footer-logo:hover {
-  transform: scale(1.05) rotate(2deg);
-  filter: brightness(1.1);
-}
-
 .footer-logo:hover::after {
   opacity: 1;
 }
