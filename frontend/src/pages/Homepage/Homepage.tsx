@@ -7,6 +7,8 @@ import {
   Text,
   Group,
   ThemeIcon,
+  Loader,
+  Center,
 } from "@mantine/core";
 import { HomepageNews } from "../../components/HomepageNews/HomepageNews";
 import { useNews } from "../../hooks/useNews/useNews";
@@ -26,10 +28,22 @@ import {
 import { useNavigate } from "react-router-dom";
 
 export const Homepage: React.FC = () => {
-  const { data: newsData } = useNews();
-  const { data: categories } = useCategories();
-  const { data } = useConfiguration();
+  const { data: newsData, isLoading: newsLoading } = useNews();
+  const { data: categories, isLoading: categoriesLoading } = useCategories();
+  const { data, isLoading: configLoading } = useConfiguration();
   const navigate = useNavigate();
+
+  const isLoading = newsLoading || categoriesLoading || configLoading;
+
+  if (isLoading) {
+    return (
+      <BasePage>
+        <Center style={{ height: "70vh" }}>
+          <Loader size="xl" variant="dots" />
+        </Center>
+      </BasePage>
+    );
+  }
 
   return (
     <BasePage>
