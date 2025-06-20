@@ -1,22 +1,52 @@
+/* Set white background for the entire page */
+body {
+  background-color: white;
+}
+
 .homepage {
   display: flex;
   flex-direction: column;
   gap: 40px;
-  padding: 40px 0;
+  padding: 20px 0;
+}
+
+/* Stat Cards */
+.stat-card {
+  padding: 1rem;
+  border: 1px solid #eaeaea;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  background: white;
+  cursor: pointer;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  border-color: #4b21b0;
+  background: linear-gradient(135deg, #f8f9fe 0%, #ffffff 100%);
+}
+
+.stat-card .mantine-ThemeIcon-root {
+  background: transparent;
+  color: #4b21b0;
+  border: 2px solid #4b21b0;
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover .mantine-ThemeIcon-root {
+  background: #4b21b0;
+  color: white;
 }
 
 .homepage-section {
-  background-color: white;
-  border-radius: 15px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
-  padding: 30px;
-  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    box-shadow 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  padding: 0px 0;
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
+/* Remove hover effects */
 .homepage-section:hover {
-  transform: translateY(-7px);
-  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.09);
+  transform: none;
+  box-shadow: none;
 }
 
 .homepage-featured {
@@ -53,18 +83,15 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  padding: 35px;
-  background-color: white;
+  padding: 35px 0; /* Keep vertical padding but remove horizontal padding */
   margin-top: 15px;
-  border-radius: 15px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
-  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    box-shadow 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
+/* Remove hover effects */
 .homepageadmin:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.09);
+  transform: none;
+  box-shadow: none;
 }
 
 .homepage-search {
@@ -72,7 +99,6 @@
   padding: 1rem;
   background-color: #f8f9fa;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 /* Responsive adjustments */
@@ -83,7 +109,11 @@
   }
 
   .homepage-section {
-    padding: 25px;
+    padding: 25px 0;
+  }
+
+  .stat-card {
+    padding: 1.25rem;
   }
 }
 
@@ -97,6 +127,16 @@
   }
 
   .homepage-section {
-    padding: 20px;
+    padding: 20px 0;
+  }
+
+  .stat-card {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .stat-card {
+    padding: 0.75rem;
   }
 }

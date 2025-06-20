@@ -5,7 +5,6 @@ import "../MostWatchedNews/MostWatchedNews.css";
 import { Carousel } from "@mantine/carousel";
 import { AddViewModel } from "../../types/administration/administration";
 import { addViews } from "../../api/administration/administration";
-import { useConfiguration } from "../../hooks/useConfiguration/useConfiguration";
 import Autoplay from "embla-carousel-autoplay";
 import { useRef, useContext } from "react";
 import { UserContext } from "../../contexts/UserContext";
@@ -18,7 +17,6 @@ export interface NewsProps {
 
 export const MostWatchedNews: React.FC<NewsProps> = ({ mostwatched = [] }) => {
   const navigate = useNavigate();
-  const { data } = useConfiguration();
   const autoplay = useRef(Autoplay({ delay: 3500, stopOnInteraction: false }));
   const [userContext] = useContext(UserContext);
 

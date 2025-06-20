@@ -1,23 +1,88 @@
 import { BasePage } from "../../components/BasePage/BasePage";
-import { Container, Title } from "@mantine/core";
+import {
+  Container,
+  Title,
+  Grid,
+  Paper,
+  Text,
+  Group,
+  ThemeIcon,
+} from "@mantine/core";
 import { HomepageNews } from "../../components/HomepageNews/HomepageNews";
 import { useNews } from "../../hooks/useNews/useNews";
 import "./Homepage.css";
 import { SiteNewsOnPage } from "../../components/SiteNewsOnPage/SiteNewsOnPage";
 import { MostWatchedNews } from "../../components/MostWatchedNews/MostWatchedNews";
 import { NewsByCategories } from "../../components/NewsByCategories/NewsByCategories";
+import { TrendingTopics } from "../../components/TrendingTopics/TrendingTopics";
 import { useCategories } from "../../hooks/useCategories/useCategories";
 import { useConfiguration } from "../../hooks/useConfiguration/useConfiguration";
+import {
+  IconBriefcase,
+  IconNews,
+  IconRobot,
+  IconClock,
+} from "@tabler/icons-react";
+import { useNavigate } from "react-router-dom";
 
 export const Homepage: React.FC = () => {
   const { data: newsData } = useNews();
   const { data: categories } = useCategories();
   const { data } = useConfiguration();
+  const navigate = useNavigate();
 
   return (
     <BasePage>
       <Container size="xl" px="xs">
         <div className="homepage">
+          {/* Quick Info Section */}
+          <Grid mb={0}>
+            <Grid.Col span={3}>
+              <Paper className="stat-card">
+                <Group>
+                  <ThemeIcon size="lg" radius="md" color="blue">
+                    <IconNews size={20} />
+                  </ThemeIcon>
+                  <Text size="sm">Real-time News Updates</Text>
+                </Group>
+              </Paper>
+            </Grid.Col>
+            <Grid.Col span={3}>
+              <Paper
+                className="stat-card"
+                onClick={() => navigate("/careers")}
+                style={{ cursor: "pointer" }}
+              >
+                <Group>
+                  <ThemeIcon size="lg" radius="md" color="grape">
+                    <IconBriefcase size={20} />
+                  </ThemeIcon>
+                  <Text size="sm">Join Our Team</Text>
+                </Group>
+              </Paper>
+            </Grid.Col>
+            <Grid.Col span={3}>
+              <Paper className="stat-card">
+                <Group>
+                  <ThemeIcon size="lg" radius="md" color="teal">
+                    <IconClock size={20} />
+                  </ThemeIcon>
+                  <Text size="sm">24/7 Coverage</Text>
+                </Group>
+              </Paper>
+            </Grid.Col>
+            <Grid.Col span={3}>
+              <Paper className="stat-card">
+                <Group>
+                  <ThemeIcon size="lg" radius="md" color="orange">
+                    <IconRobot size={20} />
+                  </ThemeIcon>
+                  <Text size="sm">AI-Powered Analysis</Text>
+                </Group>
+              </Paper>
+            </Grid.Col>
+          </Grid>
+
           {data?.show_featured == true && (
             <div className="homepage-section">
               <Title order={2} className="homepage-title">
@@ -28,6 +93,9 @@ export const Homepage: React.FC = () => {
               </div>
             </div>
           )}
+
+          {/* Trending Topics */}
+          <TrendingTopics />
 
           <div className="homepage-section">
             <Title order={2} className="homepage-title">

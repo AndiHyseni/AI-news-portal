@@ -25,6 +25,7 @@ import { Terms } from "../pages/Terms/Terms";
 import { ErrorPage } from "./ErrorPage";
 import ProtectedRoute from "../components/auth/ProtectedRoute";
 import { AdminDashboard } from "../pages/AdminDashboard/AdminDashboard";
+import { Careers } from "../pages/Careers/Careers";
 
 export const Router: React.FC = () => {
   return (
@@ -42,6 +43,7 @@ export const Router: React.FC = () => {
         <Route path="/about" element={<About />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/denied" element={<ErrorPage />} />
+        <Route path="/careers" element={<Careers />} />
 
         {/* Protected routes for all authenticated users */}
         <Route element={<ProtectedRoute />}>

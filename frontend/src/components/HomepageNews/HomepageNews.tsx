@@ -62,7 +62,7 @@ export const HomepageNews: React.FC<NewsProps> = ({ homenews }) => {
     <div style={{ width: "100%" }}>
       <div className="homepage-carousel-container">
         <Carousel
-          sx={{ maxWidth: 1500 }}
+          sx={{ maxWidth: 1600 }}
           mx="auto"
           loop
           withIndicators
