@@ -266,19 +266,6 @@ export const NewsTable: React.FC<TableProps> = ({ newses }) => {
             />
             Import from NewsAPI
           </Button>
-
-          <Button
-            onClick={() => navigate("/admin/news/add")}
-            className="action-button"
-          >
-            <CirclePlus
-              size={20}
-              strokeWidth={2}
-              color={"white"}
-              style={{ marginRight: "8px" }}
-            />
-            Add News
-          </Button>
         </Group>
       </div>
 
