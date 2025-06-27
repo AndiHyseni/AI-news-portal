@@ -15,6 +15,16 @@
   margin-top: -54px;
 }
 
+.admin-main-content {
+  margin-left: 280px;
+  transition: margin-left 0.3s ease;
+  width: 100%;
+}
+
+.admin-main-content-collapsed {
+  margin-left: 60px;
+}
+
 .sidebarList {
   list-style: none;
   display: flex;

@@ -16,13 +16,14 @@ import "../Administration/Administration.css";
 
 const useSidebarStyles = createStyles({
   sidebar: {
-    position: "relative",
+    position: "fixed",
     height: "100vh",
     backgroundColor: "#212529",
     boxShadow: "0 2px 20px rgba(0, 0, 0, 0.15)",
     borderRadius: "0 16px 16px 0",
     transition: "width 0.3s ease",
     overflow: "hidden",
+    zIndex: 100,
   },
   open: {
     width: "280px",
@@ -45,10 +46,16 @@ const useSidebarStyles = createStyles({
   content: {
     width: "280px",
     paddingTop: "60px",
+    height: "100%",
+    overflowY: "auto",
   },
 });
 
-export const Sidebar: React.FC = () => {
+interface SidebarProps {
+  onToggle?: (isOpen: boolean) => void;
+}
+
+export const Sidebar: React.FC<SidebarProps> = ({ onToggle }) => {
   const [isOpen, setIsOpen] = useState(true);
   const { classes } = useSidebarStyles();
 
@@ -92,7 +99,9 @@ export const Sidebar: React.FC = () => {
   ];
 
   const toggleSidebar = () => {
-    setIsOpen(!isOpen);
+    const newState = !isOpen;
+    setIsOpen(newState);
+    onToggle?.(newState);
   };
 
   return (
