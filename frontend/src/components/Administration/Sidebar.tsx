@@ -1,4 +1,4 @@
-import { Button, createStyles, Text, Box, ActionIcon } from "@mantine/core";
+import { createStyles, Text, Box, ActionIcon } from "@mantine/core";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import {
@@ -16,7 +16,7 @@ import "../Administration/Administration.css";
 
 const useSidebarStyles = createStyles({
   sidebar: {
-    position: "fixed",
+    position: "relative",
     height: "100vh",
     backgroundColor: "#212529",
     boxShadow: "0 2px 20px rgba(0, 0, 0, 0.15)",
