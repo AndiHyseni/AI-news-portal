@@ -350,3 +350,32 @@ NewsController.post(
     }
   }
 );
+
+// POST generate news content from title using AI and web search
+NewsController.post(
+  "/generate-content",
+  authorize(),
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { title, categoryId } = req.body;
+
+      if (!title || typeof title !== "string" || title.trim().length === 0) {
+        res.status(400).send({ error: "Title is required" });
+        return;
+      }
+
+      const result = await NewsService.generateContentFromTitle(
+        title.trim(),
+        categoryId
+      );
+
+      if (result.httpCode === 200) {
+        res.status(result.httpCode).send(result.data);
+      } else {
+        res.status(result.httpCode).send(result.data || "Something went wrong");
+      }
+    } catch (err) {
+      next(err);
+    }
+  }
+);

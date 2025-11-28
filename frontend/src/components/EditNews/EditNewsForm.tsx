@@ -4,6 +4,7 @@ import {
   Container,
   FileInput,
   Grid,
+  Group,
   Image,
   Paper,
   Select,
@@ -18,7 +19,8 @@ import { useForm } from "@mantine/form";
 import { AxiosError } from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { IconUpload } from "@tabler/icons-react";
+import { IconUpload, IconWand } from "@tabler/icons-react";
+import { useGenerateContent } from "../../hooks/useNews/useGenerateContent";
 import { useCategories } from "../../hooks/useCategories/useCategories";
 import { ApiError, ErrorMessage } from "../../types/auth/ApiError";
 import { Categories } from "../../types/categories/categories";
@@ -39,9 +41,11 @@ export const EditNewsForm: React.FC<NewsFormProps> = ({
   mutation,
 }) => {
   const navigate = useNavigate();
+  const generateContentMutation = useGenerateContent();
 
   const [isFeatured, setIsFeatured] = useState<boolean>(news.is_featured);
   const [isDeleted, setIsDeleted] = useState<boolean>(news.is_deleted);
+  const [isGenerating, setIsGenerating] = useState<boolean>(false);
 
   const [categoryId, setCategoryId] = useState<string | null>(news.category_id);
   const [newsImage, setNewsImage] = useState<string | ArrayBuffer | null>(
@@ -150,6 +154,37 @@ export const EditNewsForm: React.FC<NewsFormProps> = ({
     setTags(tags.filter((_, index) => index !== indexToRemove));
   }
 
+  const handleGenerateContent = async () => {
+    const title = form.values.title.trim();
+
+    if (!title) {
+      toast.error("Please enter a title first");
+      return;
+    }
+
+    setIsGenerating(true);
+    try {
+      const result = await generateContentMutation.mutateAsync({
+        title,
+        categoryId: categoryId || undefined,
+      });
+
+      if (result) {
+        // Populate form fields with generated content
+        form.setFieldValue("content", result.content || "");
+        if (result.subtitle) {
+          form.setFieldValue("subtitle", result.subtitle);
+        }
+        toast.success("Content generated successfully!");
+      }
+    } catch (error) {
+      console.error("Error generating content:", error);
+      // Error notification is handled by the hook
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
   // Format the date to MySQL compatible format (YYYY-MM-DD)
   const formattedDate = form.values.expire_date
     ? (() => {
@@ -257,15 +292,31 @@ export const EditNewsForm: React.FC<NewsFormProps> = ({
         <Box mt="md">
           <form onSubmit={form.onSubmit(handleSubmit)}>
             <div className="form-group">
-              <TextInput
-                className="form-element"
-                size="md"
-                required
-                label="Article Title"
-                placeholder="Enter a compelling title..."
-                {...form.getInputProps("title")}
-                error={form.errors.title}
-              />
+              <Group spacing="xs" align="flex-end">
+                <TextInput
+                  className="form-element"
+                  size="md"
+                  required
+                  label="Article Title"
+                  placeholder="Enter a compelling title..."
+                  {...form.getInputProps("title")}
+                  error={form.errors.title}
+                  style={{ flex: 1 }}
+                />
+                <Button
+                  leftIcon={<IconWand size={16} />}
+                  onClick={handleGenerateContent}
+                  loading={isGenerating}
+                  disabled={!form.values.title.trim() || isGenerating}
+                  variant="light"
+                  color="blue"
+                  size="md"
+                  style={{ marginBottom: "20px" }}
+                  title="Generate content and subtitle using AI"
+                >
+                  {isGenerating ? "Generating..." : "Generate with AI"}
+                </Button>
+              </Group>
 
               <TextInput
                 className="form-element"

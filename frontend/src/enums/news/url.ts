@@ -25,6 +25,10 @@ export enum GENERATE_TAGS {
   GENERATE = "generate-tags",
 }
 
+export enum GENERATE_CONTENT {
+  GENERATE = "generate-content",
+}
+
 export enum NEWS_API {
   SEARCH = "newsapi/search",
   TOP_HEADLINES = "newsapi/top-headlines",

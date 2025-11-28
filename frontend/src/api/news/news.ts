@@ -3,6 +3,7 @@ import {
   CREATE_NEWS,
   GENERATE_SUMMARIES,
   GENERATE_TAGS,
+  GENERATE_CONTENT,
   NEWS,
   NEWS_API,
   SAVED_NEWS,
@@ -206,6 +207,18 @@ export const generateTagsForArticle = async (newsId: string): Promise<any> => {
 export const verifyNews = async (newsId: string): Promise<any> => {
   const { data } = await axiosInstance.post(
     `${BaseUrl.DEVELOPMENT}/${NEWS.GET_NEWS}/verify/${newsId}`
+  );
+  return data;
+};
+
+// Generate news content from title using AI
+export const generateContentFromTitle = async (
+  title: string,
+  categoryId?: string
+): Promise<{ content: string; subtitle?: string; summary?: string }> => {
+  const { data } = await axiosInstance.post(
+    `${BaseUrl.DEVELOPMENT}/${NEWS.GET_NEWS}/${GENERATE_CONTENT.GENERATE}`,
+    { title, categoryId }
   );
   return data;
 };

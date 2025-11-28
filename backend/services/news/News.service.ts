@@ -445,6 +445,39 @@ export const NewsService = {
       return failure({ error }, StatusCodeEnums.UNPROCESSABLE_ENTITY);
     }
   },
+  // Generate news content from title using AI and web search
+  generateContentFromTitle: async (title: string, categoryId?: string) => {
+    try {
+      if (!title || title.trim().length === 0) {
+        return failure(
+          { error: "Title is required" },
+          StatusCodeEnums.UNEXPECTED
+        );
+      }
+
+      // Use OpenAI service to generate content
+      const generatedData = await OpenAIService.generateContentFromTitle(
+        title,
+        categoryId
+      );
+
+      if (!generatedData || !generatedData.content) {
+        return failure(
+          { error: "Failed to generate content. Please try again." },
+          StatusCodeEnums.UNEXPECTED
+        );
+      }
+
+      return ok({
+        content: generatedData.content,
+        subtitle: generatedData.subtitle,
+        summary: generatedData.summary,
+      });
+    } catch (error) {
+      console.error("Error generating content from title:", error);
+      return failure({ error }, StatusCodeEnums.UNPROCESSABLE_ENTITY);
+    }
+  },
   // Get related news based on tags and category
   getRelatedNews: async (newsId: string, limit: number = 4) => {
     try {

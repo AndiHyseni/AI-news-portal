@@ -21,10 +21,11 @@ import { useCategories } from "../../hooks/useCategories/useCategories";
 import { Categories } from "../../types/categories/categories";
 import { useState } from "react";
 import { useCreateNews } from "../../hooks/useCreateNews/useCreateNews";
-import { IconUpload } from "@tabler/icons-react";
+import { IconUpload, IconWand } from "@tabler/icons-react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./NewsForms.css";
+import { useGenerateContent } from "../../hooks/useNews/useGenerateContent";
 
 export interface NewsFormProps {
   newsId?: string; // Make it optional since it's not used in create mode
@@ -33,12 +34,14 @@ export interface NewsFormProps {
 export const NewsForms: React.FC<NewsFormProps> = ({ newsId }) => {
   const navigate = useNavigate();
   const createNewsMutation = useCreateNews();
+  const generateContentMutation = useGenerateContent();
   const [isFeatured, setIsFeatured] = useState<boolean>(false);
   const [isDeleted, setIsDeleted] = useState<boolean>(false);
   const [categoryId, setCategoryId] = useState<string | null>("");
   const [image, setImage] = useState<string | null>(null);
   const [tags, setTags] = useState<string[]>([]);
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
+  const [isGenerating, setIsGenerating] = useState<boolean>(false);
 
   const { data } = useCategories();
 
@@ -122,6 +125,40 @@ export const NewsForms: React.FC<NewsFormProps> = ({ newsId }) => {
   function removeTag(indexToRemove: number) {
     setTags(tags.filter((_, index) => index !== indexToRemove));
   }
+
+  const handleGenerateContent = async () => {
+    const title = form.values.title.trim();
+
+    if (!title) {
+      toast.error("Please enter a title first");
+      return;
+    }
+
+    setIsGenerating(true);
+    try {
+      const result = await generateContentMutation.mutateAsync({
+        title,
+        categoryId: categoryId || undefined,
+      });
+
+      if (result) {
+        // Populate form fields with generated content
+        form.setFieldValue("content", result.content || "");
+        if (result.subtitle) {
+          form.setFieldValue("subtitle", result.subtitle);
+        }
+        if (result.summary) {
+          form.setFieldValue("summary", result.summary);
+        }
+        toast.success("Content generated successfully!");
+      }
+    } catch (error) {
+      console.error("Error generating content:", error);
+      // Error notification is handled by the hook
+    } finally {
+      setIsGenerating(false);
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault(); // Prevent default form submission
@@ -244,15 +281,31 @@ export const NewsForms: React.FC<NewsFormProps> = ({ newsId }) => {
         <Box mt="md">
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <TextInput
-                className="form-element"
-                size="md"
-                required
-                label="Article Title"
-                placeholder="Enter a compelling title..."
-                {...form.getInputProps("title")}
-                error={formSubmitted && form.errors.title}
-              />
+              <Group spacing="xs" align="flex-end">
+                <TextInput
+                  className="form-element"
+                  size="md"
+                  required
+                  label="Article Title"
+                  placeholder="Enter a compelling title..."
+                  {...form.getInputProps("title")}
+                  error={formSubmitted && form.errors.title}
+                  style={{ flex: 1 }}
+                />
+                <Button
+                  leftIcon={<IconWand size={16} />}
+                  onClick={handleGenerateContent}
+                  loading={isGenerating}
+                  disabled={!form.values.title.trim() || isGenerating}
+                  variant="light"
+                  color="blue"
+                  size="md"
+                  style={{ marginBottom: "4px" }}
+                  title="Generate content, subtitle, and summary using AI"
+                >
+                  {isGenerating ? "Generating..." : "Generate with AI"}
+                </Button>
+              </Group>
 
               <TextInput
                 className="form-element"
