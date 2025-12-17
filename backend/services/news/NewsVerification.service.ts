@@ -2,20 +2,12 @@ import OpenAI from "openai";
 import { StatusCodeEnums } from "../../interfaces/enums";
 import { failure, ok } from "../../utils";
 import NewsDbModel from "../../models/News.model";
+import { NewsAPIService } from "../newsapi/NewsAPI.service";
 
 interface VerificationResult {
   isVerified: boolean;
   confidence: number;
-  factChecks: FactCheck[];
-  suggestedCorrections?: string[];
-  verificationSources?: string[];
-}
-
-interface FactCheck {
-  claim: string;
-  isFactual: boolean;
-  confidence: number;
-  explanation: string;
+  reason: string;
   sources?: string[];
 }
 
@@ -41,98 +33,76 @@ export const NewsVerificationService = {
         apiKey: process.env.OPENAI_API_KEY,
       });
 
-      // Extract main claims from the article
-      const claimsResponse = await openai.chat.completions.create({
+      // Fetch latest related coverage (evidence) using NewsAPI
+      const relatedArticles = await NewsAPIService.fetchNews(article.title);
+      const topEvidence = relatedArticles.slice(0, 5).map((a) => ({
+        title: a.title,
+        source: a.source?.name,
+        publishedAt: a.publishedAt,
+        url: a.url,
+        description: a.description,
+      }));
+
+      // Ask the model for a simple verdict + confidence + short reason
+      const verificationResponse = await openai.chat.completions.create({
         model: "gpt-4.1-nano",
         messages: [
           {
             role: "system",
             content:
-              "You are a fact-checking expert. Extract the main factual claims from this news article that need verification. Focus on specific facts, statistics, quotes, and events.",
+              "You are a strict news verification assistant. Use the provided evidence (recent related coverage) to judge whether the article is likely accurate.",
           },
           {
             role: "user",
-            content: `Title: ${article.title}\n\nContent: ${article.content}`,
+            content: `Return ONLY valid JSON with keys: isVerified (boolean), confidence (number 0..1), reason (short string), sources (array of urls).\n\nArticle title: ${
+              article.title
+            }\n\nArticle content:\n${
+              article.content
+            }\n\nRecent related coverage (evidence):\n${JSON.stringify(
+              topEvidence,
+              null,
+              2
+            )}`,
           },
         ],
-        temperature: 0.3,
+        temperature: 0.2,
       });
 
-      const claims =
-        claimsResponse.choices[0]?.message?.content
-          ?.split("\n")
-          .filter(Boolean) || [];
-
-      // Verify each claim
-      const factChecks: FactCheck[] = [];
-      for (const claim of claims) {
-        const verificationResponse = await openai.chat.completions.create({
-          model: "gpt-4.1-nano",
-          messages: [
-            {
-              role: "system",
-              content: `You are a fact-checking expert. Verify the following claim from a news article:
-              1. Assess if the claim is factual
-              2. Provide a confidence score (0-1)
-              3. Explain your reasoning
-              4. If possible, suggest reliable sources for verification
-              
-              Respond in JSON format with properties: isFactual, confidence, explanation, sources`,
-            },
-            {
-              role: "user",
-              content: claim,
-            },
-          ],
-          temperature: 0.2,
-        });
-
-        try {
-          const verification = JSON.parse(
-            verificationResponse.choices[0]?.message?.content || "{}"
-          );
-          factChecks.push({
-            claim,
-            isFactual: verification.isFactual,
-            confidence: verification.confidence,
-            explanation: verification.explanation,
-            sources: verification.sources,
-          });
-        } catch (error) {
-          console.error("Error parsing verification response:", error);
-        }
+      let parsed: any = {};
+      try {
+        parsed = JSON.parse(
+          verificationResponse.choices[0]?.message?.content || "{}"
+        );
+      } catch (e) {
+        console.error("Error parsing verification response:", e);
       }
 
-      // Calculate overall verification metrics
       const verificationResult: VerificationResult = {
-        isVerified: factChecks.every((check) => check.isFactual),
+        isVerified: Boolean(parsed.isVerified),
         confidence:
-          factChecks.reduce((acc, check) => acc + check.confidence, 0) /
-          factChecks.length,
-        factChecks,
-        suggestedCorrections: factChecks
-          .filter((check) => !check.isFactual)
-          .map(
-            (check) =>
-              `Correction needed for: ${check.claim}\nReason: ${check.explanation}`
-          ),
-        verificationSources: Array.from(
-          new Set(factChecks.flatMap((check) => check.sources || []))
-        ),
+          typeof parsed.confidence === "number" ? parsed.confidence : 0.5,
+        reason:
+          typeof parsed.reason === "string" && parsed.reason.trim().length > 0
+            ? parsed.reason.trim()
+            : "No detailed reason provided.",
+        sources: Array.isArray(parsed.sources)
+          ? parsed.sources.filter((x: any) => typeof x === "string")
+          : (topEvidence.map((e) => e.url).filter(Boolean) as string[]),
       };
 
+      const verifiedAt = new Date();
       // Update article with verification status
       await NewsDbModel.query()
         .findById(newsId)
         .patch({
           is_verified: verificationResult.isVerified,
           verification_data: JSON.stringify(verificationResult),
-          verified_at: new Date(),
+          verified_at: verifiedAt,
         });
 
       return ok({
         message: "Article verification completed",
-        data: verificationResult,
+        data: { ...verificationResult, verifiedAt },
       });
     } catch (error) {
       console.error("Error in article verification:", error);

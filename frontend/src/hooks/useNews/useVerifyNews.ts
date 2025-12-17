@@ -5,12 +5,13 @@ import { toast } from "react-toastify";
 
 export const useVerifyNews = () => {
   return useMutation((newsId: string) => verifyNews(newsId), {
-    onSuccess: (response) => {
+    onSuccess: (response, newsId) => {
       if (response.statusIsOk) {
-        toast.success("News article verified successfully!");
-        // Invalidate news queries to refresh the data
+        toast.success("Verification completed!");
+        // Invalidate the exact details query key used by `useNewsId`
+        queryClient.invalidateQueries(["useNews", newsId]);
+        // Also refresh list pages if needed
         queryClient.invalidateQueries(["news"]);
-        queryClient.invalidateQueries(["newsById"]);
       } else {
         toast.error(response.statusMessage || "Failed to verify news article");
       }

@@ -13,7 +13,6 @@ import { toast } from "react-toastify";
 import { RelatedNews } from "../RelatedNews/RelatedNews";
 import "../NewsDetailsId/NewsDetailsId.css";
 import { VerificationStatus } from "../common/VerificationStatus";
-import { VerificationDetailsModal } from "../common/VerificationDetailsModal";
 import { useVerifyNews } from "../../hooks/useNews/useVerifyNews";
 import { IconShieldCheck } from "@tabler/icons-react";
 
@@ -44,13 +43,24 @@ export const NewsDetailsId: React.FC<NewsDetailsProps> = ({ news }) => {
     sad: 0,
     angry: 0,
   });
-  const [verificationModalOpened, setVerificationModalOpened] = useState(false);
   const verifyNewsMutation = useVerifyNews();
 
+  const safeParseVerificationData = (value: unknown) => {
+    if (!value) return null;
+    if (typeof value === "object") return value as any;
+    if (typeof value !== "string") return null;
+
+    try {
+      return JSON.parse(value);
+    } catch (e) {
+      // Some legacy rows may contain "[object Object]" or other non-JSON strings.
+      console.warn("Invalid verification_data JSON:", value, e);
+      return null;
+    }
+  };
+
   // Parse verification data if it exists
-  const verificationData = news.verification_data
-    ? JSON.parse(news.verification_data)
-    : null;
+  const verificationData = safeParseVerificationData(news.verification_data);
 
   // Get user ID from context instead of directly decoding the JWT
   const userId = userContext.userId || "";
@@ -167,9 +177,10 @@ export const NewsDetailsId: React.FC<NewsDetailsProps> = ({ news }) => {
           <VerificationStatus
             isVerified={news.is_verified || false}
             confidence={verificationData?.confidence}
-            onClick={() => setVerificationModalOpened(true)}
+            reason={verificationData?.reason}
+            verifiedAt={news.verified_at}
           />
-          {!news.is_verified && (
+          {!news.verified_at && (
             <Button
               size="xs"
               variant="outline"
@@ -305,14 +316,6 @@ export const NewsDetailsId: React.FC<NewsDetailsProps> = ({ news }) => {
 
       {data?.show_related_news == true && news && news.id && (
         <RelatedNews newsId={news.id} />
-      )}
-
-      {verificationData && (
-        <VerificationDetailsModal
-          opened={verificationModalOpened}
-          onClose={() => setVerificationModalOpened(false)}
-          verificationData={verificationData}
-        />
       )}
     </div>
   );

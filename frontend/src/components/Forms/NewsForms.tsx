@@ -300,7 +300,7 @@ export const NewsForms: React.FC<NewsFormProps> = ({ newsId }) => {
                   variant="light"
                   color="blue"
                   size="md"
-                  style={{ marginBottom: "4px" }}
+                  style={{ marginBottom: "20px" }}
                   title="Generate content, subtitle, and summary using AI"
                 >
                   {isGenerating ? "Generating..." : "Generate with AI"}
